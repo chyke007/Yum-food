@@ -1,12 +1,11 @@
-require('dotenv').config();
+require("dotenv").config();
 
+const server = require("./server");
 
-const server = require('./server');
+require("debug")("server");
 
-require('debug')('server');
-
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 6000;
 server.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log('Server running on port', `${port}`);
+  console.log("Server running on port", `${port}`);
 });

@@ -1,0 +1,3 @@
+frontend
+integration-test
+*.test.js
