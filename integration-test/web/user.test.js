@@ -15,22 +15,13 @@ beforeEach(() => {
 });
 
 /**
- * Invalid routes
+ * Valid routes
  */
-describe("Invalid routes test", () => {
-  beforeAll(async () => {
-    const res = jest.fn(() => {
-      status: jest.fn(() => {
-        send: jest.fn();
-      });
-    });
-    const req = {};
-  });
+describe("Login", () => {
+  it("'should respond with HTTP 200 for login route", async (done) => {
+    const response = await request.post("/api/login");
 
-  it("'should respond with HTTP 404 for missing route", async (done) => {
-    const response = await request.get("/test");
-
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(200);
     done();
   });
 });
