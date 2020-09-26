@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start-watch": "set DEBUG=server && nodemon",
+    "start-watch": "set DEBUG=server && nodemon  --verbose ",
     "dev": "concurrently --kill-others  \"npm run start-watch\" \"npm run lint-w\"",
-    "lint": "esw . --fix ",
+    "lint": "esw . --fix",
     "lint-w": "esw . --fix  -w",
     "test": "jest",
     "test:watch": "jest --watchAll"
@@ -36,6 +36,7 @@
   "dependencies": {
     "debug": "^4.2.0",
     "dotenv": "^8.2.0",
+    "eslint-watch": "^7.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
