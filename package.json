@@ -1,0 +1,38 @@
+{
+  "name": "yum-food",
+  "version": "1.0.0",
+  "description": "A project for the job opening at the pace",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chyke007/Yum-food.git"
+  },
+  "keywords": [
+    "pace.africa",
+    "yum-food",
+    "fullstack",
+    "react",
+    "redux",
+    "jest",
+    "tdd",
+    "eslint",
+    "tailwind"
+  ],
+  "author": "Nwachukwu Chibuike",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chyke007/Yum-food/issues"
+  },
+  "homepage": "https://github.com/chyke007/Yum-food#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.7",
+    "validator": "^13.1.17"
+  }
+}
