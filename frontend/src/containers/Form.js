@@ -1,5 +1,5 @@
 import React from "react"
-import StyledForm from "./styles"
+import StyledForm from "../styles"
 
 function Form() {
   return (

@@ -33,6 +33,7 @@
     "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.7",
+    "redux-thunk": "^2.3.0",
     "validator": "^13.1.17"
   },
   "devDependencies": {}
