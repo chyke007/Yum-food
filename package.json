@@ -74,7 +74,6 @@
     "eslint-watch": "^7.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "jest": "^26.4.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.7",
     "redux-thunk": "^2.3.0",
@@ -87,6 +86,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "concurrently": "^5.3.0",
+    "coveralls": "^3.1.0",
     "eslint": "^7.9.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.12.0",
@@ -95,6 +95,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.2",
     "eslint-plugin-react-hooks": "^4.1.2",
+    "jest": "^26.4.2",
     "prettier": "^2.1.2"
   }
 }
