@@ -10,7 +10,8 @@
     "lint": "esw . --fix",
     "lint-w": "esw . --fix  -w",
     "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,13 @@
     "url": "https://github.com/chyke007/Yum-food/issues"
   },
   "homepage": "https://github.com/chyke007/Yum-food#readme",
+  "jest": {
+    "collectCoverageFrom": [
+        "**/*.js",
+        "!data/keyMap.js",
+        "!/node_modules/"
+    ]
+  },
   "dependencies": {
     "debug": "^4.2.0",
     "dotenv": "^8.2.0",
