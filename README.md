@@ -8,12 +8,8 @@
 
 <h4 align="center"><a href="https://yum-food.herokuapp.com/" target="_blank">Yum-food,</a> is an online food ordering application .</h4>
 
-<p align="center">
-[![Coverage Status](https://coveralls.io/repos/github/chyke007/Yum-food/badge.svg?branch=master)](https://coveralls.io/github/chyke007/Yum-food?branch=master)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)  [![Build Status](https://travis-ci.org/chyke007/Yum-food.svg?branch=master)](https://travis-ci.org/chyke007/Yum-food) [![Coverage Status](https://coveralls.io/repos/github/chyke007/Yum-food/badge.svg?branch=master)](https://coveralls.io/github/chyke007/Yum-food?branch=master)
 
-[![Build Status](https://travis-ci.org/chyke007/Yum-food.svg?branch=master)](https://travis-ci.org/chyke007/Yum-food)
-
-</p>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
