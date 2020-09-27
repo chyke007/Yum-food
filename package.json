@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "start-watch": "set DEBUG=server && nodemon  --verbose ",
+    "heroku-postbuild": "cd frontend && npm install && npm run build",
     "dev": "concurrently --kill-others  \"npm run start-watch\" \"npm run lint-w\"",
     "lint": "esw . --fix",
     "lint-w": "esw . --fix  -w",
