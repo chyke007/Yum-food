@@ -14,7 +14,12 @@
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "remote-redux-devtools": "^0.5.16",
-    "styled-components": "^5.2.0"
+    "styled-components": "^5.2.0",
+    "autoprefixer": "^9.0.0",
+    "babel-plugin-macros": "^2.8.0",
+    "postcss-cli": "^8.0.0",
+    "tailwindcss": "^1.8.10",
+    "twin.macro": "^1.10.0"
   },
   "scripts": {
     "start": "npm run watch:css & react-scripts start",
@@ -39,11 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "autoprefixer": "^9.0.0",
-    "babel-plugin-macros": "^2.8.0",
-    "postcss-cli": "^8.0.0",
-    "tailwindcss": "^1.8.10",
-    "twin.macro": "^1.10.0"
-  }
+  "devDependencies": {}
 }
