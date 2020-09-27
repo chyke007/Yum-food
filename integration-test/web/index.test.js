@@ -1,7 +1,7 @@
 const { request, app } = require("../index");
 const path = require("path");
 beforeEach(() => {
-  mockResponse = () => {
+  let mockResponse = () => {
     const response = {};
     response.status = jest.fn().mockReturnValue(response);
     response.body = jest.fn().mockReturnValue(response);

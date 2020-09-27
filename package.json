@@ -39,9 +39,36 @@
       "**/*.js",
       "!data/keyMap.js",
       "!/node_modules/"
+    ],
+    "projects": [
+      {
+        "displayName": "backend",
+        "testEnvironment": "node",
+        "testMatch": [
+          "<rootDir>/**/*.test.js"
+        ],
+        "testPathIgnorePatterns": [
+          "<rootDir>/frontend/"
+        ]
+      },
+      {
+        "displayName": "frontend",
+        "testEnvironment": "jsdom",
+        "testMatch": [
+          "<rootDir>/frontend/src/**/*.test.js"
+        ],
+        "moduleFileExtensions": [
+          "js"
+        ],
+        "moduleNameMapper": {
+          "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+          "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+        }
+      }
     ]
   },
   "dependencies": {
+    "babel-jest": "^24.9.0",
     "debug": "^4.2.0",
     "dotenv": "^8.2.0",
     "eslint-watch": "^7.0.0",
@@ -55,6 +82,10 @@
     "validator": "^13.1.17"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-syntax-jsx": "^7.10.4",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
     "concurrently": "^5.3.0",
     "eslint": "^7.9.0",
     "eslint-config-airbnb": "^18.2.0",
