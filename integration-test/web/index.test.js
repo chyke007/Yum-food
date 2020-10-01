@@ -27,7 +27,7 @@ describe("Invalid routes test", () => {
     const req = {};
   });
 
-  it("'should respond with HTTP 404 for missing route", async (done) => {
+  it("should respond with HTTP 404 for missing route", async (done) => {
     const response = await request.get("/api/test");
 
     expect(response.status).toBe(404);
