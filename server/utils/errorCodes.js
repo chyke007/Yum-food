@@ -1,3 +1,6 @@
 module.exports = {
   UNKNOWN: 1000,
+  NOT_FOUND: 404,
+  UNAUTHORIZED_TOKEN: 4000,
+  FILE_TOO_LARGE: 4001,
 };

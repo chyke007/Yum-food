@@ -3,10 +3,18 @@ const path = require("path");
 
 const server = express();
 const apiRouter = require("./routes/api");
+const { Mongo, App, ApiGuard } = require("./middleware");
 
-// Serve static files from the React app
-server.use(express.static(path.join(__dirname, "../frontend/build")));
+// connect to mongo
+Mongo();
 
+// setup global middleware
+App(server);
+
+// all requests must pass in an api key
+server.use(ApiGuard);
+
+// api router
 server.use("/api", apiRouter);
 
 // The "catchall" handler: for any request that doesn't

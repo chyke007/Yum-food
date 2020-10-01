@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 module.exports = {
   CustomException: require("./customException"),
-  Log: require("./logger"),
+  Logger: require("./logger"),
   ErrorMessage: require("./errorMessage"),
   ErrorCodes: require("./errorCodes"),
   Storage: require("./storage"),
