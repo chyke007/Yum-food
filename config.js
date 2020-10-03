@@ -6,9 +6,9 @@ exports.DB_URL = `mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}?retryW
 exports.DB_OPTIONS = {
   // ssl: true,
   useNewUrlParser: true,
+  useUnifiedTopology: false,
   useCreateIndex: true,
   useFindAndModify: false,
-  useUnifiedTopology: true,
   autoIndex: false,
   auto_reconnect: true,
   auth: { authSource: "admin" },

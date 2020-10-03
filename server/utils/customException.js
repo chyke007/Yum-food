@@ -1,5 +1,4 @@
-const { ErrorCodes } = require("./errorCodes");
-const { ErrorMessage } = require("./errorMessage");
+const { ErrorCodes, ErrorMessage } = require("./index");
 /**
  * A custom exception
  */

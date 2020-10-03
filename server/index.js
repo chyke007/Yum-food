@@ -3,16 +3,13 @@ const path = require("path");
 
 const server = express();
 const apiRouter = require("./routes/api");
-const { Mongo, App, ApiGuard } = require("./middleware");
+const { Mongo, App } = require("./middleware");
 
 // connect to mongo
 Mongo();
 
 // setup global middleware
 App(server);
-
-// all requests must pass in an api key
-server.use(ApiGuard);
 
 // api router
 server.use("/api", apiRouter);

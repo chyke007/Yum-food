@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 const Express = require("express");
-const { Exception, ErrorMessage, ErrorCodes } = require("../utils/index");
+const { CustomException, ErrorMessage, ErrorCodes } = require("../utils/index");
 const { API_KEY } = require("../../config");
 
 /**
@@ -16,6 +16,11 @@ module.exports = (req, res, next) => {
   if (apikey && apikey === API_KEY) next();
   else {
     res.status(401);
-    next(new Exception(ErrorMessage.UNAUTHORIZED, ErrorCodes.UNAUTHORIZED_KEY));
+    next(
+      new CustomException(
+        ErrorMessage.UNAUTHORIZED,
+        ErrorCodes.UNAUTHORIZED_KEY
+      )
+    );
   }
 };

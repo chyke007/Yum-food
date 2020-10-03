@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Logger } = require("../utils");
 const config = require("../../config");
 
-const log = new Logger("Mongo");
+const log = new Logger("Middleware:Mongo");
 
 module.exports = () => {
   log.info(config.DB_URL);

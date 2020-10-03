@@ -8,7 +8,7 @@ const {
 } = require("../utils");
 // const UnauthorizedError = require('express-jwt').UnauthorizedError
 
-const log = new Logger("common:ErrorHandler");
+const log = new Logger("Middleware:ErrorHandler");
 /* eslint-disable no-console */
 // eslint-disable-next-line no-unused-vars
 const handleMulter = (err, req, res, next) => {
@@ -50,7 +50,7 @@ const handleMulter = (err, req, res, next) => {
  * @return {null}
  */
 module.exports = (err, req, res, next) => {
-  log.info(JSON.stringify(err));
+  log.info(22);
   log.info(JSON.stringify(res.statusCode));
   if (res.statusCode < 400) res.status(400);
   if (err instanceof CustomException) return res.json({ error: err });
