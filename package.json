@@ -10,7 +10,7 @@
     "dev": "concurrently --kill-others  \"npm run start-watch\" \"npm run lint-w\"",
     "lint": "esw . --fix",
     "lint-w": "esw . --fix  -w",
-    "test": "jest",
+    "test": "jest --setupFiles dotenv/config",
     "test:watch": "jest  --setupFiles dotenv/config --watchAll",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
