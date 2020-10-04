@@ -1,5 +1,4 @@
-// const Codes = require("./errorCodes");
-// const Message = require("./errorMessage");
+const { ErrorCodes, ErrorMessage } = require("./index");
 /**
  * A custom exception
  */
@@ -8,7 +7,7 @@ class Exception {
    * @param  {string} message
    * @param  {string} code
    */
-  constructor(message = "Message.UNKNOWN", code = "Codes.UNKNOWN") {
+  constructor(message = ErrorMessage.UNKNOWN, code = ErrorCodes.UNKNOWN) {
     // super(message)
     this.message = message;
     this.code = code;

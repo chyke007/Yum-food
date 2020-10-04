@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start-watch": "set DEBUG=server && nodemon  --verbose ",
+    "start-watch": "set DEBUG=yum-food* && nodemon  --verbose ",
     "heroku-postbuild": "cd frontend && rm -rf node_modules && npm install --cache /tmp/empty-cache && npm install && npm run build",
     "dev": "concurrently --kill-others  \"npm run start-watch\" \"npm run lint-w\"",
     "lint": "esw . --fix",
     "lint-w": "esw . --fix  -w",
-    "test": "jest",
-    "test:watch": "jest --watchAll",
+    "test": "jest --setupFiles dotenv/config",
+    "test:watch": "jest  --setupFiles dotenv/config --watchAll",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
@@ -35,41 +35,11 @@
     "url": "https://github.com/chyke007/Yum-food/issues"
   },
   "homepage": "https://github.com/chyke007/Yum-food#readme",
-  "jest": {
-    "collectCoverageFrom": [
-      "**/*.js",
-      "!data/keyMap.js",
-      "!/node_modules/"
-    ],
-    "projects": [
-      {
-        "displayName": "backend",
-        "testEnvironment": "node",
-        "testMatch": [
-          "<rootDir>/**/*.test.js"
-        ],
-        "testPathIgnorePatterns": [
-          "<rootDir>/frontend/"
-        ]
-      },
-      {
-        "displayName": "frontend",
-        "testEnvironment": "jsdom",
-        "testMatch": [
-          "<rootDir>/frontend/src/**/*.test.js"
-        ],
-        "moduleFileExtensions": [
-          "js"
-        ],
-        "moduleNameMapper": {
-          "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-          "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
-        }
-      }
-    ]
-  },
   "dependencies": {
+    "@shelf/jest-mongodb": "^1.2.3",
     "babel-jest": "^24.9.0",
+    "chalk": "^4.1.0",
+    "cors": "^2.8.5",
     "debug": "^4.2.0",
     "dotenv": "^8.2.0",
     "eslint-watch": "^7.0.0",
@@ -77,9 +47,11 @@
     "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.7",
+    "morgan": "^1.10.0",
     "redux-thunk": "^2.3.0",
     "supertest": "^5.0.0",
-    "validator": "^13.1.17"
+    "validator": "^13.1.17",
+    "jest": "^26.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -96,7 +68,11 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.2",
     "eslint-plugin-react-hooks": "^4.1.2",
-    "jest": "^26.4.2",
     "prettier": "^2.1.2"
+  },
+  "config": {
+    "mongodbMemoryServer": {
+      "version": "latest"
+    }
   }
 }

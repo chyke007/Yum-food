@@ -1,5 +1,7 @@
-const { request, app } = require("../index");
+const { request } = require("../index");
 const path = require("path");
+
+let apikey = process.env.API_KEY;
 beforeEach(() => {
   let mockResponse = () => {
     const response = {};
@@ -15,20 +17,18 @@ beforeEach(() => {
 });
 
 /**
- * Invalid routes
+ * Index routes
  */
-describe("Invalid routes test", () => {
-  beforeAll(async () => {
-    const res = jest.fn(() => {
-      status: jest.fn(() => {
-        send: jest.fn();
-      });
-    });
-    const req = {};
+describe("Index routes test", () => {
+  it("should respond with HTTP 401 for missing api key", async (done) => {
+    const response = await request.get("/api/test");
+
+    expect(response.status).toBe(401);
+    done();
   });
 
-  it("'should respond with HTTP 404 for missing route", async (done) => {
-    const response = await request.get("/api/test");
+  it("should respond with HTTP 404 for missing route", async (done) => {
+    const response = await request.get("/api/test").set("apikey", apikey);
 
     expect(response.status).toBe(404);
     done();

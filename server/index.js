@@ -3,10 +3,15 @@ const path = require("path");
 
 const server = express();
 const apiRouter = require("./routes/api");
+const { Mongo, App } = require("./middleware");
 
-// Serve static files from the React app
-server.use(express.static(path.join(__dirname, "../frontend/build")));
+// connect to mongo
+Mongo();
 
+// setup global middleware
+App(server);
+
+// api router
 server.use("/api", apiRouter);
 
 // The "catchall" handler: for any request that doesn't
