@@ -1,5 +1,6 @@
 const { request } = require("../index");
-const path = require("path");
+const { User } = require("../../server/model");
+const mongoose = require("mongoose");
 let apikey = process.env.API_KEY;
 beforeEach(() => {
   let mockResponse = () => {
@@ -13,6 +14,12 @@ beforeEach(() => {
     return response;
   };
   mockResponse();
+});
+
+// Connects to database power-rangers
+beforeAll(async () => {
+  // const url = `mongodb://${process.env.DB_HOST}/test`;
+  // await mongoose.connect(url, { useNewUrlParser: true });
 });
 
 /**
@@ -37,7 +44,7 @@ describe("Login", () => {
 /**
  * Signup routes
  */
-describe("Login", () => {
+describe("Register", () => {
   it("should respond with HTTP 401 for missing apikey", async (done) => {
     const response = await request.post("/api/register");
 
@@ -46,8 +53,35 @@ describe("Login", () => {
   });
 
   it("should respond with user object for new user", async (done) => {
-    const response = await request.post("/api/register").set("apikey", apikey);
+    const response = await request
+      .post("/api/register")
+      .send({
+        name: "Zell",
+        email: "testing@gmail.com",
+        password: "Password2",
+        phone: "09036040503",
+      })
+      .set("apikey", apikey);
+    expect(response.body.data.name).toBeTruthy();
+    expect(response.body.data.email).toBeTruthy();
+    expect(response.status).toBe(200);
+    done();
+  });
 
+  it("should respond add new user to collection", async (done) => {
+    const response = await request
+      .post("/api/register")
+      .send({
+        name: "Zell",
+        email: "testing2@gmail.com",
+        password: "Password2",
+        phone: "09036040503",
+      })
+      .set("apikey", apikey);
+
+    const user = await User.findOne({ email: "testing2@gmail.com" });
+    expect(user.name).toBeTruthy();
+    expect(user.email).toBeTruthy();
     expect(response.status).toBe(200);
     done();
   });
