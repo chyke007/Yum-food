@@ -1,5 +1,5 @@
 module.exports = {
-  preset: "@shelf/jest-mongodb",
+  // preset: "@shelf/jest-mongodb",
   setupFiles: ["dotenv/config"],
   collectCoverageFrom: ["**/*.js", "!data/keyMap.js", "!/node_modules/"],
   projects: [
