@@ -6,4 +6,6 @@ module.exports = {
   ErrorCodes: require("./errorCodes"),
   Storage: require("./storage"),
   Constants: require("./constants"),
+  Helper: require("./helper"),
+  Validator: require("./validator"),
 };
