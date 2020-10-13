@@ -1,15 +1,68 @@
 // eslint-disable-next-line no-unused-vars
 const Express = require("express");
-// const { User } = require("../model");
+const { User } = require("../model");
+const {
+  Helper: { formatUser, tokenPayload, validateBody },
+  Logger,
+  ErrorCodes,
+  ErrorMessage,
+  CustomException,
+} = require("../utils");
+let { Jwt } = require("../service");
 
+Jwt = new Jwt(process.env.SECRET);
+const log = new Logger("Controller:User");
+
+/* eslint func-names: ["error", "never"] */
 /**
  * @param  {Express.Request} req
  * @param  {Express.Response} res
  * @param  {function} next
  */
-const register = async (req, res) => {
-  // User.save();
-  return res.json({ message: "Register" });
+const register = async function (req, res, next) {
+  const { body } = req;
+  log.info("register ", body);
+  if (!("email" in body) || !("password" in body) || !("name" in body)) {
+    res.status(422);
+    return next(
+      new CustomException(
+        ErrorMessage.REQUIRED_EMAIL_PASSWORD,
+        ErrorCodes.REQUIRED_EMAIL_PASSWORD
+      )
+    );
+  }
+
+  const isValid = validateBody(
+    ["email", "password", "name", "phone"],
+    body,
+    res,
+    next
+  );
+  if (!isValid) return false;
+  const { email, password, name, phone } = body;
+  let user = await User.findOne({ email });
+  if (user) {
+    res.status(422);
+    return next(
+      new CustomException(
+        // eslint-disable-next-line new-cap
+        ErrorMessage.EMAIL_IN_USE(email),
+        ErrorCodes.EMAIL_IN_USE
+      )
+    );
+  }
+
+  user = new User({
+    email,
+    name,
+    phone,
+  });
+  user.setPassword(password);
+  await user.save();
+
+  const token = Jwt.signToken(tokenPayload(user));
+  const data = formatUser(user, token);
+  return res.json({ data });
 };
 
 /**

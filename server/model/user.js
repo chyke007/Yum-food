@@ -16,7 +16,10 @@ const UserSchema = new Schema({
     enum: ["USER", "ADMIN"],
   },
   imageUrl: String,
-  name: String,
+  name: {
+    type: "String",
+    required: true,
+  },
   phone: String,
   isActive: {
     type: Boolean,
@@ -32,7 +35,8 @@ const UserSchema = new Schema({
   },
 });
 
-const updateDate = (next) => {
+/* eslint-disable func-names */
+const updateDate = function (next) {
   this.updatedAt = Date.now();
   next();
 };
