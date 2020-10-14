@@ -1,6 +1,8 @@
 let apikey = process.env.API_KEY;
 const mongoose = require("mongoose");
 const { User } = require("./index");
+const config = require("../../config");
+const db = require("../../integration-test/setup/db_setup");
 const userData = {
   name: "TekLoon",
   email: "Male@gmail.com",
@@ -8,11 +10,8 @@ const userData = {
   password: "Facebook46",
 };
 
-// Connects to database power-rangers
-beforeAll(async () => {
-  const url = `mongodb://${process.env.DB_HOST}/test`;
-  await mongoose.connect(url, { useNewUrlParser: true });
-});
+// Connects to test database
+db.setupDB();
 
 /**
  * User model
@@ -54,16 +53,4 @@ describe("User model", () => {
     expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
     expect(err.errors.email).toBeDefined();
   });
-});
-
-async function removeAllCollections() {
-  const collections = Object.keys(mongoose.connection.collections);
-  for (const collectionName of collections) {
-    const collection = mongoose.connection.collections[collectionName];
-    await collection.deleteMany();
-  }
-}
-
-afterEach(async () => {
-  await removeAllCollections();
 });

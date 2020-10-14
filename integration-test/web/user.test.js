@@ -1,5 +1,6 @@
 const { request } = require("../index");
 const { User } = require("../../server/model");
+const db = require("../setup/db_setup");
 const mongoose = require("mongoose");
 let apikey = process.env.API_KEY;
 beforeEach(() => {
@@ -16,11 +17,8 @@ beforeEach(() => {
   mockResponse();
 });
 
-// Connects to database power-rangers
-beforeAll(async () => {
-  // const url = `mongodb://${process.env.DB_HOST}/test`;
-  // await mongoose.connect(url, { useNewUrlParser: true });
-});
+// Connects to test database
+db.setupDB();
 
 /**
  * Login test

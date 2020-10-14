@@ -2,7 +2,7 @@ exports.SECRET = process.env.SECRET;
 exports.URL = process.env.URL;
 
 // DB Config
-exports.DB_URL = `mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+exports.DB_URL = `mongodb${process.env.DB_EXTENSION}${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 exports.DB_OPTIONS = {
   // ssl: true,
   useNewUrlParser: true,

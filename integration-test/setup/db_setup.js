@@ -1,5 +1,6 @@
 // test-setup.js
 const mongoose = require("mongoose");
+const config = require("../../config");
 mongoose.set("useCreateIndex", true);
 mongoose.promise = global.Promise;
 
@@ -33,8 +34,7 @@ module.exports = {
   setupDB(databaseName) {
     // Connect to Mongoose
     beforeAll(async () => {
-      const url = `mongodb://127.0.0.1/${databaseName}`;
-      await mongoose.connect(url, { useNewUrlParser: true });
+      await mongoose.connect(config.DB_URL, { useNewUrlParser: true });
     });
 
     // Cleans up database between each test
