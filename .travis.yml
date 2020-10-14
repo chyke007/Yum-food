@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "10"
 install:
-  - rm -rf node_modules && npm install
+  - rm -rf node_modules && npm install && npm update --depth 999 @babel/preset-react
 script:
   - npm test
   - npm run heroku-postbuild
