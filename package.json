@@ -10,9 +10,9 @@
     "dev": "concurrently --kill-others  \"npm run start-watch\" \"npm run lint-w\"",
     "lint": "esw . --fix",
     "lint-w": "esw . --fix  -w",
-    "test": "jest --setupFiles dotenv/config",
-    "test:watch": "jest  --setupFiles dotenv/config --watchAll",
-    "coveralls": "jest  --setupFiles dotenv/config --coverage && cat ./coverage/lcov.info | coveralls"
+    "test": "jest --setupFiles dotenv/config --detectOpenHandles",
+    "test:watch": "jest  --setupFiles dotenv/config  --detectOpenHandles --watchAll",
+    "coveralls": "jest  --setupFiles dotenv/config --detectOpenHandles --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
