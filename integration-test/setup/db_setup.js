@@ -33,19 +33,22 @@ async function dropAllCollections() {
 module.exports = {
   setupDB(databaseName) {
     // Connect to Mongoose
-    beforeAll(async () => {
+    beforeAll(async (done) => {
       await mongoose.connect(config.DB_URL, { useNewUrlParser: true });
+      done();
     });
 
     // Cleans up database between each test
-    afterEach(async () => {
+    afterEach(async (done) => {
       await removeAllCollections();
+      done();
     });
 
     // Disconnect Mongoose
-    afterAll(async () => {
+    afterAll(async (done) => {
       await dropAllCollections();
       await mongoose.connection.close();
+      done();
     });
   },
 };
