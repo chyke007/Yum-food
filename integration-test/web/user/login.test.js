@@ -1,6 +1,6 @@
-const { request } = require("../index");
-const { User } = require("../../server/model");
-const db = require("../setup/db_setup");
+const { request } = require("../../index");
+const { User } = require("../../../server/model");
+const db = require("../../setup/db_setup");
 const mongoose = require("mongoose");
 let apikey = process.env.API_KEY;
 beforeEach(() => {
@@ -32,32 +32,21 @@ describe("Login", () => {
   });
 
   it("should respond with user object for authenticated user", async (done) => {
-    const response = await request.post("/api/login").set("apikey", apikey);
-
-    expect(response.status).toBe(200);
-    done();
-  });
-});
-
-/**
- * Signup routes
- */
-describe("Register", () => {
-  it("should respond with HTTP 401 for missing apikey", async (done) => {
-    const response = await request.post("/api/register");
-
-    expect(response.status).toBe(401);
-    done();
-  });
-
-  it("should respond with user object for new user", async (done) => {
-    const response = await request
-      .post("/api/register")
+    let response = await request
+      .post("/api/signup")
       .send({
         name: "Zell",
         email: "testing@gmail.com",
-        password: "Password2",
+        password: "Password2@",
         phone: "09036040503",
+      })
+      .set("apikey", apikey);
+
+    response = await request
+      .post("/api/login")
+      .send({
+        email: "testing@gmail.com",
+        password: "Password2@",
       })
       .set("apikey", apikey);
     expect(response.body.data.name).toBeTruthy();
@@ -66,21 +55,14 @@ describe("Register", () => {
     done();
   });
 
-  it("should respond add new user to collection", async (done) => {
-    const response = await request
-      .post("/api/register")
+  it("should respond with error message for missing password parameter", async (done) => {
+    let response = await request
+      .post("/api/login")
       .send({
-        name: "Zell",
-        email: "testing2@gmail.com",
-        password: "Password2",
-        phone: "09036040503",
+        email: "testing@gmail.com",
       })
       .set("apikey", apikey);
-
-    const user = await User.findOne({ email: "testing2@gmail.com" });
-    expect(user.name).toBeTruthy();
-    expect(user.email).toBeTruthy();
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(422);
     done();
   });
 });

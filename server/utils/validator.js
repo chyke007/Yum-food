@@ -11,7 +11,7 @@ exports.email = (value) => validator.isEmail(value);
 exports.password = (value) =>
   validator.matches(
     value,
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d@$!%~#*?&^])[A-Za-z\d@$!%~*#?&^]{8,}$/
+    /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+).{8,}/
   );
 
 /**
@@ -21,7 +21,8 @@ exports.password = (value) =>
 exports.phone = (value) =>
   validator.isNumeric(value) && validator.isLength(value, 10);
 
-exports.name = (value) => validator.isLength(value, 3);
+exports.name = (value) =>
+  validator.isLength(value, 3) && validator.matches(value, /(?=.*[a-z][A-z])/);
 
 exports.isMongoId = (value) => validator.isMongoId(value);
 

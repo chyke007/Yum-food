@@ -12,7 +12,7 @@
     "lint-w": "esw . --fix  -w",
     "test": "jest --setupFiles dotenv/config",
     "test:watch": "jest  --setupFiles dotenv/config --watchAll",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "jest  --setupFiles dotenv/config --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",

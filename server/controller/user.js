@@ -70,8 +70,65 @@ const register = async function (req, res, next) {
  * @param  {Express.Response} res
  * @param  {function} next
  */
-const login = async (req, res) => {
-  return res.json({ message: "Login" });
+const login = async (req, res, next) => {
+  const { body } = req;
+  log.info("login ", body);
+
+  if (!("email" in body) || !("password" in body)) {
+    res.status(422);
+    return next(
+      new CustomException(
+        ErrorMessage.REQUIRED_EMAIL_PASSWORD,
+        ErrorCodes.REQUIRED_EMAIL_PASSWORD
+      )
+    );
+  }
+
+  const isValid = validateBody(["email", "password"], body, res, next);
+  if (!isValid) return false;
+
+  log.info("passed validation");
+  const { email, password } = body;
+
+  User.findOne({ email })
+    .then((user) => {
+      log.info(!(user && user.email));
+      if (!(user != null && user.email != null)) {
+        return next(
+          new CustomException(
+            ErrorMessage.ACCOUNT_NOT_FOUND,
+            ErrorCodes.ACCOUNT_NOT_FOUND
+          )
+        );
+      }
+      if (!user.validatePassword(password)) {
+        return next(
+          new CustomException(
+            ErrorMessage.INCORRECT_PASSWORD,
+            ErrorCodes.INCORRECT_PASSWORD
+          )
+        );
+      }
+
+      if (!user.isActive) {
+        return next(
+          new CustomException(
+            ErrorMessage.ACCOUNT_DEACTIVATED,
+            ErrorCodes.ACCOUNT_DEACTIVATED
+          )
+        );
+      }
+      const token = Jwt.signToken(tokenPayload(user));
+      const data = formatUser(user, token);
+      return res.json({ data });
+      // log that an account was created login was succesful
+    })
+    .catch((err) => {
+      log.info(`error ${err}`);
+      return next(
+        new CustomException(ErrorMessage.UNKNOWN, ErrorCodes.UNKNOWN)
+      );
+    });
 };
 
 module.exports = { login, register };

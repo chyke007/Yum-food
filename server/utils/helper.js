@@ -47,7 +47,7 @@ function validateBody(scope, body, res, done) {
   const { email, password, name, phone } = body;
   if (scope.includes("email")) {
     if (!(email && Validator.email(email))) {
-      log.info("invalid email");
+      log.error("invalid email", { file: "helper.js validateBody(email)" });
       res.status(422);
       if (done) {
         done(
@@ -62,7 +62,9 @@ function validateBody(scope, body, res, done) {
   }
   if (scope.includes("password")) {
     if (!(password && Validator.password(password))) {
-      log.info("invalid password");
+      log.error("invalid password", {
+        file: "helper.js validateBody(password)",
+      });
       res.status(422);
       if (done) {
         done(
@@ -78,7 +80,7 @@ function validateBody(scope, body, res, done) {
 
   if (scope.includes("name")) {
     if (!(name && Validator.name(name))) {
-      log.info("invalid name");
+      log.error("invalid name", { file: "helper.js validateBody(name)" });
       res.status(422);
       if (done) {
         done(
@@ -94,7 +96,9 @@ function validateBody(scope, body, res, done) {
 
   if (scope.includes("phone")) {
     if (!(phone && Validator.phone(phone))) {
-      log.info("invalid phone number");
+      log.error("invalid phone number", {
+        file: "helper.js validateBody(email)",
+      });
       res.status(422);
       if (done) {
         done(
