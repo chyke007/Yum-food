@@ -1,5 +1,6 @@
 // test-setup.js
 const mongoose = require("mongoose");
+const config = require("../../config");
 mongoose.set("useCreateIndex", true);
 mongoose.promise = global.Promise;
 
@@ -32,20 +33,22 @@ async function dropAllCollections() {
 module.exports = {
   setupDB(databaseName) {
     // Connect to Mongoose
-    beforeAll(async () => {
-      const url = `mongodb://127.0.0.1/${databaseName}`;
-      await mongoose.connect(url, { useNewUrlParser: true });
+    beforeAll(async (done) => {
+      await mongoose.connect(config.DB_URL, { useNewUrlParser: true });
+      done();
     });
 
     // Cleans up database between each test
-    afterEach(async () => {
+    afterEach(async (done) => {
       await removeAllCollections();
+      done();
     });
 
     // Disconnect Mongoose
-    afterAll(async () => {
+    afterAll(async (done) => {
       await dropAllCollections();
-      await mongoose.connection.close();
+      await mongoose.disconnect();
+      done();
     });
   },
 };

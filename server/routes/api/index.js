@@ -7,7 +7,7 @@ const Middleware = require("../../middleware");
 // all requests must pass in an api key
 apiRouter.use(Middleware.ApiGuard);
 
-apiRouter.post("/login", User.login).post("/register", User.register);
+apiRouter.post("/login", User.login).post("/signup", User.register);
 // .post("/logout", User.logout)
 
 // send all remaining request to the default router

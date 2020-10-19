@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 const { Logger } = require("../utils");
-const config = require("../../config");
+const { DB_NAME, DB_URL, DB_OPTIONS } = require("../../config");
 
 const log = new Logger("Middleware:Mongo");
 
 module.exports = () => {
-  log.info(config.DB_URL);
-  log.info(config.DB_OPTIONS);
+  log.info(DB_URL);
+  log.info(DB_OPTIONS);
   log.info("connecting to mongo...");
-  const connectWithRetry = () =>
-    mongoose.connect(config.DB_URL, config.DB_OPTIONS);
-
+  const connectWithRetry = () => {
+    mongoose.connect(DB_URL, DB_OPTIONS);
+  };
   mongoose.connection.on("error", () => {
     connectWithRetry();
     log.warning("Could not connect to MongoDB");
@@ -19,12 +19,12 @@ module.exports = () => {
   mongoose.connection.on("disconnected", () => {
     log.warning("Lost MongoDB connection...");
     log.warning("Lost MongoDB connection...");
-    connectWithRetry();
+    DB_NAME == "test" ? "" : connectWithRetry();
   });
 
-  mongoose.connection.on("connected", () =>
-    log.info("Connection established to MongoDB")
-  );
+  mongoose.connection.on("connected", async () => {
+    log.info("Connection established to MongoDB");
+  });
 
   mongoose.connection.on("reconnected", () =>
     log.info("Reconnected to MongoDB")

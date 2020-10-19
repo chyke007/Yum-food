@@ -1,3 +1,4 @@
+const db = require("../setup/db_setup");
 const { request } = require("../index");
 const path = require("path");
 
@@ -15,6 +16,9 @@ beforeEach(() => {
   };
   mockResponse();
 });
+
+// Connects to test database
+db.setupDB();
 
 /**
  * Index routes

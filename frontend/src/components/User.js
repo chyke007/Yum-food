@@ -10,7 +10,7 @@ export const User = (props) => {
       </div>
       <div className="row">
         <div className="col-xs-12">
-          <p>User Name: {props.username}</p>
+          <p>User Name is: {props.username}</p>
         </div>
       </div>
     </div>
