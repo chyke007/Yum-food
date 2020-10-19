@@ -1,5 +1,3 @@
-const { request } = require("../index");
-const path = require("path");
 beforeEach(() => {
   let mockResponse = () => {
     const response = {};

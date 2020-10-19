@@ -94,6 +94,7 @@ const login = async (req, res, next) => {
     .then((user) => {
       log.info(!(user && user.email));
       if (!(user != null && user.email != null)) {
+        res.status(422);
         return next(
           new CustomException(
             ErrorMessage.ACCOUNT_NOT_FOUND,
@@ -102,6 +103,7 @@ const login = async (req, res, next) => {
         );
       }
       if (!user.validatePassword(password)) {
+        res.status(422);
         return next(
           new CustomException(
             ErrorMessage.INCORRECT_PASSWORD,
@@ -111,6 +113,7 @@ const login = async (req, res, next) => {
       }
 
       if (!user.isActive) {
+        res.status(422);
         return next(
           new CustomException(
             ErrorMessage.ACCOUNT_DEACTIVATED,

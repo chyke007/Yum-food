@@ -1,7 +1,9 @@
+const mongoose = require("mongoose");
+const faker = require("faker");
+
 const { request } = require("../../index");
 const { User } = require("../../../server/model");
 const db = require("../../setup/db_setup");
-const mongoose = require("mongoose");
 let apikey = process.env.API_KEY;
 beforeEach(() => {
   let mockResponse = () => {
@@ -17,13 +19,13 @@ beforeEach(() => {
   mockResponse();
 });
 
-// Connects to test database
-db.setupDB();
-
 /**
  * Login test
  */
 describe("Login", () => {
+  // Connects to test database
+  db.setupDB();
+
   it("should respond with HTTP 401 for missing apikey", async (done) => {
     const response = await request.post("/api/login");
 
@@ -32,6 +34,52 @@ describe("Login", () => {
   });
 
   it("should respond with user object for authenticated user", async (done) => {
+    let response = await request
+      .post("/api/signup")
+      .send({
+        name: "Zell",
+        email: "testing1@gmail.com",
+        password: "Password2@",
+        phone: "09036040503",
+      })
+      .set("apikey", apikey);
+
+    response = await request
+      .post("/api/login")
+      .send({
+        email: "testing1@gmail.com",
+        password: "Password2@",
+      })
+      .set("apikey", apikey);
+    expect(response.body.data.name).toBeTruthy();
+    expect(response.body.data.email).toBeTruthy();
+    expect(response.status).toBe(200);
+    done();
+  });
+
+  it("should respond with error message for invalid credentials - (email)", async (done) => {
+    let response = await request
+      .post("/api/signup")
+      .send({
+        name: "Zell",
+        email: "testing@gmail.com",
+        password: "Password2@",
+        phone: "09036040503",
+      })
+      .set("apikey", apikey);
+
+    response = await request
+      .post("/api/login")
+      .send({
+        email: "testing2@gmail.com",
+        password: "Password2@",
+      })
+      .set("apikey", apikey);
+    expect(response.status).toBe(422);
+    done();
+  });
+
+  it("should respond with error message for invalid user credentials - (password)", async (done) => {
     let response = await request
       .post("/api/signup")
       .send({
@@ -46,12 +94,37 @@ describe("Login", () => {
       .post("/api/login")
       .send({
         email: "testing@gmail.com",
+        password: "Password23@",
+      })
+      .set("apikey", apikey);
+    expect(response.status).toBe(422);
+    done();
+  });
+
+  it("should respond with error message for inactive user", async (done) => {
+    let response = await request
+      .post("/api/signup")
+      .send({
+        name: "Zell",
+        email: "testing@gmail.com",
+        password: "Password2@",
+        phone: "09036040503",
+      })
+      .set("apikey", apikey);
+
+    await User.findOneAndUpdate(
+      { email: "testing@gmail.com" },
+      { isActive: false }
+    );
+
+    response = await request
+      .post("/api/login")
+      .send({
+        email: "testing@gmail.com",
         password: "Password2@",
       })
       .set("apikey", apikey);
-    expect(response.body.data.name).toBeTruthy();
-    expect(response.body.data.email).toBeTruthy();
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(422);
     done();
   });
 
@@ -60,6 +133,18 @@ describe("Login", () => {
       .post("/api/login")
       .send({
         email: "testing@gmail.com",
+      })
+      .set("apikey", apikey);
+    expect(response.status).toBe(422);
+    done();
+  });
+
+  it("should respond with error message for invalid password format", async (done) => {
+    let response = await request
+      .post("/api/login")
+      .send({
+        email: "testing@gmail.com",
+        password: faker.name.findName(),
       })
       .set("apikey", apikey);
     expect(response.status).toBe(422);

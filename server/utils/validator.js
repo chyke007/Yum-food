@@ -8,6 +8,7 @@ exports.email = (value) => validator.isEmail(value);
  * @param  {string} value
  * @return {boolean}
  */
+
 exports.password = (value) =>
   validator.matches(
     value,

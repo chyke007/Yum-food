@@ -1,7 +1,9 @@
+const mongoose = require("mongoose");
+const faker = require("faker");
+
 const { request } = require("../../index");
 const { User } = require("../../../server/model");
 const db = require("../../setup/db_setup");
-const mongoose = require("mongoose");
 let apikey = process.env.API_KEY;
 beforeEach(() => {
   let mockResponse = () => {
@@ -17,13 +19,12 @@ beforeEach(() => {
   mockResponse();
 });
 
-// Connects to test database
-db.setupDB();
-
 /**
  * Signup routes
  */
 describe("Register", () => {
+  // Connects to test database
+  db.setupDB();
   it("should respond with HTTP 401 for missing apikey", async (done) => {
     const response = await request.post("/api/signup");
 
@@ -77,6 +78,20 @@ describe("Register", () => {
       .send({
         name: "Zell",
         email: "testing@gmail.com",
+        phone: "09036040503",
+      })
+      .set("apikey", apikey);
+    expect(response.status).toBe(422);
+    done();
+  });
+
+  it("should respond with error message for invalid password format", async (done) => {
+    let response = await request
+      .post("/api/signup")
+      .send({
+        name: "Zell",
+        email: "testing@gmail.com",
+        password: faker.name.findName(),
         phone: "09036040503",
       })
       .set("apikey", apikey);
