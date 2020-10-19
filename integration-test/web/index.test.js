@@ -38,3 +38,14 @@ describe("Index routes test", () => {
     done();
   });
 });
+
+/**
+ * Frontend routes
+ */
+describe("Frontend routes test", () => {
+  // it("should respond with HTTP 200 for frontend app", async (done) => {
+  //   const response = await request.get("/");
+  //   expect(response.status).toBe(200);
+  //   done();
+  // });
+});
