@@ -1,7 +1,11 @@
 module.exports = {
   // preset: "@shelf/jest-mongodb",
   setupFiles: ["dotenv/config"],
-  collectCoverageFrom: ["**/*.js", "!data/keyMap.js", "!/node_modules/"],
+  collectCoverageFrom: [
+    "integration-test/*.js",
+    "server/*.js",
+    "!/node_modules/",
+  ],
   projects: [
     {
       displayName: "backend",
