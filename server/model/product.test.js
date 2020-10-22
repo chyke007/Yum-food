@@ -83,239 +83,303 @@ describe("Product model", () => {
     expect(err.errors.description).toBeDefined();
   });
 
-  it("should create and add review to product successfully", async (done) => {
-    const validUser = new User(userData);
-    await validUser.setPassword(userData.password);
-    const savedUser = await validUser.save();
+  //Add user review
+  describe("Add user review", () => {
+    it("should create and add review to product successfully", async (done) => {
+      const validUser = new User(userData);
+      await validUser.setPassword(userData.password);
+      const savedUser = await validUser.save();
 
-    const validProduct = new Product(productData);
-    let review = {
-      user: savedUser._id,
-      rating: 3,
-      comment: "Great food",
-    };
+      const validProduct = new Product(productData);
+      let review = {
+        user: savedUser._id,
+        rating: 3,
+        comment: "Great food",
+      };
 
-    await validProduct.addReview(review);
-    const savedProduct = await validProduct.save();
-    expect(savedProduct.numReviews).toBe(1);
-    expect(savedProduct.rating).toBe(3);
-
-    done();
-  });
-
-  it("should create, add review and get right rating of product successfully", async (done) => {
-    const validUser = new User(userData);
-    await validUser.setPassword(userData.password);
-    const savedUser = await validUser.save();
-
-    const validUser2 = new User(userData2);
-    await validUser2.setPassword(userData2.password);
-    const savedUser2 = await validUser2.save();
-
-    const validUser3 = new User(userData3);
-    await validUser3.setPassword(userData3.password);
-    const savedUser3 = await validUser3.save();
-
-    const validProduct = new Product(productData);
-    let review = {
-      user: savedUser._id,
-      rating: 3,
-      comment: "Great food",
-    };
-
-    await validProduct.addReview(review);
-    review = {
-      user: savedUser2._id,
-      rating: 2,
-      comment: "Too much salt",
-    };
-
-    await validProduct.addReview(review);
-    review = {
-      user: savedUser3._id,
-      rating: 5,
-      comment: "Sharwarma on point",
-    };
-
-    await validProduct.addReview(review);
-
-    const savedProduct = await validProduct.save();
-    expect(savedProduct.numReviews).toBe(3);
-    expect(savedProduct.rating).toBe(4);
-
-    done();
-  });
-
-  it("should return error for duplicate user in product review", async (done) => {
-    const validUser = new User(userData);
-    await validUser.setPassword(userData.password);
-    const savedUser = await validUser.save();
-
-    const validUser2 = new User(userData2);
-    await validUser2.setPassword(userData2.password);
-    const savedUser2 = await validUser2.save();
-
-    const validProduct = new Product(productData);
-    let review = {
-      user: savedUser._id,
-      rating: 3,
-      comment: "Great food",
-    };
-
-    await validProduct.addReview(review);
-    review = {
-      user: savedUser._id,
-      rating: 2,
-      comment: "Too much salt",
-    };
-
-    let err;
-    try {
       await validProduct.addReview(review);
-    } catch (error) {
-      err = error;
-    }
-    expect(err).toBeInstanceOf(CustomException);
-    expect(err.message).toBeDefined();
+      const savedProduct = await validProduct.save();
+      expect(savedProduct.numReviews).toBe(1);
+      expect(savedProduct.rating).toBe(3);
 
-    done();
+      done();
+    });
+
+    it("should create, add review and get right rating of product successfully", async (done) => {
+      const validUser = new User(userData);
+      await validUser.setPassword(userData.password);
+      const savedUser = await validUser.save();
+
+      const validUser2 = new User(userData2);
+      await validUser2.setPassword(userData2.password);
+      const savedUser2 = await validUser2.save();
+
+      const validUser3 = new User(userData3);
+      await validUser3.setPassword(userData3.password);
+      const savedUser3 = await validUser3.save();
+
+      const validProduct = new Product(productData);
+      let review = {
+        user: savedUser._id,
+        rating: 3,
+        comment: "Great food",
+      };
+
+      await validProduct.addReview(review);
+      review = {
+        user: savedUser2._id,
+        rating: 2,
+        comment: "Too much salt",
+      };
+
+      await validProduct.addReview(review);
+      review = {
+        user: savedUser3._id,
+        rating: 5,
+        comment: "Sharwarma on point",
+      };
+
+      await validProduct.addReview(review);
+
+      const savedProduct = await validProduct.save();
+      expect(savedProduct.numReviews).toBe(3);
+      expect(savedProduct.rating).toBe(4);
+
+      done();
+    });
+
+    it("should return error for duplicate user in product review", async (done) => {
+      const validUser = new User(userData);
+      await validUser.setPassword(userData.password);
+      const savedUser = await validUser.save();
+
+      const validUser2 = new User(userData2);
+      await validUser2.setPassword(userData2.password);
+      const savedUser2 = await validUser2.save();
+
+      const validProduct = new Product(productData);
+      let review = {
+        user: savedUser._id,
+        rating: 3,
+        comment: "Great food",
+      };
+
+      await validProduct.addReview(review);
+      review = {
+        user: savedUser._id,
+        rating: 2,
+        comment: "Too much salt",
+      };
+
+      let err;
+      try {
+        await validProduct.addReview(review);
+      } catch (error) {
+        err = error;
+      }
+      expect(err).toBeInstanceOf(CustomException);
+      expect(err.message).toBeDefined();
+
+      done();
+    });
   });
 
-  it("should edit product review successfully", async (done) => {
-    const validUser = new User(userData);
-    await validUser.setPassword(userData.password);
-    const savedUser = await validUser.save();
+  //Edit user review
+  describe("Edit product review", () => {
+    it("should edit product review successfully", async (done) => {
+      const validUser = new User(userData);
+      await validUser.setPassword(userData.password);
+      const savedUser = await validUser.save();
 
-    const validProduct = new Product(productData);
-    let review = {
-      user: savedUser._id,
-      rating: 3,
-      comment: "Great food",
-    };
+      const validProduct = new Product(productData);
+      let review = {
+        user: savedUser._id,
+        rating: 3,
+        comment: "Great food",
+      };
 
-    await validProduct.addReview(review);
-    review = {
-      user: savedUser._id,
-      rating: 4,
-      comment: "Very yummy",
-    };
+      await validProduct.addReview(review);
+      review = {
+        user: savedUser._id,
+        rating: 4,
+        comment: "Very yummy",
+      };
 
-    await validProduct.editReview(review);
-    const savedProduct = await validProduct.save();
-    expect(savedProduct.rating).toBe(review.rating);
-    expect(savedProduct.reviews[0].rating).toBe(review.rating);
+      await validProduct.editReview(review);
+      const savedProduct = await validProduct.save();
+      expect(savedProduct.rating).toBe(review.rating);
+      expect(savedProduct.reviews[0].rating).toBe(review.rating);
 
-    done();
+      done();
+    });
+
+    it("should find and edit product review in array of reviews successfully", async (done) => {
+      const validUser = new User(userData);
+      await validUser.setPassword(userData.password);
+      const savedUser = await validUser.save();
+
+      const validUser2 = new User(userData2);
+      await validUser2.setPassword(userData2.password);
+      const savedUser2 = await validUser2.save();
+
+      const validProduct = new Product(productData);
+      let review = {
+        user: savedUser._id,
+        rating: 3,
+        comment: "Great food",
+      };
+
+      await validProduct.addReview(review);
+      review = {
+        user: savedUser2._id,
+        rating: 3,
+        comment: "Very yummy",
+      };
+
+      await validProduct.addReview(review);
+      await validProduct.editReview({ ...review, rating: 5 });
+      const savedProduct = await validProduct.save();
+      expect(savedProduct.rating).toBe(4);
+
+      done();
+    });
+
+    it("should throw an error for user not found when editing review", async (done) => {
+      const validUser = new User(userData);
+      await validUser.setPassword(userData.password);
+      const savedUser = await validUser.save();
+
+      const validUser2 = new User(userData2);
+      await validUser2.setPassword(userData2.password);
+      const savedUser2 = await validUser2.save();
+
+      const validProduct = new Product(productData);
+      let oldReview = {
+        user: savedUser._id,
+        rating: 3,
+        comment: "Great food",
+      };
+
+      await validProduct.addReview(oldReview);
+      let newReview = {
+        user: savedUser2._id,
+        rating: 4,
+        comment: "Very yummy",
+      };
+
+      let err;
+      try {
+        await validProduct.editReview(newReview);
+      } catch (error) {
+        err = error;
+      }
+      expect(err).toBeInstanceOf(CustomException);
+      expect(err.message).toBeDefined();
+
+      const savedProduct = await validProduct.save();
+      expect(savedProduct.rating).toBe(oldReview.rating);
+      expect(savedProduct.reviews[0].rating).toBe(oldReview.rating);
+
+      done();
+    });
   });
 
-  it("should reject new product details and return previuos details", async (done) => {
-    const validUser = new User(userData);
-    await validUser.setPassword(userData.password);
-    const savedUser = await validUser.save();
+  //Delete user review
+  describe("Delete user review", () => {
+    it("should delete product review successfully", async (done) => {
+      const validUser = new User(userData);
+      await validUser.setPassword(userData.password);
+      const savedUser = await validUser.save();
 
-    const validProduct = new Product(productData);
-    let oldReview = {
-      user: savedUser._id,
-      rating: 3,
-      comment: "Great food",
-    };
+      const validUser2 = new User(userData2);
+      await validUser2.setPassword(userData2.password);
+      const savedUser2 = await validUser2.save();
 
-    await validProduct.addReview(oldReview);
-    let newReview = {
-      user: savedUser._id + "2",
-      rating: 4,
-      comment: "Very yummy",
-    };
+      const validProduct = new Product(productData);
+      let oldReview = {
+        user: savedUser._id,
+        rating: 3,
+        comment: "Great food",
+      };
 
-    await validProduct.editReview(newReview);
-    const savedProduct = await validProduct.save();
-    expect(savedProduct.rating).toBe(oldReview.rating);
-    expect(savedProduct.reviews[0].rating).toBe(oldReview.rating);
+      await validProduct.addReview(oldReview);
+      let newReview = {
+        user: savedUser2._id,
+        rating: 4,
+        comment: "Very yummy",
+      };
+      await validProduct.addReview(newReview);
 
-    done();
-  });
+      await validProduct.deleteReview(newReview.user);
 
-  it("should delete product review successfully", async (done) => {
-    const validUser = new User(userData);
-    await validUser.setPassword(userData.password);
-    const savedUser = await validUser.save();
+      const savedProduct = await validProduct.save();
 
-    const validUser2 = new User(userData2);
-    await validUser2.setPassword(userData2.password);
-    const savedUser2 = await validUser2.save();
+      expect(savedProduct.numReviews).toBe(1);
+      expect(savedProduct.rating).toBe(3);
+      expect(savedProduct.reviews[0].user).toBe(oldReview.user);
+      expect(savedProduct.reviews[0].rating).toBe(oldReview.rating);
 
-    const validProduct = new Product(productData);
-    let oldReview = {
-      user: savedUser._id,
-      rating: 3,
-      comment: "Great food",
-    };
+      done();
+    });
 
-    await validProduct.addReview(oldReview);
-    let newReview = {
-      user: savedUser2._id,
-      rating: 4,
-      comment: "Very yummy",
-    };
-    await validProduct.addReview(newReview);
+    it("should delete product review, then return right value for rating and numReview", async (done) => {
+      const validUser = new User(userData);
+      await validUser.setPassword(userData.password);
+      const savedUser = await validUser.save();
 
-    await validProduct.deleteReview(newReview.user);
+      const validProduct = new Product(productData);
 
-    const savedProduct = await validProduct.save();
+      let review = {
+        user: savedUser._id,
+        rating: 4,
+        comment: "Very yummy",
+      };
+      await validProduct.addReview(review);
 
-    expect(savedProduct.numReviews).toBe(1);
-    expect(savedProduct.rating).toBe(3);
-    expect(savedProduct.reviews[0].user).toBe(oldReview.user);
-    expect(savedProduct.reviews[0].rating).toBe(oldReview.rating);
+      await validProduct.deleteReview(review.user);
 
-    done();
-  });
+      const savedProduct = await validProduct.save();
 
-  it("should delete product review, then return right value for rating and numReview", async (done) => {
-    const validUser = new User(userData);
-    await validUser.setPassword(userData.password);
-    const savedUser = await validUser.save();
+      expect(savedProduct.numReviews).toBe(0);
+      expect(savedProduct.rating).toBe(0);
+      expect(savedProduct.reviews.length).toBe(0);
 
-    const validProduct = new Product(productData);
+      done();
+    });
+    it("should throw an error", async (done) => {
+      const validUser = new User(userData);
+      await validUser.setPassword(userData.password);
+      const savedUser = await validUser.save();
 
-    let review = {
-      user: savedUser._id,
-      rating: 4,
-      comment: "Very yummy",
-    };
-    await validProduct.addReview(review);
+      const validUser2 = new User(userData2);
+      await validUser2.setPassword(userData2.password);
+      const savedUser2 = await validUser2.save();
 
-    await validProduct.deleteReview(review.user);
+      const validProduct = new Product(productData);
 
-    const savedProduct = await validProduct.save();
+      let review = {
+        user: savedUser._id,
+        rating: 4,
+        comment: "Very yummy",
+      };
 
-    expect(savedProduct.numReviews).toBe(0);
-    expect(savedProduct.rating).toBe(0);
-    expect(savedProduct.reviews.length).toBe(0);
+      await validProduct.addReview(review);
+      let err;
+      try {
+        await validProduct.deleteReview(savedUser2._id);
+      } catch (error) {
+        err = error;
+      }
+      expect(err).toBeInstanceOf(CustomException);
+      expect(err.message).toBeDefined();
 
-    done();
-  });
-  it("should return default value for product numReviews,reviews and rating, since no review has been added", async (done) => {
-    const validUser = new User(userData);
-    await validUser.setPassword(userData.password);
-    const savedUser = await validUser.save();
+      const savedProduct = await validProduct.save();
 
-    const validProduct = new Product(productData);
+      expect(savedProduct.numReviews).toBe(1);
+      expect(savedProduct.rating).toBe(review.rating);
+      expect(savedProduct.reviews.length).toBe(1);
 
-    let review = {
-      user: savedUser._id,
-      rating: 4,
-      comment: "Very yummy",
-    };
-
-    await validProduct.deleteReview(review.user);
-
-    const savedProduct = await validProduct.save();
-
-    expect(savedProduct.numReviews).toBe(0);
-    expect(savedProduct.rating).toBe(0);
-    expect(savedProduct.reviews.length).toBe(0);
-
-    done();
+      done();
+    });
   });
 });

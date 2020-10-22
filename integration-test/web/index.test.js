@@ -44,9 +44,8 @@ describe("Index routes test", () => {
  */
 describe("Frontend routes test", () => {
   it("should respond with HTTP 200 for frontend app", async (done) => {
-    const response = await request.get("/");
-
-    expect(200).toBe(200);
+    const response = await request.get("/login");
+    expect(response.body).toBeDefined();
     done();
   });
 });
