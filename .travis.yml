@@ -4,6 +4,6 @@ node_js:
 install:
   - rm -rf node_modules && npm install
 script:
-  - npm test
   - npm run heroku-postbuild
+  - npm test
 after_success: npm run coveralls

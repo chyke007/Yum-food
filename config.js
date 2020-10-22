@@ -24,4 +24,4 @@ exports.DB_OPTIONS = {
 };
 exports.DB_NAME = process.env.DB_NAME;
 exports.API_KEY = process.env.API_KEY;
-exports.STORAGE = ".../../frontend/build";
+exports.STORAGE = process.env.STORAGE;

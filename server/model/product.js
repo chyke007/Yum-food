@@ -53,13 +53,25 @@ ProductSchema.methods.addReview = function (review) {
 };
 
 ProductSchema.methods.editReview = function (review) {
+  if (!this.reviews.some((e) => e.user == review.user)) {
+    throw new CustomException(
+      ErrorMessage.USER_HAS_NO_REVIEW,
+      ErrorCodes.USER_HAS_NO_REVIEW
+    );
+  }
   this.reviews = this.reviews.map((r) => (r.user == review.user ? review : r));
   this.updatedRating(this.reviews);
 };
 
 ProductSchema.methods.deleteReview = function (user) {
+  if (!this.reviews.some((e) => e.user == user)) {
+    throw new CustomException(
+      ErrorMessage.USER_HAS_NO_REVIEW,
+      ErrorCodes.USER_HAS_NO_REVIEW
+    );
+  }
   this.reviews = this.reviews.filter((a) => a.user != user);
-  this.numReviews = this.numReviews > 0 ? this.numReviews - 1 : 0;
+  this.numReviews = this.numReviews - 1;
   this.updatedRating(this.reviews);
 };
 
