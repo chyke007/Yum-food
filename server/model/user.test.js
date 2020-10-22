@@ -1,4 +1,3 @@
-let apikey = process.env.API_KEY;
 const mongoose = require("mongoose");
 const { User } = require("./index");
 const config = require("../../config");
@@ -38,7 +37,7 @@ describe("User model", () => {
     await userWithInvalidField.setPassword(userData.password);
     const savedUserWithInvalidField = await userWithInvalidField.save();
     expect(savedUserWithInvalidField._id).toBeDefined();
-    expect(savedUserWithInvalidField.nickkname).toBeUndefined();
+    expect(savedUserWithInvalidField.nickname).toBeUndefined();
   });
 
   // It should us tell us the errors in on email field.

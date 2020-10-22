@@ -9,19 +9,19 @@ const log = new Logger("Middleware:App");
  * @param  {Express.Application} server
  */
 module.exports = (server) => {
-  var gracefulExit = function () {
-    mongoose.connection.close(function () {
-      log(
-        "Mongoose default connection with DB :" +
-          db_server +
-          " is disconnected through app termination"
-      );
-      process.exit(0);
-    });
-  };
+  // var gracefulExit = function () {
+  //   mongoose.connection.close(function () {
+  //     log(
+  //       "Mongoose default connection with DB :" +
+  //         db_server +
+  //         " is disconnected through app termination"
+  //     );
+  //     process.exit(0);
+  //   });
+  // };
 
   // If the Node process ends, close the Mongoose connection
-  process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
+  // process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
 
   server.use(logger("dev"));
   server.use(Express.json());

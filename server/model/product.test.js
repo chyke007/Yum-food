@@ -1,0 +1,321 @@
+let apikey = process.env.API_KEY;
+const mongoose = require("mongoose");
+const { Product, User } = require("./index");
+const config = require("../../config");
+const db = require("../../integration-test/setup/db_setup");
+
+const { CustomException } = require("../utils");
+
+const productData = {
+  name: "Jellof rice", //{ type: String, required: true },
+  image: "/uploads/jellof.png", //{ type: String, required: true }
+  price: 2000, //{ type: Number, default: 0, required: true }
+  countInStock: 2, //{ type: Number, default: 0, required: true },
+  description: "Jellof rice as you like it", //{ type: String, required: true }
+};
+
+const userData = {
+  name: "TekLoon",
+  email: "Male@gmail.com",
+  phone: "08032394493",
+  password: "Facebook46",
+};
+
+const userData2 = {
+  name: "Kilop",
+  email: "Female@yahoo.com",
+  phone: "09032394493",
+  password: "Twitter64",
+};
+
+const userData3 = {
+  name: "Zanie",
+  email: "boy@yandex.com",
+  phone: "01937433",
+  password: "Snapchat23",
+};
+
+// Connects to test database
+db.setupDB();
+
+/**
+ * Product model
+ */
+describe("Product model", () => {
+  it("create & save product successfully", async (done) => {
+    const validProduct = new Product(productData);
+    const savedProduct = await validProduct.save();
+
+    // Object Id should be defined when successfully saved to MongoDB.
+    expect(savedProduct._id).toBeDefined();
+    expect(savedProduct.price).toBe(productData.price);
+    expect(savedProduct.countInStock).toBe(productData.countInStock);
+    expect(savedProduct.description).toBe(productData.description);
+    expect(savedProduct.rating).toBeDefined();
+    expect(savedProduct.numReviews).toBeDefined();
+    done();
+  });
+
+  // You shouldn't be able to add in any field that isn't defined in the schema
+  it("insert product successfully, but the field does not defined in schema should be undefined", async () => {
+    const productWithInvalidField = new Product({
+      ...productData,
+      cook: "Mc Donald",
+    });
+    const savedProductWithInvalidField = await productWithInvalidField.save();
+    expect(savedProductWithInvalidField._id).toBeDefined();
+    expect(savedProductWithInvalidField.cook).toBeUndefined();
+  });
+
+  // It should us tell us the errors is on price field.
+  it("create product without required field should failed", async () => {
+    const productWithoutRequiredField = new Product({
+      name: "TekLoon",
+      image: "/uploads/moi-moi.png",
+    });
+    let err;
+    try {
+      const savedProductWithoutRequiredField = await productWithoutRequiredField.save();
+    } catch (error) {
+      err = error;
+    }
+    expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
+    expect(err.errors.description).toBeDefined();
+  });
+
+  it("should create and add review to product successfully", async (done) => {
+    const validUser = new User(userData);
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    const validProduct = new Product(productData);
+    let review = {
+      user: savedUser._id,
+      rating: 3,
+      comment: "Great food",
+    };
+
+    await validProduct.addReview(review);
+    const savedProduct = await validProduct.save();
+    expect(savedProduct.numReviews).toBe(1);
+    expect(savedProduct.rating).toBe(3);
+
+    done();
+  });
+
+  it("should create, add review and get right rating of product successfully", async (done) => {
+    const validUser = new User(userData);
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    const validUser2 = new User(userData2);
+    await validUser2.setPassword(userData2.password);
+    const savedUser2 = await validUser2.save();
+
+    const validUser3 = new User(userData3);
+    await validUser3.setPassword(userData3.password);
+    const savedUser3 = await validUser3.save();
+
+    const validProduct = new Product(productData);
+    let review = {
+      user: savedUser._id,
+      rating: 3,
+      comment: "Great food",
+    };
+
+    await validProduct.addReview(review);
+    review = {
+      user: savedUser2._id,
+      rating: 2,
+      comment: "Too much salt",
+    };
+
+    await validProduct.addReview(review);
+    review = {
+      user: savedUser3._id,
+      rating: 5,
+      comment: "Sharwarma on point",
+    };
+
+    await validProduct.addReview(review);
+
+    const savedProduct = await validProduct.save();
+    expect(savedProduct.numReviews).toBe(3);
+    expect(savedProduct.rating).toBe(4);
+
+    done();
+  });
+
+  it("should return error for duplicate user in product review", async (done) => {
+    const validUser = new User(userData);
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    const validUser2 = new User(userData2);
+    await validUser2.setPassword(userData2.password);
+    const savedUser2 = await validUser2.save();
+
+    const validProduct = new Product(productData);
+    let review = {
+      user: savedUser._id,
+      rating: 3,
+      comment: "Great food",
+    };
+
+    await validProduct.addReview(review);
+    review = {
+      user: savedUser._id,
+      rating: 2,
+      comment: "Too much salt",
+    };
+
+    let err;
+    try {
+      await validProduct.addReview(review);
+    } catch (error) {
+      err = error;
+    }
+    expect(err).toBeInstanceOf(CustomException);
+    expect(err.message).toBeDefined();
+
+    done();
+  });
+
+  it("should edit product review successfully", async (done) => {
+    const validUser = new User(userData);
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    const validProduct = new Product(productData);
+    let review = {
+      user: savedUser._id,
+      rating: 3,
+      comment: "Great food",
+    };
+
+    await validProduct.addReview(review);
+    review = {
+      user: savedUser._id,
+      rating: 4,
+      comment: "Very yummy",
+    };
+
+    await validProduct.editReview(review);
+    const savedProduct = await validProduct.save();
+    expect(savedProduct.rating).toBe(review.rating);
+    expect(savedProduct.reviews[0].rating).toBe(review.rating);
+
+    done();
+  });
+
+  it("should reject new product details and return previuos details", async (done) => {
+    const validUser = new User(userData);
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    const validProduct = new Product(productData);
+    let oldReview = {
+      user: savedUser._id,
+      rating: 3,
+      comment: "Great food",
+    };
+
+    await validProduct.addReview(oldReview);
+    let newReview = {
+      user: savedUser._id + "2",
+      rating: 4,
+      comment: "Very yummy",
+    };
+
+    await validProduct.editReview(newReview);
+    const savedProduct = await validProduct.save();
+    expect(savedProduct.rating).toBe(oldReview.rating);
+    expect(savedProduct.reviews[0].rating).toBe(oldReview.rating);
+
+    done();
+  });
+
+  it("should delete product review successfully", async (done) => {
+    const validUser = new User(userData);
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    const validUser2 = new User(userData2);
+    await validUser2.setPassword(userData2.password);
+    const savedUser2 = await validUser2.save();
+
+    const validProduct = new Product(productData);
+    let oldReview = {
+      user: savedUser._id,
+      rating: 3,
+      comment: "Great food",
+    };
+
+    await validProduct.addReview(oldReview);
+    let newReview = {
+      user: savedUser2._id,
+      rating: 4,
+      comment: "Very yummy",
+    };
+    await validProduct.addReview(newReview);
+
+    await validProduct.deleteReview(newReview.user);
+
+    const savedProduct = await validProduct.save();
+
+    expect(savedProduct.numReviews).toBe(1);
+    expect(savedProduct.rating).toBe(3);
+    expect(savedProduct.reviews[0].user).toBe(oldReview.user);
+    expect(savedProduct.reviews[0].rating).toBe(oldReview.rating);
+
+    done();
+  });
+
+  it("should delete product review, then return right value for rating and numReview", async (done) => {
+    const validUser = new User(userData);
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    const validProduct = new Product(productData);
+
+    let review = {
+      user: savedUser._id,
+      rating: 4,
+      comment: "Very yummy",
+    };
+    await validProduct.addReview(review);
+
+    await validProduct.deleteReview(review.user);
+
+    const savedProduct = await validProduct.save();
+
+    expect(savedProduct.numReviews).toBe(0);
+    expect(savedProduct.rating).toBe(0);
+    expect(savedProduct.reviews.length).toBe(0);
+
+    done();
+  });
+  it("should return default value for product numReviews,reviews and rating, since no review has been added", async (done) => {
+    const validUser = new User(userData);
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    const validProduct = new Product(productData);
+
+    let review = {
+      user: savedUser._id,
+      rating: 4,
+      comment: "Very yummy",
+    };
+
+    await validProduct.deleteReview(review.user);
+
+    const savedProduct = await validProduct.save();
+
+    expect(savedProduct.numReviews).toBe(0);
+    expect(savedProduct.rating).toBe(0);
+    expect(savedProduct.reviews.length).toBe(0);
+
+    done();
+  });
+});
