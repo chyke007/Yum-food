@@ -4,6 +4,8 @@ module.exports = {
   collectCoverageFrom: [
     "integration-test/**/*.js",
     "server/**/*.js",
+    "!integration-test/**/*.test.js",
+    "!server/**/*.test.js",
     "!/node_modules/",
   ],
   projects: [
