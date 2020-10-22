@@ -7,4 +7,5 @@ module.exports = {
   Storage: require("./storage"),
   Helper: require("./helper"),
   Validator: require("./validator"),
+  Constants: require("./constants"),
 };
