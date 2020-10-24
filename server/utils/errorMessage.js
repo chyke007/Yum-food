@@ -14,6 +14,8 @@ module.exports = {
   EMAIL_IN_USE: (email) => `an account with email ${email} already exists`,
   DUPLICATE_USER_REVIEW: "Duplicate user review",
   USER_HAS_NO_REVIEW: "User has no review",
+  PRODUCT_NOT_FOUND: "Product not found",
+  DUPLICATE_PRODUCT_IN_ORDER: "Duplicate product in a single order",
   NOT_FOUND:
     "Could not find what you are looking for please check our documentation for more details",
 };
