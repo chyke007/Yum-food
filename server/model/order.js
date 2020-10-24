@@ -2,8 +2,13 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
+const Product = require("./product");
+
 const {
   Constants: { PENDING, ACCEPTED, DECLINED },
+  CustomException,
+  ErrorCodes,
+  ErrorMessage,
 } = require("../utils");
 
 const shippingSchema = {
@@ -15,9 +20,9 @@ const shippingSchema = {
 
 const orderItemSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, default: "Item name" },
     qty: { type: Number, required: true },
-    image: { type: String, required: true },
+    image: { type: String, required: true, default: "/uploads/default.png" },
     price: { type: Number, required: true },
     total: { type: Number, required: true },
     product: {
@@ -36,10 +41,9 @@ const OrderSchema = new Schema(
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     orderItems: [orderItemSchema],
     shipping: shippingSchema,
-    itemsPrice: { type: Number },
-    taxPrice: { type: Number },
-    shippingPrice: { type: Number },
-    totalPrice: { type: Number },
+    itemsPrice: { type: Number, default: 0 },
+    shippingPrice: { type: Number, required: true, default: 0 },
+    totalPrice: { type: Number, default: 0 },
     isPaid: { type: Boolean, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, default: false },
@@ -54,5 +58,45 @@ const OrderSchema = new Schema(
     timestamps: true,
   }
 );
+
+/* eslint-disable func-names */
+OrderSchema.methods.addItem = async function (orderItem) {
+  const product = await Product.findById(orderItem.product);
+  if (!product) {
+    throw new CustomException(
+      ErrorMessage.PRODUCT_NOT_FOUND,
+      ErrorCodes.PRODUCT_NOT_FOUND
+    );
+  }
+
+  if (this.orderItems.some((e) => e.product == orderItem.product)) {
+    throw new CustomException(
+      ErrorMessage.DUPLICATE_PRODUCT_IN_ORDER,
+      ErrorCodes.DUPLICATE_PRODUCT_IN_ORDER
+    );
+  }
+
+  let newOrderItem = {
+    ...orderItem,
+    price: product.price,
+    total: (orderItem.qty || 1) * product.price,
+    qty: orderItem.qty || 1,
+  };
+  this.orderItems = [...this.orderItems, newOrderItem];
+  this.updatedItemsPrice(this.orderItems);
+};
+
+OrderSchema.methods.updatedItemsPrice = function (items) {
+  const itemsPrice = items.reduce((acc, next) => {
+    return acc + next.total;
+  }, 0);
+  this.itemsPrice = itemsPrice;
+  this.updatedTotalPrice(this.itemsPrice);
+};
+
+OrderSchema.methods.updatedTotalPrice = function (itemsPrice) {
+  const newShippingPrice = itemsPrice + this.shippingPrice;
+  this.totalPrice = newShippingPrice;
+};
 
 module.exports = mongoose.model("order", OrderSchema);
