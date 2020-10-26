@@ -8,6 +8,11 @@ const Middleware = require("../../middleware");
 apiRouter.use(Middleware.ApiGuard);
 
 apiRouter.post("/login", User.login).post("/signup", User.register);
+
+// all requests must pass in a token
+apiRouter.use(Middleware.ExtractToken);
+
+apiRouter.use("/product", require("./product"));
 // .post("/logout", User.logout)
 
 // send all remaining request to the default router

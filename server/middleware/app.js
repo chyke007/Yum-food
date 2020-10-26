@@ -2,7 +2,6 @@ const Express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const path = require("path");
-const mongoose = require("mongoose");
 const config = require("../../config");
 // const { Logger } = require("../utils");
 // const log = new Logger("Middleware:App");

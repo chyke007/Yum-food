@@ -69,14 +69,14 @@ OrderSchema.methods.addItem = async function (orderItem) {
     );
   }
 
-  if (this.orderItems.some((e) => e.product == orderItem.product)) {
+  if (this.orderItems.some((e) => e.product === orderItem.product)) {
     throw new CustomException(
       ErrorMessage.DUPLICATE_PRODUCT_IN_ORDER,
       ErrorCodes.DUPLICATE_PRODUCT_IN_ORDER
     );
   }
 
-  let newOrderItem = {
+  const newOrderItem = {
     ...orderItem,
     price: product.price,
     total: (orderItem.qty || 1) * product.price,
