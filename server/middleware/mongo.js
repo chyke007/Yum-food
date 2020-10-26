@@ -19,7 +19,7 @@ module.exports = () => {
   mongoose.connection.on("disconnected", () => {
     log.warning("Lost MongoDB connection...");
     log.warning("Lost MongoDB connection...");
-    DB_NAME == "test" ? "" : connectWithRetry();
+    if (DB_NAME !== "test") connectWithRetry();
   });
 
   mongoose.connection.on("connected", async () => {

@@ -7,6 +7,40 @@ const Validator = require("./validator");
 const log = new Logger("utils:helper");
 
 /**
+ * check if the decoded data from the token has email and userId
+ * @param  {object} user
+ * @param  {function} next
+ * @return {boolean}
+ */
+function checkPayload(user, next) {
+  const { id, email } = user;
+  // console.log(user.id)
+  // console.log(user)
+  if (email && id) {
+    // ensure the id is a mongo id
+    return checkId(id);
+  }
+  next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.EXPIRED_OR_INVALID_TOKEN,
+      ErrorCodes.EXPIRED_OR_INVALID_TOKEN
+    )
+  );
+  return false;
+}
+
+/**
+ * check if the decoded data id is a valid mongo id
+ * @param  {object} user
+ * @return {boolean}
+ */
+function checkId(id) {
+  // ensure the id is a mongo id
+  return Validator.isMongoId(String(id));
+}
+
+/**
  * @param  {User} user
  * @param  {string} token
  * @return {object}
@@ -114,4 +148,10 @@ function validateBody(scope, body, res, done) {
   return true;
 }
 
-module.exports = { formatUser, tokenPayload, validateBody };
+module.exports = {
+  checkPayload,
+  checkId,
+  formatUser,
+  tokenPayload,
+  validateBody,
+};

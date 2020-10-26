@@ -128,9 +128,9 @@ class Jwt {
     if (query && query.token) {
       return query.token;
     }
-    if (params && params.token) {
-      return params.token;
-    }
+    // if (params && params.token) {
+    //   return params.token;
+    // }
     return null;
   }
 }

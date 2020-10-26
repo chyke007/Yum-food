@@ -1,16 +1,14 @@
 // eslint-disable-next-line no-unused-vars
 const Express = require("express");
 const {
-  Helper: { validateBody },
-  Logger,
+  Helper: { checkId, checkPayload },
+
   ErrorCodes,
   ErrorMessage,
   CustomException,
   Db: { paginate: Paginate },
 } = require("../utils");
 const { Product } = require("../model");
-
-const log = new Logger("Controller:Product");
 
 /**
  * tranforms query parameters for mongo
@@ -76,8 +74,30 @@ const parseQuery = ({ search, price, rating, reviews, active }) => {
   }
   return query;
 };
-/* eslint func-names: ["error", "never"] */
+
 /**
+ *
+ * @param  {object} video
+ * @param  {Express.Response} res
+ * @param {function} next
+ */
+const handleResult = function (product, res, next) {
+  if (product) {
+    res.json({ data: product });
+  } else {
+    res.status(404);
+    next(
+      new CustomException(
+        // eslint-disable-next-line new-cap
+        ErrorMessage.PRODUCT_NOT_FOUND,
+        ErrorCodes.PRODUCT_NOT_FOUND
+      )
+    );
+  }
+};
+
+/* eslint func-names: ["error", "never"] */
+/** returns all products
  * @param  {Express.Request} req
  * @param  {Express.Response} res
  * @param  {function} next
@@ -94,4 +114,65 @@ const getAll = async function (req, res, next) {
   });
 };
 
-module.exports = { getAll };
+/**
+ * Get specific product record
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const get = async function (req, res, next) {
+  if (checkPayload(req.user || {}, next)) {
+    const { id } = req.params;
+    if (!checkId(id)) {
+      next(
+        new CustomException(
+          // eslint-disable-next-line new-cap
+          ErrorMessage.PRODUCT_NOT_FOUND,
+          ErrorCodes.PRODUCT_NOT_FOUND
+        )
+      );
+      return;
+    }
+
+    Product.findById(id, { countInStock: 0 }).then((product) => {
+      handleResult(product, res, next);
+    });
+  } else {
+    next(
+      new CustomException(
+        // eslint-disable-next-line new-cap
+        ErrorMessage.NO_PRIVILEGE,
+        ErrorCodes.NO_PRIVILEGE
+      )
+    );
+  }
+};
+
+/**
+ * delete a single product
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const deleteProduct = async function (req, res, next) {
+  const { params } = req;
+  if (
+    checkPayload(req.user || {}) &&
+    req.user.accountType === "ADMIN" &&
+    checkId(params.id)
+  ) {
+    Product.findByIdAndDelete(params.id).then((product) => {
+      handleResult(product, res, next);
+    });
+  } else {
+    next(
+      new CustomException(
+        // eslint-disable-next-line new-cap
+        ErrorMessage.NO_PRIVILEGE,
+        ErrorCodes.NO_PRIVILEGE
+      )
+    );
+  }
+};
+
+module.exports = { getAll, get, deleteProduct };

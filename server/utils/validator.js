@@ -8,11 +8,10 @@ exports.email = (value) => validator.isEmail(value);
  * @param  {string} value
  * @return {boolean}
  */
-
 exports.password = (value) =>
   validator.matches(
     value,
-    /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+).{8,}/
+    /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+).{8,}/ // eslint-disable-line
   );
 
 /**

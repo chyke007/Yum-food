@@ -2,4 +2,7 @@ module.exports = {
   PENDING: "PENDING",
   DECLINED: "DECLINED",
   ACCEPTED: "ACCEPTED",
+  USER: "USER",
+  ADMIN: "ADMIN",
+  SAMPLE_MONGO_ID: "5f96d1c842a2c839781e686d",
 };
