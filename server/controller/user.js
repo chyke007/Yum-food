@@ -90,7 +90,7 @@ const login = async (req, res, next) => {
   log.info("passed validation");
   const { email, password } = body;
 
-  User.findOne({ email })
+  return User.findOne({ email })
     .then((user) => {
       log.info(!(user && user.email));
       if (!(user != null && user.email != null)) {

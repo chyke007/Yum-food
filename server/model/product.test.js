@@ -100,7 +100,7 @@ describe("Product model", () => {
       await validProduct.addReview(review);
       const savedProduct = await validProduct.save();
       expect(savedProduct.numReviews).toBe(1);
-      expect(savedProduct.rating).toBe(3);
+      expect(savedProduct.rating).toBe(review.rating);
 
       done();
     });

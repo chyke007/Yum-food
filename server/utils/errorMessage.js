@@ -12,6 +12,7 @@ module.exports = {
   INVALID_NAME: "Invalid name",
   INVALID_PHONE: "Invalid phone number",
   EMAIL_IN_USE: (email) => `an account with email ${email} already exists`,
+  NO_TOKEN_FOUND: "Please provide a token",
   DUPLICATE_USER_REVIEW: "Duplicate user review",
   USER_HAS_NO_REVIEW: "User has no review",
   PRODUCT_NOT_FOUND: "Product not found",

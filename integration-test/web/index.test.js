@@ -31,9 +31,22 @@ describe("Index routes test", () => {
     done();
   });
 
-  it("should respond with HTTP 404 for missing route", async (done) => {
-    const response = await request.get("/api/test").set("apikey", apikey);
-
+  it("should respond with HTTP 404 for missing token", async (done) => {
+    let token = await request
+      .post("/api/signup")
+      .send({
+        name: "Zell",
+        email: "test@gmail.com",
+        password: "Password2@",
+        phone: "09036040503",
+      })
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    let response = await request
+      .get("/api/test")
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.status).toBe(404);
     done();
   });

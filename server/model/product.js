@@ -11,7 +11,7 @@ const reviewSchema = new Schema(
       ref: "user",
       required: true,
     },
-    rating: { type: Number, default: 0 },
+    rating: { type: Number, default: 0, enum: [0, 1, 2, 3, 4, 5] },
     comment: { type: String, required: true },
   },
   {
@@ -41,42 +41,45 @@ const ProductSchema = new Schema(
 
 /* eslint-disable func-names */
 ProductSchema.methods.addReview = function (review) {
-  if (this.reviews.some((e) => e.user == review.user)) {
+  if (this.reviews.some((e) => e.user === review.user)) {
     throw new CustomException(
       ErrorMessage.DUPLICATE_USER_REVIEW,
       ErrorCodes.DUPLICATE_USER_REVIEW
     );
   }
   this.reviews = [...this.reviews, review];
-  this.numReviews = this.numReviews + 1;
+  this.numReviews += 1;
   this.updatedRating(this.reviews);
 };
 
 ProductSchema.methods.editReview = function (review) {
-  if (!this.reviews.some((e) => e.user == review.user)) {
+  if (!this.reviews.some((e) => e.user === review.user)) {
     throw new CustomException(
       ErrorMessage.USER_HAS_NO_REVIEW,
       ErrorCodes.USER_HAS_NO_REVIEW
     );
   }
-  this.reviews = this.reviews.map((r) => (r.user == review.user ? review : r));
+  this.reviews = this.reviews.map((r) => (r.user === review.user ? review : r));
   this.updatedRating(this.reviews);
 };
 
 ProductSchema.methods.deleteReview = function (user) {
-  if (!this.reviews.some((e) => e.user == user)) {
+  if (!this.reviews.some((e) => e.user === user)) {
     throw new CustomException(
       ErrorMessage.USER_HAS_NO_REVIEW,
       ErrorCodes.USER_HAS_NO_REVIEW
     );
   }
-  this.reviews = this.reviews.filter((a) => a.user != user);
-  this.numReviews = this.numReviews - 1;
+  this.reviews = this.reviews.filter((a) => a.user !== user);
+  this.numReviews -= 1;
   this.updatedRating(this.reviews);
 };
 
 ProductSchema.methods.updatedRating = function (reviews) {
-  if (reviews.length < 1) return (this.rating = 0);
+  if (reviews.length < 1) {
+    this.rating = 0;
+    return;
+  }
   const rating =
     reviews.reduce((acc, next) => {
       return acc + next.rating;

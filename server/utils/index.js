@@ -8,4 +8,5 @@ module.exports = {
   Helper: require("./helper"),
   Validator: require("./validator"),
   Constants: require("./constants"),
+  Db: require("./db"),
 };
