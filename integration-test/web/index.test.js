@@ -31,7 +31,7 @@ describe("Index routes test", () => {
     done();
   });
 
-  it("should respond with HTTP 404 for missing token", async (done) => {
+  it("should respond with HTTP 404 for missing route - token passed in header", async (done) => {
     let token = await request
       .post("/api/signup")
       .send({
@@ -47,6 +47,25 @@ describe("Index routes test", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
+    expect(response.status).toBe(404);
+    done();
+  });
+  it("should respond with HTTP 404 for missing token - token passed in as query parameter", async (done) => {
+    let token = await request
+      .post("/api/signup")
+      .send({
+        name: "Zell",
+        email: "test@gmail.com",
+        password: "Password2@",
+        phone: "09036040503",
+      })
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    let response = await request
+      .get(`/api/test?token=${token}`)
+      .set("apikey", apikey)
+      .set("Accept", "application/json");
+
     expect(response.status).toBe(404);
     done();
   });

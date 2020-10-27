@@ -2,10 +2,13 @@ module.exports = {
   ACCOUNT_NOT_FOUND: "account not found",
   INCORRECT_PASSWORD: "email or password is incorrect",
   ACCOUNT_DEACTIVATED: "oops, your account has been deactivated, contact admin",
+  NO_PRIVILEGE:
+    "you do not have the required privilege to perform this operation",
   UNKNOWN: "an unexpected error has occured",
   EXPIRED_TOKEN: "Expired token",
   UNAUTHORIZED: "Unauthorized",
   UNAUTHORIZED_TOKEN: "Unauthorized token",
+  EXPIRED_OR_INVALID_TOKEN: "Expired or invalid token",
   REQUIRED_EMAIL_PASSWORD: "Email, password and name are required",
   INVALID_EMAIL: "Invalid email",
   INVALID_PASSWORD: "Invalid pasword",

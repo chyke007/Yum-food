@@ -1,12 +1,10 @@
 // const MulterError = require('multer').MulterError
-const { JsonWebTokenError } = require("jsonwebtoken");
 const {
   CustomException,
   ErrorMessage,
   ErrorCodes,
   Logger,
 } = require("../utils");
-// const UnauthorizedError = require('express-jwt').UnauthorizedError
 
 const log = new Logger("Middleware:ErrorHandler");
 /* eslint-disable no-console */
@@ -54,17 +52,6 @@ module.exports = (err, req, res, next) => {
   log.info(JSON.stringify(res.statusCode));
   if (res.statusCode < 400) res.status(400);
   if (err instanceof CustomException) return res.json({ error: err });
-  if (
-    // err instanceof UnauthorizedError ||
-    err instanceof JsonWebTokenError
-  ) {
-    return res.status(401).json({
-      error: new CustomException(
-        ErrorMessage.UNAUTHORIZED,
-        ErrorCodes.UNAUTHORIZED_TOKEN
-      ),
-    });
-  }
   if (err.name === "MulterError") {
     return handleMulter(err, req, res, next);
   }

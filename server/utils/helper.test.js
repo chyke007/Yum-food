@@ -1,7 +1,62 @@
 const {
-  Helper: { formatUser, tokenPayload, validateBody },
+  Helper: { checkPayload, checkId, formatUser, tokenPayload, validateBody },
+  Constants: { SAMPLE_MONGO_ID },
 } = require("./index");
 const faker = require("faker");
+
+/**
+ * Check Payload
+ */
+describe("Check Payload test", () => {
+  let fakedUser = {
+    email: faker.internet.email(),
+    id: SAMPLE_MONGO_ID,
+  };
+  let next = () => {};
+  it("should respond with desired value", () => {
+    const response = checkPayload(fakedUser, next);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with false for missing email or id", () => {
+    delete fakedUser.email;
+
+    const response = checkPayload(fakedUser, next);
+    expect(response).toBe(false);
+  });
+
+  it("should respond with false for missing email or id", () => {
+    delete fakedUser.id;
+
+    const response = checkPayload(fakedUser, next);
+    expect(response).toBe(false);
+  });
+
+  it("should respond with false for invalid mongo id", () => {
+    fakedUser.id = "123";
+
+    const response = checkPayload(fakedUser, next);
+    expect(response).toBe(false);
+  });
+});
+
+/**
+ * Check Id
+ */
+describe("Check Id test", () => {
+  let id = SAMPLE_MONGO_ID;
+  it("should respond with desired value", () => {
+    const response = checkId(id);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with false for invalid mongo id", () => {
+    id = "123";
+
+    const response = checkId(id);
+    expect(response).toBe(false);
+  });
+});
 
 /**
  * Format User

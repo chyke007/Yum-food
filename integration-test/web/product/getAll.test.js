@@ -1,6 +1,3 @@
-const mongoose = require("mongoose");
-const faker = require("faker");
-
 const { request } = require("../../index");
 const { User, Product } = require("../../../server/model");
 const db = require("../../setup/db_setup");
@@ -18,6 +15,20 @@ const productData = {
   price: 2000,
   countInStock: 2,
   description: "Jellof rice as you like it",
+};
+const productData2 = {
+  name: "Fried rice",
+  image: "/uploads/fried_rice.png",
+  price: 4000,
+  countInStock: 4,
+  description: "Fried rice as you like it",
+};
+const productData3 = {
+  name: "Bean cake",
+  image: "/uploads/bean_cake.png",
+  price: 4500,
+  countInStock: 3,
+  description: "Bean cake as you like it",
 };
 
 let apikey = process.env.API_KEY;
@@ -112,7 +123,7 @@ describe("Product", () => {
       expect(response.status).toBe(200);
       done();
     });
-    it("should respond with empty data object for valid product query parameter  - search", async (done) => {
+    it("should respond with data object for valid product query parameter  - search", async (done) => {
       const validProduct = new Product(productData);
       const savedProduct = await validProduct.save();
       let token = await request
@@ -145,13 +156,12 @@ describe("Product", () => {
         .set("apikey", apikey)
         .set("Accept", "application/json")
         .set("Authorization", `Bearer ${token}`);
-      // console.log(response.body);
       expect(response.body.data).toBeDefined();
       expect(response.body.data[0]).toBeUndefined();
       expect(response.status).toBe(200);
       done();
     });
-    it("should respond with empty data object for valid product query parameter  - price", async (done) => {
+    it("should respond with  data object for valid product query parameter  - price", async (done) => {
       const validProduct = new Product(productData);
       const savedProduct = await validProduct.save();
       let token = await request
@@ -165,12 +175,35 @@ describe("Product", () => {
         .set("apikey", apikey)
         .set("Accept", "application/json")
         .set("Authorization", `Bearer ${token}`);
-      // console.log(response.body);
       expect(response.body.data).toBeDefined();
       expect(response.body.data[0]).toBeDefined();
       expect(response.status).toBe(200);
       done();
     });
+    it("should respond with  data object for valid product  query parameter  - price(multiple)", async (done) => {
+      const validProduct = new Product(productData);
+      const savedProduct = await validProduct.save();
+      const validProduct2 = new Product(productData2);
+      const savedProduct2 = await validProduct2.save();
+      const validProduct3 = new Product(productData3);
+      const savedProduct3 = await validProduct3.save();
+      let token = await request
+        .post("/api/signup")
+        .send(userData)
+        .set("apikey", apikey);
+      token = token.body.data.token;
+
+      let response = await request
+        .get("/api/product?price=1000-2000,4100-*")
+        .set("apikey", apikey)
+        .set("Accept", "application/json")
+        .set("Authorization", `Bearer ${token}`);
+      expect(response.body.data).toBeDefined();
+      expect(response.body.data.length).toBe(2);
+      expect(response.status).toBe(200);
+      done();
+    });
+
     it("should respond with empty data object for invalid product query parameter  - active", async (done) => {
       const validProduct = new Product(productData);
       const savedProduct = await validProduct.save();
@@ -185,7 +218,6 @@ describe("Product", () => {
         .set("apikey", apikey)
         .set("Accept", "application/json")
         .set("Authorization", `Bearer ${token}`);
-      // console.log(response.body);
       expect(response.body.data).toBeDefined();
       expect(response.body.data[0]).toBeUndefined();
       expect(response.status).toBe(200);
@@ -205,7 +237,100 @@ describe("Product", () => {
         .set("apikey", apikey)
         .set("Accept", "application/json")
         .set("Authorization", `Bearer ${token}`);
-      // console.log(response.body);
+      expect(response.body.data).toBeDefined();
+      expect(response.body.data[0]).toBeDefined();
+      expect(response.status).toBe(200);
+      done();
+    });
+    it("should respond with empty data object for invalid product query parameter  - rating", async (done) => {
+      const validProduct = new Product(productData);
+      const savedProduct = await validProduct.save();
+      let token = await request
+        .post("/api/signup")
+        .send(userData)
+        .set("apikey", apikey);
+      token = token.body.data.token;
+
+      let response = await request
+        .get("/api/product?rating=1")
+        .set("apikey", apikey)
+        .set("Accept", "application/json")
+        .set("Authorization", `Bearer ${token}`);
+      expect(response.body.data).toBeDefined();
+      expect(response.body.data[0]).toBeUndefined();
+      expect(response.status).toBe(200);
+      done();
+    });
+    it("should respond with empty data object for valid product query parameter  - rating", async (done) => {
+      let token = await request
+        .post("/api/signup")
+        .send(userData)
+        .set("apikey", apikey);
+
+      const validProduct = new Product(productData);
+      let review = {
+        user: token.body.data._id,
+        rating: 3,
+        comment: "Great food",
+      };
+      token = token.body.data.token;
+
+      await validProduct.addReview(review);
+      const savedProduct = await validProduct.save();
+
+      let response = await request
+        .get("/api/product?rating=3")
+        .set("apikey", apikey)
+        .set("Accept", "application/json")
+        .set("Authorization", `Bearer ${token}`);
+      expect(response.body.data).toBeDefined();
+      expect(response.body.data[0]).toBeDefined();
+      expect(response.status).toBe(200);
+      done();
+    });
+    it("should respond with empty data object for invalid product query parameter  - reviews", async (done) => {
+      let token = await request
+        .post("/api/signup")
+        .send(userData)
+        .set("apikey", apikey);
+      token = token.body.data.token;
+
+      const validProduct = new Product(productData);
+
+      const savedProduct = await validProduct.save();
+
+      let response = await request
+        .get("/api/product?reviews=1-3")
+        .set("apikey", apikey)
+        .set("Accept", "application/json")
+        .set("Authorization", `Bearer ${token}`);
+      expect(response.body.data).toBeDefined();
+      expect(response.body.data[0]).toBeUndefined();
+      expect(response.status).toBe(200);
+      done();
+    });
+    it("should respond with empty data object for valid product query parameter  - reviews", async (done) => {
+      let token = await request
+        .post("/api/signup")
+        .send(userData)
+        .set("apikey", apikey);
+
+      const validProduct = new Product(productData);
+      let review = {
+        user: token.body.data._id,
+        rating: 3,
+        comment: "Great food",
+      };
+      token = token.body.data.token;
+
+      await validProduct.addReview(review);
+      const savedProduct = await validProduct.save();
+
+      let response = await request
+        .get("/api/product?reviews=1-3")
+        .set("apikey", apikey)
+        .set("Accept", "application/json")
+        .set("Authorization", `Bearer ${token}`);
       expect(response.body.data).toBeDefined();
       expect(response.body.data[0]).toBeDefined();
       expect(response.status).toBe(200);
