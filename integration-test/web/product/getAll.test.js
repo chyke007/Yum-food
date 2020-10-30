@@ -309,7 +309,7 @@ describe("Product", () => {
       expect(response.status).toBe(200);
       done();
     });
-    it("should respond with empty data object for valid product query parameter  - reviews", async (done) => {
+    it("should respond with data object for valid product query parameter  - reviews", async (done) => {
       let token = await request
         .post("/api/signup")
         .send(userData)
@@ -328,6 +328,34 @@ describe("Product", () => {
 
       let response = await request
         .get("/api/product?reviews=1-3")
+        .set("apikey", apikey)
+        .set("Accept", "application/json")
+        .set("Authorization", `Bearer ${token}`);
+      expect(response.body.data).toBeDefined();
+      expect(response.body.data[0]).toBeDefined();
+      expect(response.status).toBe(200);
+      done();
+    });
+
+    it("should respond with data object for valid product query parameter  - reviews(multiple)", async (done) => {
+      let token = await request
+        .post("/api/signup")
+        .send(userData)
+        .set("apikey", apikey);
+
+      const validProduct = new Product(productData);
+      let review = {
+        user: token.body.data._id,
+        rating: 3,
+        comment: "Great food",
+      };
+      token = token.body.data.token;
+
+      await validProduct.addReview(review);
+      const savedProduct = await validProduct.save();
+
+      let response = await request
+        .get("/api/product?reviews=1-*")
         .set("apikey", apikey)
         .set("Accept", "application/json")
         .set("Authorization", `Bearer ${token}`);
