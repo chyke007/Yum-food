@@ -40,7 +40,7 @@ beforeEach(() => {
 describe("Product", () => {
   db.setupDB();
   it("should respond with single product object for authenticated user - No image", async (done) => {
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -65,7 +65,7 @@ describe("Product", () => {
   });
 
   it("should respond with single product object for authenticated user - With image", async (done) => {
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -115,7 +115,7 @@ describe("Product", () => {
   //Missing Values
 
   it("should respond with error message for missing value - (name)", async (done) => {
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -137,7 +137,7 @@ describe("Product", () => {
   });
 
   it("should respond with error message for missing value - (price)", async (done) => {
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -158,7 +158,7 @@ describe("Product", () => {
   });
 
   it("should respond with error message for missing value - (description)", async (done) => {
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -180,7 +180,7 @@ describe("Product", () => {
 
   //Invalid Values
   it("should respond with error message for invalid value - (name)", async (done) => {
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -201,7 +201,7 @@ describe("Product", () => {
     done();
   });
   it("should respond with error message for invalid value - (price)", async (done) => {
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -222,7 +222,7 @@ describe("Product", () => {
     done();
   });
   it("should respond with error message for invalid value - (description)", async (done) => {
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 

@@ -202,7 +202,6 @@ const post = async function (req, res, next) {
       if (imageUrl instanceof CustomException) {
         log.error("error saving image", {
           file: "product.js add(image)",
-          error: error,
         });
       } else {
         validProduct.image = imageUrl;
