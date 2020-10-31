@@ -67,8 +67,10 @@ exports.saveFile = async function (folder = Storage.PRODUCT, file) {
   return await new Promise((resolve) => {
     fs.move(file.path, storagePath, (err) => {
       if (err) {
-        throw new CustomException(
-          "An unexpected error occured could not upload this file"
+        return resolve(
+          new CustomException(
+            "An unexpected error occured could not upload this file"
+          )
         );
       }
 

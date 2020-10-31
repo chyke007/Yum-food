@@ -95,6 +95,7 @@ describe("Product", () => {
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
+    console.log(token.body);
     token = token.body.data.token;
 
     let response = await request
@@ -122,6 +123,7 @@ describe("Product", () => {
       .post("/api/login")
       .send(userData)
       .set("apikey", apikey);
+    console.log(token.body);
     token = token.body.data.token;
     let response = await request
       .post("/api/product")
