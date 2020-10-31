@@ -22,7 +22,7 @@ const reviewSchema = new Schema(
 const ProductSchema = new Schema(
   {
     name: { type: String, required: true },
-    image: { type: String, required: true },
+    image: { type: String },
     price: { type: Number, default: 0, required: true },
     countInStock: { type: Number, default: 0, required: true },
     description: { type: String, required: true },

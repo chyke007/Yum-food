@@ -7,11 +7,11 @@ const db = require("../../integration-test/setup/db_setup");
 const { CustomException } = require("../utils");
 
 const productData = {
-  name: "Jellof rice", //{ type: String, required: true },
-  image: "/uploads/jellof.png", //{ type: String, required: true }
-  price: 2000, //{ type: Number, default: 0, required: true }
-  countInStock: 2, //{ type: Number, default: 0, required: true },
-  description: "Jellof rice as you like it", //{ type: String, required: true }
+  name: "Jellof rice",
+  image: "/uploads/jellof.png",
+  price: 2000,
+  countInStock: 2,
+  description: "Jellof rice as you like it",
 };
 
 const userData = {

@@ -48,7 +48,6 @@ const handleMulter = (err, req, res, next) => {
  * @return {null}
  */
 module.exports = (err, req, res, next) => {
-  log.info(22);
   log.info(JSON.stringify(res.statusCode));
   if (res.statusCode < 400) res.status(400);
   if (err instanceof CustomException) return res.json({ error: err });

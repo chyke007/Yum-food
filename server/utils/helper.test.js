@@ -216,6 +216,46 @@ describe("Validate Body Test", () => {
     });
   });
 
+  //Price
+  describe("Validate Body Test - Price", () => {
+    it("should respond with true for valid price", () => {
+      let body = { price: 120 };
+      let scope = ["price"];
+      let done = () => {};
+      let res = { status: () => {} };
+      const response = validateBody(scope, body, res, done);
+      expect(response).toBe(true);
+    });
+    it("should respond with false for invalid price", () => {
+      let body = { price: 98 };
+      let scope = ["price"];
+      let done = () => {};
+      let res = { status: () => {} };
+      const response = validateBody(scope, body, res, done);
+      expect(response).toBe(false);
+    });
+  });
+
+  //Description
+  describe("Validate Body Test - Description", () => {
+    it("should respond with true for valid description", () => {
+      let body = { description: "Yummy and satisfactory bean cake" };
+      let scope = ["description"];
+      let done = () => {};
+      let res = { status: () => {} };
+      const response = validateBody(scope, body, res, done);
+      expect(response).toBe(true);
+    });
+    it("should respond with false for invalid description", () => {
+      let body = { description: "bean cake" };
+      let scope = ["description"];
+      let done = () => {};
+      let res = { status: () => {} };
+      const response = validateBody(scope, body, res, done);
+      expect(response).toBe(false);
+    });
+  });
+
   //Phone
   describe("Validate Body Test - Phone", () => {
     it("should respond with true for valid phone", () => {

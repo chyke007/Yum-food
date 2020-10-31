@@ -24,14 +24,10 @@ exports.phone = (value) =>
 exports.name = (value) =>
   validator.isLength(value, 3) && validator.matches(value, /(?=.*[a-z][A-z])/);
 
+exports.description = (value) => validator.isLength(value, 10);
+
 exports.isMongoId = (value) => validator.isMongoId(value);
 
 exports.checkLen = (value, low) => validator.isLength(value, low);
 
 exports.isToken = (value) => validator.isJWT(value);
-
-exports.isUrl = (value) =>
-  validator.isURL(value, {
-    protocols: ["https"],
-    allow_underscores: true,
-  });

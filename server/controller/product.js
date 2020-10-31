@@ -1,15 +1,18 @@
 // eslint-disable-next-line no-unused-vars
 const Express = require("express");
 const {
-  Helper: { checkId, checkPayload },
-
+  Helper: { checkId, checkPayload, validateBody },
+  Storage: { PRODUCT },
   ErrorCodes,
   ErrorMessage,
   CustomException,
   Db: { paginate: Paginate },
+  Logger,
 } = require("../utils");
+const { FileManager } = require("../service");
 const { Product } = require("../model");
 
+const log = new Logger("Controller:Product");
 /**
  * tranforms query parameters for mongo
  * @param  {Object} body
@@ -149,6 +152,68 @@ const get = async function (req, res, next) {
 };
 
 /**
+ * Adds a product record
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const post = async function (req, res, next) {
+  if (checkPayload(req.user || {}) && req.user.accountType === "ADMIN") {
+    const { body } = req;
+
+    if (!("name" in body) || !("price" in body)) {
+      res.status(422);
+      return next(
+        new CustomException(
+          ErrorMessage.REQUIRED_NAME_PRICE,
+          ErrorCodes.REQUIRED_NAME_PRICE
+        )
+      );
+    }
+    if (!("description" in body)) {
+      res.status(422);
+      return next(
+        new CustomException(
+          ErrorMessage.REQUIRED_DESCRIPTION,
+          ErrorCodes.REQUIRED_DESCRIPTION
+        )
+      );
+    }
+
+    const isValid = validateBody(
+      ["name", "price", "description"],
+      body,
+      res,
+      next
+    );
+    if (!isValid) return false;
+
+    log.info("passed validation");
+    const { name, price, description } = body;
+
+    const validProduct = new Product({
+      name,
+      price,
+      description,
+    });
+
+    if (req.file) {
+      const imageUrl = await FileManager.saveFile(PRODUCT, req.file);
+      validProduct.image = imageUrl;
+    }
+    await validProduct.save();
+    return handleResult(validProduct, res, next);
+  } else {
+    next(
+      new CustomException(
+        // eslint-disable-next-line new-cap
+        ErrorMessage.NO_PRIVILEGE,
+        ErrorCodes.NO_PRIVILEGE
+      )
+    );
+  }
+};
+/**
  * delete a single product
  * @param  {Express.Request} req
  * @param  {Express.Response} res
@@ -161,7 +226,10 @@ const deleteProduct = async function (req, res, next) {
     req.user.accountType === "ADMIN" &&
     checkId(params.id)
   ) {
-    Product.findByIdAndDelete(params.id).then((product) => {
+    Product.findByIdAndRemove(params.id).then((product) => {
+      if (product && product.image) {
+        FileManager.deleteFile(product.image || "");
+      }
       handleResult(product, res, next);
     });
   } else {
@@ -175,4 +243,4 @@ const deleteProduct = async function (req, res, next) {
   }
 };
 
-module.exports = { getAll, get, deleteProduct };
+module.exports = { getAll, get, post, deleteProduct };
