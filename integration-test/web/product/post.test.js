@@ -112,137 +112,133 @@ describe("Product", () => {
   });
 
   //Missing Values
-  describe("Missing values", () => {
-    db.setupDB();
-    it("should respond with error message for missing value - (name)", async (done) => {
-      const validUser = new User({ ...userData, accountType: ADMIN });
-      await validUser.setPassword(userData.password);
-      const savedUser = await validUser.save();
 
-      let token = await request
-        .post("/api/login")
-        .send(userData)
-        .set("apikey", apikey);
-      token = token.body.data.token;
-      let response = await request
-        .post("/api/product")
-        .field("price", productData.price)
-        .field("description", productData.description)
-        .set("apikey", apikey)
-        .set("Accept", "multipart/form-data")
-        .set("Authorization", `Bearer ${token}`);
-      expect(response.status).toBe(422);
-      done();
-    });
+  it("should respond with error message for missing value - (name)", async (done) => {
+    const validUser = new User({ ...userData, accountType: ADMIN });
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
 
-    it("should respond with error message for missing value - (price)", async (done) => {
-      const validUser = new User({ ...userData, accountType: ADMIN });
-      await validUser.setPassword(userData.password);
-      const savedUser = await validUser.save();
-
-      let token = await request
-        .post("/api/login")
-        .send(userData)
-        .set("apikey", apikey);
-      token = token.body.data.token;
-      let response = await request
-        .post("/api/product")
-        .field("name", productData.name)
-        .field("description", productData.description)
-        .set("apikey", apikey)
-        .set("Accept", "multipart/form-data")
-        .set("Authorization", `Bearer ${token}`);
-      expect(response.status).toBe(422);
-      done();
-    });
-
-    it("should respond with error message for missing value - (description)", async (done) => {
-      const validUser = new User({ ...userData, accountType: ADMIN });
-      await validUser.setPassword(userData.password);
-      const savedUser = await validUser.save();
-
-      let token = await request
-        .post("/api/login")
-        .send(userData)
-        .set("apikey", apikey);
-      token = token.body.data.token;
-      let response = await request
-        .post("/api/product")
-        .field("name", productData.name)
-        .field("price", productData.price)
-        .set("apikey", apikey)
-        .set("Accept", "multipart/form-data")
-        .set("Authorization", `Bearer ${token}`);
-      expect(response.status).toBe(422);
-      done();
-    });
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    let response = await request
+      .post("/api/product")
+      .field("price", productData.price)
+      .field("description", productData.description)
+      .set("apikey", apikey)
+      .set("Accept", "multipart/form-data")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.status).toBe(422);
+    done();
   });
+
+  it("should respond with error message for missing value - (price)", async (done) => {
+    const validUser = new User({ ...userData, accountType: ADMIN });
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    let response = await request
+      .post("/api/product")
+      .field("name", productData.name)
+      .field("description", productData.description)
+      .set("apikey", apikey)
+      .set("Accept", "multipart/form-data")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.status).toBe(422);
+    done();
+  });
+
+  it("should respond with error message for missing value - (description)", async (done) => {
+    const validUser = new User({ ...userData, accountType: ADMIN });
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    let response = await request
+      .post("/api/product")
+      .field("name", productData.name)
+      .field("price", productData.price)
+      .set("apikey", apikey)
+      .set("Accept", "multipart/form-data")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.status).toBe(422);
+    done();
+  });
+
   //Invalid Values
-  describe("Invalid values", () => {
-    db.setupDB();
-    it("should respond with error message for invalid value - (name)", async (done) => {
-      const validUser = new User({ ...userData, accountType: ADMIN });
-      await validUser.setPassword(userData.password);
-      const savedUser = await validUser.save();
+  it("should respond with error message for invalid value - (name)", async (done) => {
+    const validUser = new User({ ...userData, accountType: ADMIN });
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
 
-      let token = await request
-        .post("/api/login")
-        .send(userData)
-        .set("apikey", apikey);
-      token = token.body.data.token;
-      let response = await request
-        .post("/api/product")
-        .field("name", "te")
-        .field("price", productData.price)
-        .field("description", productData.description)
-        .set("apikey", apikey)
-        .set("Accept", "multipart/form-data")
-        .set("Authorization", `Bearer ${token}`);
-      expect(response.status).toBe(422);
-      done();
-    });
-    it("should respond with error message for invalid value - (price)", async (done) => {
-      const validUser = new User({ ...userData, accountType: ADMIN });
-      await validUser.setPassword(userData.password);
-      const savedUser = await validUser.save();
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    let response = await request
+      .post("/api/product")
+      .field("name", "te")
+      .field("price", productData.price)
+      .field("description", productData.description)
+      .set("apikey", apikey)
+      .set("Accept", "multipart/form-data")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.status).toBe(422);
+    done();
+  });
+  it("should respond with error message for invalid value - (price)", async (done) => {
+    const validUser = new User({ ...userData, accountType: ADMIN });
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
 
-      let token = await request
-        .post("/api/login")
-        .send(userData)
-        .set("apikey", apikey);
-      token = token.body.data.token;
-      let response = await request
-        .post("/api/product")
-        .field("name", productData.name)
-        .field("price", 99)
-        .field("description", productData.description)
-        .set("apikey", apikey)
-        .set("Accept", "multipart/form-data")
-        .set("Authorization", `Bearer ${token}`);
-      expect(response.status).toBe(422);
-      done();
-    });
-    it("should respond with error message for invalid value - (description)", async (done) => {
-      const validUser = new User({ ...userData, accountType: ADMIN });
-      await validUser.setPassword(userData.password);
-      const savedUser = await validUser.save();
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    let response = await request
+      .post("/api/product")
+      .field("name", productData.name)
+      .field("price", 99)
+      .field("description", productData.description)
+      .set("apikey", apikey)
+      .set("Accept", "multipart/form-data")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.status).toBe(422);
+    done();
+  });
+  it("should respond with error message for invalid value - (description)", async (done) => {
+    const validUser = new User({ ...userData, accountType: ADMIN });
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
 
-      let token = await request
-        .post("/api/login")
-        .send(userData)
-        .set("apikey", apikey);
-      token = token.body.data.token;
-      let response = await request
-        .post("/api/product")
-        .field("name", productData.name)
-        .field("price", productData.price)
-        .field("description", "Jellof")
-        .set("apikey", apikey)
-        .set("Accept", "multipart/form-data")
-        .set("Authorization", `Bearer ${token}`);
-      expect(response.status).toBe(422);
-      done();
-    });
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    let response = await request
+      .post("/api/product")
+      .field("name", productData.name)
+      .field("price", productData.price)
+      .field("description", "Jellof")
+      .set("apikey", apikey)
+      .set("Accept", "multipart/form-data")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.status).toBe(422);
+    done();
   });
 
   //next implement put route and test
