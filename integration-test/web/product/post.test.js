@@ -84,7 +84,7 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "multipart/form-data")
       .set("Authorization", `Bearer ${token}`);
-    expect(response.body.image).toBeDefined();
+    // expect(response.body.image).toBeDefined();
     expect(response.body.data.price).toBe(productData.price);
     expect(response.status).toBe(200);
     done();
@@ -113,6 +113,7 @@ describe("Product", () => {
 
   //Missing Values
   describe("Missing values", () => {
+    db.setupDB();
     it("should respond with error message for missing value - (name)", async (done) => {
       const validUser = new User({ ...userData, accountType: ADMIN });
       await validUser.setPassword(userData.password);
@@ -178,6 +179,7 @@ describe("Product", () => {
   });
   //Invalid Values
   describe("Invalid values", () => {
+    db.setupDB();
     it("should respond with error message for invalid value - (name)", async (done) => {
       const validUser = new User({ ...userData, accountType: ADMIN });
       await validUser.setPassword(userData.password);

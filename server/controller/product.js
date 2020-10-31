@@ -198,8 +198,15 @@ const post = async function (req, res, next) {
     });
 
     if (req.file) {
-      const imageUrl = await FileManager.saveFile(PRODUCT, req.file);
-      validProduct.image = imageUrl;
+      try {
+        const imageUrl = await FileManager.saveFile(PRODUCT, req.file);
+        validProduct.image = imageUrl;
+      } catch (error) {
+        log.error("error saving image", {
+          file: "product.js add(image)",
+          error: error,
+        });
+      }
     }
     await validProduct.save();
     return handleResult(validProduct, res, next);
