@@ -92,7 +92,7 @@ describe("Product", () => {
 
   it("should respond with 400 error for unauthorized access", async (done) => {
     let token = await request
-      .post("/api/register")
+      .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
