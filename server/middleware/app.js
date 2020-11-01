@@ -26,7 +26,7 @@ module.exports = (server) => {
   server.use(logger("dev"));
   server.use(Express.json());
   server.use(Express.urlencoded({ extended: false }));
-  server.use("/upload", Express.static(path.join(__dirname, config.STORAGE)));
+  server.use("/upload", Express.static(config.STORAGE));
   server.use(Express.static(path.join(__dirname, "../../frontend/build")));
   server.use(cors());
 };

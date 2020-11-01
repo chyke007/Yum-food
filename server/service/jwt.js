@@ -119,7 +119,7 @@ class Jwt {
     const {
       headers: { authorization },
       query,
-      params,
+      // params,
     } = req;
     if (authorization && authorization.split(" ")[0] === "Bearer") {
       log.info(authorization);

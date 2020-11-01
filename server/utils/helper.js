@@ -7,6 +7,16 @@ const Validator = require("./validator");
 const log = new Logger("utils:helper");
 
 /**
+ * check if the decoded data id is a valid mongo id
+ * @param  {object} user
+ * @return {boolean}
+ */
+function checkId(id) {
+  // ensure the id is a mongo id
+  return Validator.isMongoId(String(id));
+}
+
+/**
  * check if the decoded data from the token has email and userId
  * @param  {object} user
  * @param  {function} next
@@ -28,16 +38,6 @@ function checkPayload(user, next) {
     )
   );
   return false;
-}
-
-/**
- * check if the decoded data id is a valid mongo id
- * @param  {object} user
- * @return {boolean}
- */
-function checkId(id) {
-  // ensure the id is a mongo id
-  return Validator.isMongoId(String(id));
 }
 
 /**
@@ -78,7 +78,7 @@ function tokenPayload(user) {
  * @return {function(err, result)}
  */
 function validateBody(scope, body, res, done) {
-  const { email, password, name, phone } = body;
+  const { email, password, name, phone, price, description } = body;
   if (scope.includes("email")) {
     if (!(email && Validator.email(email))) {
       log.error("invalid email", { file: "helper.js validateBody(email)" });
@@ -128,10 +128,43 @@ function validateBody(scope, body, res, done) {
     }
   }
 
+  if (scope.includes("price")) {
+    if (!(price && Number(price) > 100)) {
+      log.error("invalid price", { file: "helper.js validateBody(price)" });
+      res.status(422);
+      if (done) {
+        done(
+          new CustomException(
+            ErrorMessage.INVALID_PRICE,
+            ErrorCodes.INVALID_PRICE
+          )
+        );
+      }
+      return false;
+    }
+  }
+  if (scope.includes("description")) {
+    if (!(description && Validator.description(description))) {
+      log.error("invalid description", {
+        file: "helper.js validateBody(description)",
+      });
+      res.status(422);
+      if (done) {
+        done(
+          new CustomException(
+            ErrorMessage.INVALID_DESCRIPTION,
+            ErrorCodes.INVALID_DESCRIPTION
+          )
+        );
+      }
+      return false;
+    }
+  }
+
   if (scope.includes("phone")) {
     if (!(phone && Validator.phone(phone))) {
       log.error("invalid phone number", {
-        file: "helper.js validateBody(email)",
+        file: "helper.js validateBody(phone)",
       });
       res.status(422);
       if (done) {

@@ -14,7 +14,6 @@ const userData = {
 
 const productData = {
   name: "Jellof rice",
-  image: "/uploads/jellof.png",
   price: 2000,
   countInStock: 2,
   description: "Jellof rice as you like it",

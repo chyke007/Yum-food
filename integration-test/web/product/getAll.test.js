@@ -11,21 +11,18 @@ const userData = {
 
 const productData = {
   name: "Jellof rice",
-  image: "/uploads/jellof.png",
   price: 2000,
   countInStock: 2,
   description: "Jellof rice as you like it",
 };
 const productData2 = {
   name: "Fried rice",
-  image: "/uploads/fried_rice.png",
   price: 4000,
   countInStock: 4,
   description: "Fried rice as you like it",
 };
 const productData3 = {
   name: "Bean cake",
-  image: "/uploads/bean_cake.png",
   price: 4500,
   countInStock: 3,
   description: "Bean cake as you like it",

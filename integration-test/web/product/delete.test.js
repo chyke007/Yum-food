@@ -1,6 +1,7 @@
 const { request } = require("../../index");
 const { Product, User } = require("../../../server/model");
 const db = require("../../setup/db_setup");
+const path = require("path");
 const {
   Constants: { SAMPLE_MONGO_ID, USER, ADMIN },
 } = require("../../../server/utils");
@@ -14,7 +15,6 @@ const userData = {
 
 const productData = {
   name: "Jellof rice",
-  image: "/uploads/jellof.png",
   price: 2000,
   countInStock: 2,
   description: "Jellof rice as you like it",
@@ -64,6 +64,36 @@ describe("Product", () => {
     done();
   });
 
+  it("should respond with single product object for deleted product - With image", async (done) => {
+    const validUser = new User({ ...userData, accountType: ADMIN });
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    const filePath = path.join(__dirname, "logo192.png");
+    let response = await request
+      .post("/api/product")
+      .field("name", productData.name)
+      .field("price", productData.price)
+      .field("description", productData.description)
+      .attach("image", filePath)
+      .set("apikey", apikey)
+      .set("Accept", "multipart/form-data")
+      .set("Authorization", `Bearer ${token}`);
+    response = await request
+      .delete(`/api/product/${response.body.data._id}`)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+    // expect(response.body.image).toBeDefined();
+    expect(response.body.data.price).toBe(productData.price);
+    expect(response.status).toBe(200);
+    done();
+  });
   it("should respond with 400 error for unauthorized access", async (done) => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
