@@ -24,4 +24,8 @@ exports.DB_OPTIONS = {
 };
 exports.DB_NAME = process.env.DB_NAME;
 exports.API_KEY = process.env.API_KEY;
-exports.STORAGE = process.env.STORAGE;
+
+// Cloudinary
+exports.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+exports.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
+exports.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
