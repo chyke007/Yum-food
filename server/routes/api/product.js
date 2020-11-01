@@ -1,14 +1,19 @@
 // eslint-disable-next-line new-cap
 const router = require("express").Router();
-
+const { ExtractToken, Admin } = require("../../middleware");
 const { FileManager } = require("../../service");
 const controller = require("../../controller/product");
 
+router.get("/", controller.getAll).get("/:id", controller.get);
+
+// all requests must pass in a token
+router.use(ExtractToken);
+// .put('/:id', FileManager.cloudinary, controller.update)
+
+// all requests must be by ADMIN
+router.use(Admin);
 router
-  .get("/", controller.getAll)
-  .get("/:id", controller.get)
-  .post("/", FileManager.upload, controller.post)
-  // .put('/:id', FileManager.upload, controller.update)
+  .post("/", FileManager.cloudinary, controller.post)
   .delete("/:id", controller.deleteProduct);
 
 module.exports = router;

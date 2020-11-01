@@ -90,12 +90,11 @@ describe("Product", () => {
     done();
   });
 
-  it("should respond with 400 error for unauthorized access", async (done) => {
+  it("should respond with 403 error for unauthorized access", async (done) => {
     let token = await request
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
-    console.log(token.body);
     token = token.body.data.token;
 
     let response = await request
@@ -108,7 +107,7 @@ describe("Product", () => {
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeUndefined();
     expect(response.body.error).toBeDefined();
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(403);
     done();
   });
 
@@ -123,7 +122,6 @@ describe("Product", () => {
       .post("/api/login")
       .send(userData)
       .set("apikey", apikey);
-    console.log(token.body);
     token = token.body.data.token;
     let response = await request
       .post("/api/product")
@@ -132,6 +130,7 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "multipart/form-data")
       .set("Authorization", `Bearer ${token}`);
+    // console.log(response.body);
     expect(response.status).toBe(422);
     done();
   });
@@ -247,7 +246,6 @@ describe("Product", () => {
 
   //implement post route for reviews and test
   //implement put route for reviews and test
-  //open routes like get all and single product from token
 
   //////then
 

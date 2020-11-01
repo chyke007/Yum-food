@@ -94,6 +94,7 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
+    // console.log(response.body);
     expect(response.body.data).toBeUndefined();
     expect(response.body.error).toBeDefined();
     expect(response.status).toBe(404);

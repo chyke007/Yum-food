@@ -1,5 +1,5 @@
 const { request } = require("../../index");
-const { User, Product } = require("../../../server/model");
+const { Product } = require("../../../server/model");
 const db = require("../../setup/db_setup");
 
 const userData = {
@@ -58,28 +58,6 @@ describe("Product", () => {
       done();
     });
 
-    it("should respond with HTTP 400 for missing token in header", async (done) => {
-      const response = await request.get("/api/product").set("apikey", apikey);
-      expect(response.status).toBe(400);
-      done();
-    });
-
-    it("should respond with 401 for invalid token", async (done) => {
-      let token = await request
-        .post("/api/signup")
-        .send(userData)
-        .set("apikey", apikey);
-      token = token.body.data.token;
-
-      let response = await request
-        .get("/api/product")
-        .set("apikey", apikey)
-        .set("Accept", "application/json")
-        .set("Authorization", `Bearer ${token + "3"}`);
-      expect(response.status).toBe(401);
-      expect(response.error.message).toBeDefined();
-      done();
-    });
     it("should respond with product object for authenticated user", async (done) => {
       let token = await request
         .post("/api/signup")

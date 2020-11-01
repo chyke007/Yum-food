@@ -2,7 +2,6 @@
 const Express = require("express");
 const {
   Helper: { checkId, checkPayload, validateBody },
-  Storage: { PRODUCT },
   ErrorCodes,
   ErrorMessage,
   CustomException,
@@ -124,31 +123,21 @@ const getAll = async function (req, res, next) {
  * @param  {function} next
  */
 const get = async function (req, res, next) {
-  if (checkPayload(req.user || {}, next)) {
-    const { id } = req.params;
-    if (!checkId(id)) {
-      next(
-        new CustomException(
-          // eslint-disable-next-line new-cap
-          ErrorMessage.PRODUCT_NOT_FOUND,
-          ErrorCodes.PRODUCT_NOT_FOUND
-        )
-      );
-      return;
-    }
-
-    Product.findById(id, { countInStock: 0 }).then((product) => {
-      handleResult(product, res, next);
-    });
-  } else {
+  const { id } = req.params;
+  if (!checkId(id)) {
     next(
       new CustomException(
         // eslint-disable-next-line new-cap
-        ErrorMessage.NO_PRIVILEGE,
-        ErrorCodes.NO_PRIVILEGE
+        ErrorMessage.PRODUCT_NOT_FOUND,
+        ErrorCodes.PRODUCT_NOT_FOUND
       )
     );
+    return;
   }
+
+  Product.findById(id, { countInStock: 0 }).then((product) => {
+    handleResult(product, res, next);
+  });
 };
 
 /**
@@ -158,7 +147,7 @@ const get = async function (req, res, next) {
  * @param  {function} next
  */
 const post = async function (req, res, next) {
-  if (checkPayload(req.user || {}) && req.user.accountType === "ADMIN") {
+  if (checkPayload(req.user || {})) {
     const { body } = req;
 
     if (!("name" in body) || !("price" in body)) {
@@ -198,26 +187,26 @@ const post = async function (req, res, next) {
     });
 
     if (req.file) {
-      const imageUrl = await FileManager.saveFile(PRODUCT, req.file);
-      if (imageUrl instanceof CustomException) {
+      log.info(req.file);
+      if (!req.file.path) {
         log.error("error saving image", {
           file: "product.js add(image)",
         });
       } else {
-        validProduct.image = imageUrl;
+        validProduct.image = req.file.path;
+        validProduct.public_id = req.file.filename;
       }
     }
     await validProduct.save();
     return handleResult(validProduct, res, next);
-  } else {
-    next(
-      new CustomException(
-        // eslint-disable-next-line new-cap
-        ErrorMessage.NO_PRIVILEGE,
-        ErrorCodes.NO_PRIVILEGE
-      )
-    );
   }
+  return next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.NO_PRIVILEGE,
+      ErrorCodes.NO_PRIVILEGE
+    )
+  );
 };
 /**
  * delete a single product
@@ -227,14 +216,10 @@ const post = async function (req, res, next) {
  */
 const deleteProduct = async function (req, res, next) {
   const { params } = req;
-  if (
-    checkPayload(req.user || {}) &&
-    req.user.accountType === "ADMIN" &&
-    checkId(params.id)
-  ) {
+  if (checkPayload(req.user || {}) && checkId(params.id)) {
     Product.findByIdAndRemove(params.id).then((product) => {
-      if (product && product.image) {
-        FileManager.deleteFile(product.image || "");
+      if (product && product.public_id) {
+        FileManager.deleteCloud(product.public_id || "");
       }
       handleResult(product, res, next);
     });

@@ -43,7 +43,7 @@ describe("Product", () => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
 
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -65,7 +65,7 @@ describe("Product", () => {
   });
 
   it("should respond with single product object for deleted product - With image", async (done) => {
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -94,7 +94,7 @@ describe("Product", () => {
     expect(response.status).toBe(200);
     done();
   });
-  it("should respond with 400 error for unauthorized access", async (done) => {
+  it("should respond with 403 error for unauthorized access", async (done) => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
 
@@ -111,7 +111,7 @@ describe("Product", () => {
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeUndefined();
     expect(response.body.error).toBeDefined();
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(403);
     done();
   });
 
@@ -119,7 +119,7 @@ describe("Product", () => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
 
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
@@ -135,6 +135,7 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
+    // console.log(response.body);
     expect(response.body.data).toBeUndefined();
     expect(response.body.error).toBeDefined();
     expect(response.status).toBe(400);
@@ -145,7 +146,7 @@ describe("Product", () => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
 
-    const validUser = new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     const savedUser = await validUser.save();
 
