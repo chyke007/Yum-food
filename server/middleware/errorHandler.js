@@ -60,9 +60,6 @@ module.exports = (err, req, res, next) => {
   if (err.message) {
     return res.json({ error: { message: err.message, code: err.code } });
   }
-  if (res.body != null && res.body.error != null) {
-    return res.json(res.body);
-  }
   return res.json({
     error: new CustomException(ErrorMessage.UNKNOWN, ErrorCodes.UNKNOWN),
   });

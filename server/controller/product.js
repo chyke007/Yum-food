@@ -78,8 +78,8 @@ const parseQuery = ({ search, price, rating, reviews, active }) => {
 };
 
 /**
- *
- * @param  {object} video
+ * Send result to user
+ * @param  {object} product
  * @param  {Express.Response} res
  * @param {function} next
  */
@@ -96,6 +96,24 @@ const handleResult = function (product, res, next) {
       )
     );
   }
+};
+
+/**
+ * make sure protected content is not overriden
+ * @param  {string} body
+ */
+
+/* eslint no-param-reassign: ["error", { "props": false }] no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+
+const sanitizeBody = function (body) {
+  delete body._id;
+  delete body.createdAt;
+  delete body.updatedAt;
+  delete body.numReviews;
+  delete body.reviews;
+  delete body.rating;
+  delete body.image;
+  delete body.public_id;
 };
 
 /* eslint func-names: ["error", "never"] */
@@ -208,6 +226,59 @@ const post = async function (req, res, next) {
     )
   );
 };
+
+/**
+ * updates a single product
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const update = async function (req, res, next) {
+  const {
+    params: { id },
+    body,
+  } = req;
+  if (checkPayload(req.user || {}) && checkId(id)) {
+    sanitizeBody(body);
+    const newData = [];
+    if (body.name) newData.push("name");
+    if (body.price) newData.push("price");
+    if (body.description) newData.push("description");
+
+    const isValid = validateBody(newData, body, res, next);
+    if (!isValid) return false;
+    return Product.findByIdAndUpdate(id, body, { new: true })
+      .then(async (product) => {
+        if (req.file) {
+          log.info(req.file);
+          if (!req.file.path) {
+            log.error("error saving image", {
+              file: "product.js update(image)",
+            });
+          } else {
+            // delete previous file
+            if (product && product.public_id) {
+              FileManager.deleteCloud(product.public_id || "");
+            }
+            product.image = req.file.path;
+            product.public_id = req.file.filename;
+            await product.save();
+          }
+        }
+        return handleResult(product, res, next);
+      })
+      .catch((err) => {
+        return next(err);
+      });
+  }
+  return next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.NO_PRIVILEGE,
+      ErrorCodes.NO_PRIVILEGE
+    )
+  );
+};
 /**
  * delete a single product
  * @param  {Express.Request} req
@@ -234,4 +305,4 @@ const deleteProduct = async function (req, res, next) {
   }
 };
 
-module.exports = { getAll, get, post, deleteProduct };
+module.exports = { getAll, get, post, deleteProduct, update };
