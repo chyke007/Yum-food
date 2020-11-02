@@ -3,7 +3,7 @@ const { User, Product } = require("../../../server/model");
 const db = require("../../setup/db_setup");
 const path = require("path");
 const {
-  Constants: { ADMIN },
+  Constants: { ADMIN, SAMPLE_MONGO_ID },
 } = require("../../../server/utils");
 let apikey = process.env.API_KEY;
 const userData = {
@@ -151,8 +151,8 @@ describe("Product", () => {
       .post("/api/login")
       .send(userData)
       .set("apikey", apikey);
-    console.log(token.body);
     token = token.body.data.token;
+
     let response = await request
       .put(`/api/product/${savedProduct._id}`)
       .field("name", "se")
@@ -177,7 +177,6 @@ describe("Product", () => {
       .post("/api/login")
       .send(userData)
       .set("apikey", apikey);
-    console.log(token.body);
     token = token.body.data.token;
 
     let response = await request
