@@ -9,6 +9,7 @@ module.exports = {
   UNAUTHORIZED: "Unauthorized",
   UNAUTHORIZED_TOKEN: "Unauthorized token",
   EXPIRED_OR_INVALID_TOKEN: "Expired or invalid token",
+  FILE_TOO_LARGE: "file too large, must not be more than 1mb",
   REQUIRED_EMAIL_PASSWORD: "email, password and name are required",
   REQUIRED_NAME_PRICE: "name and price are required",
   REQUIRED_DESCRIPTION: "description is required",
