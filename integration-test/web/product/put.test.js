@@ -133,7 +133,7 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "multipart/form-data")
       .set("Authorization", `Bearer ${token}`);
-    expect(response.body.image).toBeDefined();
+    expect(response.body.data.image).toBeDefined();
     expect(response.body.data.price).toBe(productData2.price);
     expect(response.status).toBe(200);
     done();
@@ -151,8 +151,8 @@ describe("Product", () => {
       .post("/api/login")
       .send(userData)
       .set("apikey", apikey);
+    console.log(token.body);
     token = token.body.data.token;
-
     let response = await request
       .put(`/api/product/${savedProduct._id}`)
       .field("name", "se")
@@ -177,6 +177,7 @@ describe("Product", () => {
       .post("/api/login")
       .send(userData)
       .set("apikey", apikey);
+    console.log(token.body);
     token = token.body.data.token;
 
     let response = await request

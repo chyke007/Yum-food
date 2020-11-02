@@ -10,7 +10,6 @@ const log = new Logger("Middleware:ErrorHandler");
 /* eslint-disable no-console */
 // eslint-disable-next-line no-unused-vars
 const handleMulter = (err, req, res, next) => {
-  console.log(err.code);
   switch (err.code) {
     case "LIMIT_FILE_SIZE":
       return res.status(413).json({
