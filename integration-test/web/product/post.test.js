@@ -74,7 +74,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    const filePath = path.join(__dirname, "../assets/logo192.png");
+    const filePath = path.join(__dirname, "./assets/logo192.png");
     let response = await request
       .post("/api/product")
       .field("name", productData.name)
@@ -100,7 +100,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    const filePath = path.join(__dirname, "../assets/cover.jpg");
+    const filePath = path.join(__dirname, "./assets/cover.jpg");
     let response = await request
       .post("/api/product")
       .field("name", productData.name)
@@ -125,7 +125,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    const filePath = path.join(__dirname, "../assets/favicon.ico");
+    const filePath = path.join(__dirname, "./assets/favicon.ico");
     let response = await request
       .post("/api/product")
       .field("name", productData.name)

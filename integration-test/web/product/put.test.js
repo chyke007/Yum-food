@@ -84,7 +84,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    const filePath = path.join(__dirname, "../assets/logo192.png");
+    const filePath = path.join(__dirname, "./assets/logo192.png");
 
     let response = await request
       .put(`/api/product/${savedProduct._id}`)
@@ -112,7 +112,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    const filePath = path.join(__dirname, "../assets/logo192.png");
+    const filePath = path.join(__dirname, "./assets/logo192.png");
     //Add product
     let response = await request
       .post("/api/product")
