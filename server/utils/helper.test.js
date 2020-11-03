@@ -1,5 +1,13 @@
 const {
-  Helper: { checkPayload, checkId, formatUser, tokenPayload, validateBody },
+  Helper: {
+    checkPayload,
+    checkId,
+    checkRating,
+    checkComment,
+    formatUser,
+    tokenPayload,
+    validateBody,
+  },
   Constants: { SAMPLE_MONGO_ID },
 } = require("./index");
 const faker = require("faker");
@@ -54,6 +62,42 @@ describe("Check Id test", () => {
     id = "123";
 
     const response = checkId(id);
+    expect(response).toBe(false);
+  });
+});
+
+/**
+ * Check Rating
+ */
+describe("Check rating test", () => {
+  let id = 2;
+  it("should respond with desired value", () => {
+    const response = checkRating(rating);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with false for invalid rating", () => {
+    id = 6;
+
+    const response = checkRating(id);
+    expect(response).toBe(false);
+  });
+});
+
+/**
+ * Check Comment
+ */
+describe("Check comment test", () => {
+  let comment = "Yummy food";
+  it("should respond with desired value", () => {
+    const response = checkComment(comment);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with false for invalid comment", () => {
+    comment = "Very good";
+
+    const response = checkComment(comment);
     expect(response).toBe(false);
   });
 });

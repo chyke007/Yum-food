@@ -9,6 +9,7 @@ router.get("/", controller.getAll).get("/:id", controller.get);
 // all requests must pass in a token
 router.use(ExtractToken);
 
+router.post("/review/:id", controller.addReview);
 // all requests must be by ADMIN
 router.use(Admin);
 router

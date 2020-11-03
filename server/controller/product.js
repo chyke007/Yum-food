@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 const Express = require("express");
 const {
-  Helper: { checkId, checkPayload, validateBody },
+  Helper: { checkId, checkRating, checkComment, checkPayload, validateBody },
   ErrorCodes,
   ErrorMessage,
   CustomException,
@@ -115,6 +115,35 @@ const sanitizeBody = function (body) {
   delete body.image;
   delete body.public_id;
 };
+
+/**
+ * check if the review data from the body has user, rating and comment
+ * @param  {object} review
+ * @param  {function} next
+ * @return {boolean}
+ */
+function checkReview(review, next) {
+  const { user, rating, comment } = review;
+  if (
+    user &&
+    rating &&
+    comment &&
+    checkId(user) &&
+    checkRating(rating) &&
+    checkComment(comment)
+  ) {
+    // ensure desired object values
+    return true;
+  }
+  next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.INVALID_REVIEWS,
+      ErrorCodes.INVALID_REVIEWS
+    )
+  );
+  return false;
+}
 
 /* eslint func-names: ["error", "never"] */
 /** returns all products
@@ -288,21 +317,56 @@ const update = async function (req, res, next) {
 const deleteProduct = async function (req, res, next) {
   const { params } = req;
   if (checkPayload(req.user || {}) && checkId(params.id)) {
-    Product.findByIdAndRemove(params.id).then((product) => {
+    return Product.findByIdAndRemove(params.id).then((product) => {
       if (product && product.public_id) {
         FileManager.deleteCloud(product.public_id || "");
       }
-      handleResult(product, res, next);
+      return handleResult(product, res, next);
     });
-  } else {
-    next(
-      new CustomException(
-        // eslint-disable-next-line new-cap
-        ErrorMessage.NO_PRIVILEGE,
-        ErrorCodes.NO_PRIVILEGE
-      )
-    );
   }
+  return next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.NO_PRIVILEGE,
+      ErrorCodes.NO_PRIVILEGE
+    )
+  );
 };
 
-module.exports = { getAll, get, post, deleteProduct, update };
+/**
+ * adds a single review
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const addReview = async function (req, res, next) {
+  const {
+    params: { id },
+    body: { review },
+  } = req;
+  if (checkPayload(req.user || {}) && checkId(id)) {
+    const reviewN = { ...review, user: req.user.id };
+    const isValid = checkReview(reviewN, next);
+    if (!isValid) return false;
+
+    const product = await Product.findById(id);
+    if (!product) return handleResult(product, res, next);
+    try {
+      await product.addReview(reviewN);
+    } catch (err) {
+      log.info(err);
+      return next({ error: err });
+    }
+    product.save();
+    return handleResult(product, res, next);
+  }
+  return next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.NO_PRIVILEGE,
+      ErrorCodes.NO_PRIVILEGE
+    )
+  );
+};
+
+module.exports = { getAll, get, post, deleteProduct, update, addReview };

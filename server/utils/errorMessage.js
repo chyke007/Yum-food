@@ -15,11 +15,13 @@ module.exports = {
   REQUIRED_DESCRIPTION: "description is required",
   INVALID_EMAIL: "Invalid email",
   INVALID_PASSWORD: "Invalid pasword",
-  INVALID_NAME: "Invalid name, name must be more than 3 characters",
+  INVALID_NAME: "Invalid name, name must be at least 3 characters",
   INVALID_PRICE: "Invalid price, price must be more than 99",
   INVALID_DESCRIPTION:
-    "Invalid description, description must be more than 10 characters",
+    "Invalid description, description must be at least 10 characters",
   INVALID_PHONE: "Invalid phone number",
+  INVALID_REVIEWS:
+    "Invalid review, user,rating, comment is required. Rating must be 1 or 2 or 3 or 4 or 5, Comment must be at least 10 characters",
   EMAIL_IN_USE: (email) => `an account with email ${email} already exists`,
   NO_TOKEN_FOUND: "Please provide a token",
   DUPLICATE_USER_REVIEW: "Duplicate user review",
