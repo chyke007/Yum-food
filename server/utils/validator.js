@@ -29,5 +29,3 @@ exports.description = (value) => validator.isLength(value, 10);
 exports.isMongoId = (value) => validator.isMongoId(value);
 
 exports.checkLen = (value, low) => validator.isLength(value, low);
-
-exports.isToken = (value) => validator.isJWT(value);

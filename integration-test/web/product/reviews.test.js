@@ -46,7 +46,7 @@ describe("Product", () => {
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
-    token = response.body.data.token;
+    token = token.body.data.token;
 
     let review = {
       rating: 3,
@@ -74,7 +74,7 @@ describe("Product", () => {
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
-    token = response.body.data.token;
+    token = token.body.data.token;
 
     let review = {
       rating: 3,
@@ -101,7 +101,7 @@ describe("Product", () => {
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
-    token = response.body.data.token;
+    token = token.body.data.token;
 
     let review = {
       comment: "Great food",
@@ -125,7 +125,7 @@ describe("Product", () => {
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
-    token = response.body.data.token;
+    token = token.body.data.token;
 
     let review = {
       rating: 2,
@@ -151,7 +151,7 @@ describe("Product", () => {
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
-    token = response.body.data.token;
+    token = token.body.data.token;
 
     let review = {
       rating: 6,
@@ -176,7 +176,7 @@ describe("Product", () => {
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
-    token = response.body.data.token;
+    token = token.body.data.token;
 
     let review = {
       rating: 3,
@@ -201,7 +201,7 @@ describe("Product", () => {
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
-    token = response.body.data.token;
+    token = token.body.data.token;
 
     let review = {
       rating: 3,
@@ -226,7 +226,7 @@ describe("Product", () => {
       .post("/api/signup")
       .send(userData)
       .set("apikey", apikey);
-    token = response.body.data.token;
+    token = token.body.data.token;
 
     let review = {
       rating: 3,

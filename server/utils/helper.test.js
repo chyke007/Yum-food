@@ -70,16 +70,16 @@ describe("Check Id test", () => {
  * Check Rating
  */
 describe("Check rating test", () => {
-  let id = 2;
+  let rating = 2;
   it("should respond with desired value", () => {
     const response = checkRating(rating);
     expect(response).toBe(true);
   });
 
   it("should respond with false for invalid rating", () => {
-    id = 6;
+    rating = 6;
 
-    const response = checkRating(id);
+    const response = checkRating(rating);
     expect(response).toBe(false);
   });
 });

@@ -42,7 +42,7 @@ const ProductSchema = new Schema(
 
 /* eslint-disable func-names */
 ProductSchema.methods.addReview = function (review) {
-  if (this.reviews.some((e) => String(e.user) === review.user)) {
+  if (this.reviews.some((e) => String(e.user) === String(review.user))) {
     throw new CustomException(
       ErrorMessage.DUPLICATE_USER_REVIEW,
       ErrorCodes.DUPLICATE_USER_REVIEW
@@ -54,7 +54,7 @@ ProductSchema.methods.addReview = function (review) {
 };
 
 ProductSchema.methods.editReview = function (review) {
-  if (!this.reviews.some((e) => String(e.user) === review.user)) {
+  if (!this.reviews.some((e) => String(e.user) === String(review.user))) {
     throw new CustomException(
       ErrorMessage.USER_HAS_NO_REVIEW,
       ErrorCodes.USER_HAS_NO_REVIEW
@@ -67,13 +67,13 @@ ProductSchema.methods.editReview = function (review) {
 };
 
 ProductSchema.methods.deleteReview = function (user) {
-  if (!this.reviews.some((e) => String(e.user) === user)) {
+  if (!this.reviews.some((e) => String(e.user) === String(user))) {
     throw new CustomException(
       ErrorMessage.USER_HAS_NO_REVIEW,
       ErrorCodes.USER_HAS_NO_REVIEW
     );
   }
-  this.reviews = this.reviews.filter((a) => String(a.user) !== user);
+  this.reviews = this.reviews.filter((a) => String(a.user) !== String(user));
   this.numReviews -= 1;
   this.updatedRating(this.reviews);
 };
