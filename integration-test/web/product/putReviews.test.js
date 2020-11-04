@@ -60,9 +60,22 @@ describe("Product", () => {
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
       .send(review);
+
+    review = {
+      review: {
+        rating: 4,
+        comment: "Delicious food",
+      },
+    };
+    response = await request
+      .put(`/api/product/review/${savedProduct._id}`)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`)
+      .send(review);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.numReviews).toBe(1);
-    expect(response.body.data.rating).toBe(3);
+    expect(response.body.data.rating).toBe(review.review.rating);
     expect(response.status).toBe(200);
     done();
   });
@@ -84,7 +97,20 @@ describe("Product", () => {
       },
     };
     let response = await request
-      .post(`/api/product/review/234`)
+      .post(`/api/product/review/${savedProduct._id}`)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`)
+      .send(review);
+
+    review = {
+      review: {
+        rating: 4,
+        comment: "Delicious food",
+      },
+    };
+    response = await request
+      .put(`/api/product/review/234`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
@@ -107,12 +133,24 @@ describe("Product", () => {
 
     let review = {
       review: {
+        rating: 3,
         comment: "Great food",
       },
     };
-
     let response = await request
       .post(`/api/product/review/${savedProduct._id}`)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`)
+      .send(review);
+
+    review = {
+      review: {
+        comment: "Delicious food",
+      },
+    };
+    response = await request
+      .put(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
@@ -121,6 +159,7 @@ describe("Product", () => {
     expect(response.status).toBe(400);
     done();
   });
+
   it("should respond with 400 error for missing value - Comment", async (done) => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
@@ -134,10 +173,23 @@ describe("Product", () => {
     let review = {
       review: {
         rating: 3,
+        comment: "Great food",
       },
     };
     let response = await request
       .post(`/api/product/review/${savedProduct._id}`)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`)
+      .send(review);
+
+    review = {
+      review: {
+        rating: 4,
+      },
+    };
+    response = await request
+      .put(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
@@ -147,7 +199,7 @@ describe("Product", () => {
     done();
   });
 
-  //Invalid values
+  //Invalid Values
   it("should respond with 400 error for invalid value - Rating", async (done) => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
@@ -160,13 +212,26 @@ describe("Product", () => {
 
     let review = {
       review: {
+        rating: 3,
+        comment: "Great food",
+      },
+    };
+    let response = await request
+      .post(`/api/product/review/${savedProduct._id}`)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`)
+      .send(review);
+
+    review = {
+      review: {
         rating: 6,
         comment: "Great food",
       },
     };
 
-    let response = await request
-      .post(`/api/product/review/${savedProduct._id}`)
+    response = await request
+      .put(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
@@ -188,12 +253,25 @@ describe("Product", () => {
     let review = {
       review: {
         rating: 3,
+        comment: "Great food",
+      },
+    };
+    let response = await request
+      .post(`/api/product/review/${savedProduct._id}`)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`)
+      .send(review);
+
+    review = {
+      review: {
+        rating: 3,
         comment: "Nice food",
       },
     };
 
-    let response = await request
-      .post(`/api/product/review/${savedProduct._id}`)
+    response = await request
+      .put(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
@@ -218,9 +296,21 @@ describe("Product", () => {
         comment: "Great food",
       },
     };
-
     let response = await request
-      .post(`/api/product/review/${SAMPLE_MONGO_ID}`)
+      .post(`/api/product/review/${savedProduct._id}`)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`)
+      .send(review);
+
+    review = {
+      review: {
+        rating: 3,
+        comment: "Great food",
+      },
+    };
+    response = await request
+      .put(`/api/product/review/${SAMPLE_MONGO_ID}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
@@ -229,7 +319,7 @@ describe("Product", () => {
     expect(response.status).toBe(404);
     done();
   });
-  it("should respond with 400 error for duplicate user review", async (done) => {
+  it("should respond with 400 error for missing user in stored reviews when editing review", async (done) => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
 
@@ -245,16 +335,8 @@ describe("Product", () => {
         comment: "Great food",
       },
     };
-
     let response = await request
-      .post(`/api/product/review/${savedProduct._id}`)
-      .set("apikey", apikey)
-      .set("Accept", "application/json")
-      .set("Authorization", `Bearer ${token}`)
-      .send(review);
-
-    response = await request
-      .post(`/api/product/review/${savedProduct._id}`)
+      .put(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)

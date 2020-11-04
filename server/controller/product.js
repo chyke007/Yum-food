@@ -369,4 +369,47 @@ const addReview = async function (req, res, next) {
   );
 };
 
-module.exports = { getAll, get, post, deleteProduct, update, addReview };
+/**
+ * updates a single review
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const updateReview = async function (req, res, next) {
+  const {
+    params: { id },
+    body: { review },
+  } = req;
+  if (checkPayload(req.user || {}) && checkId(id)) {
+    const reviewN = { ...review, user: req.user.id };
+    const isValid = checkReview(reviewN, next);
+    if (!isValid) return false;
+
+    const product = await Product.findById(id);
+    if (!product) return handleResult(product, res, next);
+    try {
+      await product.editReview(reviewN);
+    } catch (err) {
+      log.info(err);
+      return next({ error: err });
+    }
+    await product.save();
+    return handleResult(product, res, next);
+  }
+  return next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.NO_PRIVILEGE,
+      ErrorCodes.NO_PRIVILEGE
+    )
+  );
+};
+module.exports = {
+  getAll,
+  get,
+  post,
+  deleteProduct,
+  update,
+  addReview,
+  updateReview,
+};
