@@ -49,16 +49,17 @@ describe("Product", () => {
     token = token.body.data.token;
 
     let review = {
-      rating: 3,
-      comment: "Great food",
+      review: {
+        rating: 3,
+        comment: "Great food",
+      },
     };
-
     let response = await request
       .post(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
-      .send("review", review);
+      .send(review);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.numReviews).toBe(1);
     expect(response.body.data.rating).toBe(3);
@@ -77,16 +78,17 @@ describe("Product", () => {
     token = token.body.data.token;
 
     let review = {
-      rating: 3,
-      comment: "Great food",
+      review: {
+        rating: 3,
+        comment: "Great food",
+      },
     };
-
     let response = await request
       .post(`/api/product/review/234`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
-      .send("review", review);
+      .send(review);
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
     done();
@@ -104,7 +106,9 @@ describe("Product", () => {
     token = token.body.data.token;
 
     let review = {
-      comment: "Great food",
+      review: {
+        comment: "Great food",
+      },
     };
 
     let response = await request
@@ -112,7 +116,7 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
-      .send("review", review);
+      .send(review);
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
     done();
@@ -128,15 +132,16 @@ describe("Product", () => {
     token = token.body.data.token;
 
     let review = {
-      rating: 2,
+      review: {
+        rating: 3,
+      },
     };
-
     let response = await request
       .post(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
-      .send("review", review);
+      .send(review);
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
     done();
@@ -154,8 +159,10 @@ describe("Product", () => {
     token = token.body.data.token;
 
     let review = {
-      rating: 6,
-      comment: "Great food",
+      review: {
+        rating: 6,
+        comment: "Great food",
+      },
     };
 
     let response = await request
@@ -163,7 +170,7 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
-      .send("review", review);
+      .send(review);
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
     done();
@@ -179,8 +186,10 @@ describe("Product", () => {
     token = token.body.data.token;
 
     let review = {
-      rating: 3,
-      comment: "Nice food",
+      review: {
+        rating: 3,
+        comment: "Nice food",
+      },
     };
 
     let response = await request
@@ -188,7 +197,7 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
-      .send("review", review);
+      .send(review);
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
     done();
@@ -204,8 +213,10 @@ describe("Product", () => {
     token = token.body.data.token;
 
     let review = {
-      rating: 3,
-      comment: "Great food",
+      review: {
+        rating: 3,
+        comment: "Great food",
+      },
     };
 
     let response = await request
@@ -213,7 +224,7 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
-      .send("review", review);
+      .send(review);
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(404);
     done();
@@ -229,8 +240,10 @@ describe("Product", () => {
     token = token.body.data.token;
 
     let review = {
-      rating: 3,
-      comment: "Great food",
+      review: {
+        rating: 3,
+        comment: "Great food",
+      },
     };
 
     let response = await request
@@ -238,14 +251,14 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
-      .send("review", review);
+      .send(review);
 
     response = await request
       .post(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`)
-      .send("review", review);
+      .send(review);
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
     done();

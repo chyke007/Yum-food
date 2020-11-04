@@ -357,7 +357,7 @@ const addReview = async function (req, res, next) {
       log.info(err);
       return next({ error: err });
     }
-    product.save();
+    await product.save();
     return handleResult(product, res, next);
   }
   return next(

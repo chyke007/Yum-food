@@ -61,7 +61,7 @@ ProductSchema.methods.editReview = function (review) {
     );
   }
   this.reviews = this.reviews.map((r) =>
-    String(r.user) === review.user ? review : r
+    String(r.user) === String(review.user) ? review : r
   );
   this.updatedRating(this.reviews);
 };
