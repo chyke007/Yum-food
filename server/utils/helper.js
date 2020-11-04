@@ -17,6 +17,25 @@ function checkId(id) {
 }
 
 /**
+ * check rating is between 1-5
+ * @param  {object} rating
+ * @return {boolean}
+ */
+function checkRating(rating) {
+  const allowedRatings = [1, 2, 3, 4, 5];
+  return allowedRatings.includes(rating);
+}
+
+/**
+ * check if comment is length appropriate
+ * @param  {object} user
+ * @return {boolean}
+ */
+function checkComment(comment) {
+  return Validator.checkLen(String(comment), 10);
+}
+
+/**
  * check if the decoded data from the token has email and userId
  * @param  {object} user
  * @param  {function} next
@@ -24,8 +43,6 @@ function checkId(id) {
  */
 function checkPayload(user, next) {
   const { id, email } = user;
-  // console.log(user.id)
-  // console.log(user)
   if (email && id) {
     // ensure the id is a mongo id
     return checkId(id);
@@ -184,6 +201,8 @@ function validateBody(scope, body, res, done) {
 module.exports = {
   checkPayload,
   checkId,
+  checkRating,
+  checkComment,
   formatUser,
   tokenPayload,
   validateBody,

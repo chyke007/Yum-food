@@ -312,16 +312,9 @@ describe("Product", () => {
     done();
   });
 
-  //next implement put route and test
-
-  //implement post route for reviews and test
-  //implement put route for reviews and test
-
-  //////then
-
   //order controller and test
 
-  // user profile update and test
+  // user logout and test
 
   //then api would be done
 });
