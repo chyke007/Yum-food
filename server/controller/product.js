@@ -160,6 +160,7 @@ const getAll = async function (req, res, next) {
     query,
     page,
     projections: { countInStock: 0 },
+    populate: { path: "reviews.user", select: "name email" },
   });
 };
 
@@ -182,9 +183,11 @@ const get = async function (req, res, next) {
     return;
   }
 
-  Product.findById(id, { countInStock: 0 }).then((product) => {
-    handleResult(product, res, next);
-  });
+  Product.findById(id, { countInStock: 0 })
+    .populate({ path: "reviews.user", select: "name email" })
+    .then((product) => {
+      handleResult(product, res, next);
+    });
 };
 
 /**

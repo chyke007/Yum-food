@@ -312,10 +312,9 @@ describe("Product", () => {
     done();
   });
 
-  //populate get and getall user in review
   //order controller and test
 
-  // user profile update/logout and test
+  // user logout and test
 
   //then api would be done
 });
