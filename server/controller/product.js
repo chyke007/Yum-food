@@ -404,6 +404,37 @@ const updateReview = async function (req, res, next) {
     )
   );
 };
+
+/**
+ * deletes a single review
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const deleteReview = async function (req, res, next) {
+  const {
+    params: { id },
+  } = req;
+  if (checkPayload(req.user || {}) && checkId(id)) {
+    const product = await Product.findById(id);
+    if (!product) return handleResult(product, res, next);
+    try {
+      await product.deleteReview(req.user.id);
+    } catch (err) {
+      log.info(err);
+      return next({ error: err });
+    }
+    await product.save();
+    return handleResult(product, res, next);
+  }
+  return next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.NO_PRIVILEGE,
+      ErrorCodes.NO_PRIVILEGE
+    )
+  );
+};
 module.exports = {
   getAll,
   get,
@@ -412,4 +443,5 @@ module.exports = {
   update,
   addReview,
   updateReview,
+  deleteReview,
 };

@@ -11,6 +11,7 @@ router.use(ExtractToken);
 
 router.post("/review/:id", controller.addReview);
 router.put("/review/:id", controller.updateReview);
+router.delete("/review/:id", controller.deleteReview);
 // all requests must be by ADMIN
 router.use(Admin);
 router

@@ -62,7 +62,7 @@ describe("Product", () => {
       .send(review);
     expect(response.body.data).toBeDefined();
     expect(response.body.data.numReviews).toBe(1);
-    expect(response.body.data.rating).toBe(3);
+    expect(response.body.data.rating).toBe(review.review.rating);
     expect(response.status).toBe(200);
     done();
   });
