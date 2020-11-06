@@ -4,6 +4,8 @@ const {
     checkId,
     checkRating,
     checkComment,
+    checkOrderItems,
+    checkShippingData,
     formatUser,
     tokenPayload,
     validateBody,
@@ -102,6 +104,71 @@ describe("Check comment test", () => {
   });
 });
 
+/**
+ * Check Order Items
+ */
+describe("Check Order Items", () => {
+  let order = [{ name: "Jellof rice" }];
+  let next = () => {};
+  it("should respond with desired value", () => {
+    const response = checkOrderItems(order, next);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with false for invalid order", () => {
+    order = [];
+
+    const response = checkOrderItems(order, next);
+    expect(response).toBe(false);
+  });
+
+  it("should respond with false for invalid order", () => {
+    order = "";
+
+    const response = checkOrderItems(order, next);
+    expect(response).toBe(false);
+  });
+});
+
+/**
+ * Check Shipping Data
+ */
+describe("Check Shipping Data", () => {
+  let shipping = {
+    address: "2A/12 Mopi drive, LA, Pluto",
+    city: "LA",
+    postalCode: "028293",
+    country: "Pluto",
+  };
+  let next = () => {};
+  it("should respond with desired value", () => {
+    const response = checkShippingData(shipping, next);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with false for invalid shipping", () => {
+    shipping = {
+      address: "2A/12 Mopi drive, LA, Pluto",
+      city: "LA",
+      country: "Pluto",
+    };
+
+    const response = checkShippingData(shipping, next);
+    expect(response).toBe(false);
+  });
+
+  it("should respond with false for invalid shipping", () => {
+    shipping = {
+      address: "2A/12 Mopi drive, LA, Pluto",
+      city: "LA",
+      postalCode: "023",
+      country: "Pluto",
+    };
+
+    const response = checkShippingData(shipping, next);
+    expect(response).toBe(false);
+  });
+});
 /**
  * Format User
  */

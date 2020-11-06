@@ -314,7 +314,5 @@ describe("Product", () => {
 
   //order controller and test
 
-  // user logout and test
-
   //then api would be done
 });

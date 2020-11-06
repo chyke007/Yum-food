@@ -41,7 +41,7 @@ const upload = multer({
 const deleteFile = async (params) => {
   try {
     return await cloudinary.uploader.destroy(params, (error, result) => {
-      if (error) return log.info("File Found in S3");
+      if (error) return log.info(`An error occured: ${JSON.stringify(result)}`);
       return log.info(`File deleted succesfully ${JSON.stringify(result)}`);
     });
   } catch (err) {

@@ -36,6 +36,55 @@ function checkComment(comment) {
 }
 
 /**
+ * check if order item has value
+ * @param  {object} items
+ * @param  {function} next
+ * @return {boolean}
+ */
+function checkOrderItems(items, next) {
+  const len = items.length;
+  if (len > 0 && Array.isArray(items)) return true;
+  next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.INVALID_ORDER_ITEMS,
+      ErrorCodes.INVALID_ORDER_ITEMS
+    )
+  );
+  return false;
+}
+
+/**
+ * check if shipping data has required values
+ * @param  {object} shipping
+ * @param  {function} next
+ * @return {boolean}
+ */
+function checkShippingData(shipping, next) {
+  const { address, city, postalCode, country } = shipping;
+  if (
+    address &&
+    city &&
+    postalCode &&
+    country &&
+    Validator.checkLen(address, 10) &&
+    Validator.checkLen(city, 2) &&
+    Validator.checkLen(postalCode, 4) &&
+    Validator.checkLen(country, 3)
+  ) {
+    // ensure the values are non-empty
+    return true;
+  }
+  next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.INVALID_SHIPPING_DATA,
+      ErrorCodes.INVALID_SHIPPING_DATA
+    )
+  );
+  return false;
+}
+/**
  * check if the decoded data from the token has email and userId
  * @param  {object} user
  * @param  {function} next
@@ -203,6 +252,8 @@ module.exports = {
   checkId,
   checkRating,
   checkComment,
+  checkOrderItems,
+  checkShippingData,
   formatUser,
   tokenPayload,
   validateBody,
