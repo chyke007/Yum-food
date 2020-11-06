@@ -10,6 +10,7 @@ apiRouter.use(Middleware.ApiGuard);
 apiRouter.post("/login", User.login).post("/signup", User.register);
 
 apiRouter.use("/product", require("./product"));
+apiRouter.use("/order", require("./order"));
 // .post("/logout", User.logout)
 
 // send all remaining request to the default router
