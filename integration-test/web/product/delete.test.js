@@ -1,11 +1,12 @@
+const path = require("path");
 const { request } = require("../../index");
 const { Product, User } = require("../../../server/model");
 const db = require("../../setup/db_setup");
-const path = require("path");
 const {
   Constants: { SAMPLE_MONGO_ID, USER, ADMIN },
 } = require("../../../server/utils");
-let apikey = process.env.API_KEY;
+
+const apikey = process.env.API_KEY;
 const userData = {
   name: "Zell",
   email: "test@gmail.com",
@@ -21,7 +22,7 @@ const productData = {
 };
 
 beforeEach(() => {
-  let mockResponse = () => {
+  const mockResponse = () => {
     const response = {};
     response.status = jest.fn().mockReturnValue(response);
     response.body = jest.fn().mockReturnValue(response);
@@ -53,7 +54,7 @@ describe("Product", () => {
       .set("apikey", apikey);
 
     token = token.body.data.token;
-    let response = await request
+    const response = await request
       .delete(`/api/product/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -104,7 +105,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .delete(`/api/product/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -130,7 +131,7 @@ describe("Product", () => {
 
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .delete(`/api/product/123`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -157,7 +158,7 @@ describe("Product", () => {
 
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .delete(`/api/product/${SAMPLE_MONGO_ID}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")

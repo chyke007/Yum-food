@@ -1,7 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 const Express = require("express");
 const {
-  Helper: { checkPayload, checkOrderItems, checkShippingData },
+  Helper: { checkPayload, checkId, checkOrderItems, checkShippingData },
+  Constants: { PENDING },
   ErrorCodes,
   ErrorMessage,
   CustomException,
@@ -44,6 +45,7 @@ const sanitizeBody = function (body) {
   delete body.createdAt;
   delete body.updatedAt;
   delete body.user;
+  delete body.status;
   delete body.itemsPrice;
   delete body.isDelivered;
   delete body.deliveredAt;
@@ -139,6 +141,87 @@ const post = async function (req, res, next) {
   );
 };
 
+/**
+ * updates a single order
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const update = async function (req, res, next) {
+  const {
+    params: { id },
+    body,
+  } = req;
+  if (checkPayload(req.user || {}) && checkId(id)) {
+    if (!("items" in body)) {
+      res.status(422);
+      return next(
+        new CustomException(
+          ErrorMessage.REQUIRED_ITEMS,
+          ErrorCodes.REQUIRED_ITEMS
+        )
+      );
+    }
+    if (!("shippingData" in body)) {
+      res.status(422);
+      return next(
+        new CustomException(
+          ErrorMessage.REQUIRED_SHIPPING_DATA,
+          ErrorCodes.REQUIRED_SHIPPING_DATA
+        )
+      );
+    }
+
+    sanitizeBody(req.body);
+
+    const { items, shippingData } = body;
+    const order = {
+      shipping: shippingData,
+      orderItems: items,
+      user: req.user.id,
+    };
+    const isValid = checkOrder(order, next);
+    if (!isValid) return false;
+
+    order.orderItems = [];
+
+    let error = null;
+    const validOrder = await Order.findByIdAndUpdate(id, order, { new: true });
+    if (!validOrder) return handleResult(validOrder, res, next);
+    if (validOrder.status !== PENDING)
+      return next(
+        new CustomException(
+          // eslint-disable-next-line new-cap
+          `order has already been by ${validOrder.status} by admin`,
+          ErrorCodes.ORDER_HAS_BEEN_ACCEPTED_REJECTED
+        )
+      );
+    await Promise.all(
+      items.map(async (val) => {
+        try {
+          await validOrder.addItem(val);
+          return val;
+        } catch (err) {
+          log.info(err);
+          error = err;
+          return err;
+        }
+      })
+    );
+    if (error) return next({ error });
+    await validOrder.save();
+    return handleResult(validOrder, res, next);
+  }
+  return next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.NO_PRIVILEGE,
+      ErrorCodes.NO_PRIVILEGE
+    )
+  );
+};
+
 module.exports = {
   post,
+  update,
 };

@@ -28,10 +28,10 @@ const productData3 = {
   description: "Bean cake as you like it",
 };
 
-let apikey = process.env.API_KEY;
+const apikey = process.env.API_KEY;
 
 beforeEach(() => {
-  let mockResponse = () => {
+  const mockResponse = () => {
     const response = {};
     response.status = jest.fn().mockReturnValue(response);
     response.body = jest.fn().mockReturnValue(response);
@@ -65,7 +65,7 @@ describe("Product", () => {
         .set("apikey", apikey);
       token = token.body.data.token;
 
-      let response = await request
+      const response = await request
         .get("/api/product")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -88,7 +88,7 @@ describe("Product", () => {
         .set("apikey", apikey);
       token = token.body.data.token;
 
-      let response = await request
+      const response = await request
         .get("/api/product?search=likz")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -107,7 +107,7 @@ describe("Product", () => {
         .set("apikey", apikey);
       token = token.body.data.token;
 
-      let response = await request
+      const response = await request
         .get("/api/product?search=like")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -126,7 +126,7 @@ describe("Product", () => {
         .set("apikey", apikey);
       token = token.body.data.token;
 
-      let response = await request
+      const response = await request
         .get("/api/product?price=1-1000")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -145,7 +145,7 @@ describe("Product", () => {
         .set("apikey", apikey);
       token = token.body.data.token;
 
-      let response = await request
+      const response = await request
         .get("/api/product?price=1000-2000")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -168,7 +168,7 @@ describe("Product", () => {
         .set("apikey", apikey);
       token = token.body.data.token;
 
-      let response = await request
+      const response = await request
         .get("/api/product?price=1000-2000,4100-*")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -188,7 +188,7 @@ describe("Product", () => {
         .set("apikey", apikey);
       token = token.body.data.token;
 
-      let response = await request
+      const response = await request
         .get("/api/product?active=false")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -207,7 +207,7 @@ describe("Product", () => {
         .set("apikey", apikey);
       token = token.body.data.token;
 
-      let response = await request
+      const response = await request
         .get("/api/product?active=true")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -226,7 +226,7 @@ describe("Product", () => {
         .set("apikey", apikey);
       token = token.body.data.token;
 
-      let response = await request
+      const response = await request
         .get("/api/product?rating=1")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -243,7 +243,7 @@ describe("Product", () => {
         .set("apikey", apikey);
 
       const validProduct = new Product(productData);
-      let review = {
+      const review = {
         user: token.body.data._id,
         rating: 3,
         comment: "Great food",
@@ -253,7 +253,7 @@ describe("Product", () => {
       await validProduct.addReview(review);
       const savedProduct = await validProduct.save();
 
-      let response = await request
+      const response = await request
         .get("/api/product?rating=3")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -274,7 +274,7 @@ describe("Product", () => {
 
       const savedProduct = await validProduct.save();
 
-      let response = await request
+      const response = await request
         .get("/api/product?reviews=1-3")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -291,7 +291,7 @@ describe("Product", () => {
         .set("apikey", apikey);
 
       const validProduct = new Product(productData);
-      let review = {
+      const review = {
         user: token.body.data._id,
         rating: 3,
         comment: "Great food",
@@ -301,7 +301,7 @@ describe("Product", () => {
       await validProduct.addReview(review);
       const savedProduct = await validProduct.save();
 
-      let response = await request
+      const response = await request
         .get("/api/product?reviews=1-3")
         .set("apikey", apikey)
         .set("Accept", "application/json")
@@ -319,7 +319,7 @@ describe("Product", () => {
         .set("apikey", apikey);
 
       const validProduct = new Product(productData);
-      let review = {
+      const review = {
         user: token.body.data._id,
         rating: 3,
         comment: "Great food",
@@ -329,7 +329,7 @@ describe("Product", () => {
       await validProduct.addReview(review);
       const savedProduct = await validProduct.save();
 
-      let response = await request
+      const response = await request
         .get("/api/product?reviews=1-*")
         .set("apikey", apikey)
         .set("Accept", "application/json")

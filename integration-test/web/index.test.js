@@ -1,10 +1,10 @@
+const path = require("path");
 const db = require("../setup/db_setup");
 const { request } = require("../index");
-const path = require("path");
 
-let apikey = process.env.API_KEY;
+const apikey = process.env.API_KEY;
 beforeEach(() => {
-  let mockResponse = () => {
+  const mockResponse = () => {
     const response = {};
     response.status = jest.fn().mockReturnValue(response);
     response.body = jest.fn().mockReturnValue(response);
@@ -42,7 +42,7 @@ describe("Index routes test", () => {
       })
       .set("apikey", apikey);
     token = token.body.data.token;
-    let response = await request
+    const response = await request
       .get("/api/test")
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -61,7 +61,7 @@ describe("Index routes test", () => {
       })
       .set("apikey", apikey);
     token = token.body.data.token;
-    let response = await request
+    const response = await request
       .get(`/api/test?token=${token}`)
       .set("apikey", apikey)
       .set("Accept", "application/json");

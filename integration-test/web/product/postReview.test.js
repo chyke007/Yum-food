@@ -4,7 +4,8 @@ const db = require("../../setup/db_setup");
 const {
   Constants: { SAMPLE_MONGO_ID },
 } = require("../../../server/utils");
-let apikey = process.env.API_KEY;
+
+const apikey = process.env.API_KEY;
 const userData = {
   name: "Zell",
   email: "test@gmail.com",
@@ -20,7 +21,7 @@ const productData = {
 };
 
 beforeEach(() => {
-  let mockResponse = () => {
+  const mockResponse = () => {
     const response = {};
     response.status = jest.fn().mockReturnValue(response);
     response.body = jest.fn().mockReturnValue(response);
@@ -48,13 +49,13 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let review = {
+    const review = {
       review: {
         rating: 3,
         comment: "Great food",
       },
     };
-    let response = await request
+    const response = await request
       .post(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -77,13 +78,13 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let review = {
+    const review = {
       review: {
         rating: 3,
         comment: "Great food",
       },
     };
-    let response = await request
+    const response = await request
       .post(`/api/product/review/234`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -94,7 +95,7 @@ describe("Product", () => {
     done();
   });
 
-  //Missing Values
+  // Missing Values
   it("should respond with 400 error for missing value - Rating", async (done) => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
@@ -105,13 +106,13 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let review = {
+    const review = {
       review: {
         comment: "Great food",
       },
     };
 
-    let response = await request
+    const response = await request
       .post(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -131,12 +132,12 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let review = {
+    const review = {
       review: {
         rating: 3,
       },
     };
-    let response = await request
+    const response = await request
       .post(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -147,7 +148,7 @@ describe("Product", () => {
     done();
   });
 
-  //Invalid values
+  // Invalid values
   it("should respond with 400 error for invalid value - Rating", async (done) => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();
@@ -158,14 +159,14 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let review = {
+    const review = {
       review: {
         rating: 6,
         comment: "Great food",
       },
     };
 
-    let response = await request
+    const response = await request
       .post(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -185,14 +186,14 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let review = {
+    const review = {
       review: {
         rating: 3,
         comment: "Nice food",
       },
     };
 
-    let response = await request
+    const response = await request
       .post(`/api/product/review/${savedProduct._id}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -212,14 +213,14 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let review = {
+    const review = {
       review: {
         rating: 3,
         comment: "Great food",
       },
     };
 
-    let response = await request
+    const response = await request
       .post(`/api/product/review/${SAMPLE_MONGO_ID}`)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -239,7 +240,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let review = {
+    const review = {
       review: {
         rating: 3,
         comment: "Great food",
