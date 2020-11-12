@@ -7,11 +7,12 @@ const {
     checkComment,
     checkOrderItems,
     checkShippingData,
+    checkStatus,
     formatUser,
     tokenPayload,
     validateBody,
   },
-  Constants: { SAMPLE_MONGO_ID },
+  Constants: { SAMPLE_MONGO_ID, ACCEPTED, DECLINED, PENDING },
 } = require("./index");
 
 /**
@@ -169,6 +170,30 @@ describe("Check Shipping Data", () => {
     expect(response).toBe(false);
   });
 });
+
+/**
+ * Check Status
+ */
+describe("Check Status test", () => {
+  const next = () => {};
+  it("should respond with desired value", () => {
+    const response = checkStatus(ACCEPTED,next);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with desired value", () => {
+    const response = checkStatus(DECLINED,next);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with false for invalid status", () => {
+    const response = checkStatus(PENDING,next);
+    expect(response).toBe(false);
+  });
+});
+
+
+
 /**
  * Format User
  */

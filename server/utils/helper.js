@@ -3,6 +3,7 @@ const ErrorMessage = require("./errorMessage");
 const CustomException = require("./customException");
 const Logger = require("./logger");
 const Validator = require("./validator");
+const { ACCEPTED, DECLINED } = require("./constants");
 
 const log = new Logger("utils:helper");
 
@@ -84,6 +85,27 @@ function checkShippingData(shipping, next) {
   );
   return false;
 }
+
+/**
+ * check status is either ACCEPTED or DECLINED
+ * @param  {object} status
+ * @return {boolean}
+ */
+function checkStatus(status, next) {
+  const allowedStatus = [ACCEPTED, DECLINED];
+  const val = allowedStatus.includes(status);
+  if (val) return true;
+
+  next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.INVALID_STATUS,
+      ErrorCodes.INVALID_STATUS
+    )
+  );
+  return false;
+}
+
 /**
  * check if the decoded data from the token has email and userId
  * @param  {object} user
@@ -254,6 +276,7 @@ module.exports = {
   checkComment,
   checkOrderItems,
   checkShippingData,
+  checkStatus,
   formatUser,
   tokenPayload,
   validateBody,

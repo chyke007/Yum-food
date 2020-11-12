@@ -1,7 +1,13 @@
 // eslint-disable-next-line no-unused-vars
 const Express = require("express");
 const {
-  Helper: { checkPayload, checkId, checkOrderItems, checkShippingData },
+  Helper: {
+    checkPayload,
+    checkId,
+    checkOrderItems,
+    checkShippingData,
+    checkStatus,
+  },
   Constants: { PENDING },
   ErrorCodes,
   ErrorMessage,
@@ -221,7 +227,42 @@ const update = async function (req, res, next) {
   );
 };
 
+/**
+ * updates a single order status (Admin)
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const updateStatus = async function (req, res, next) {
+  const {
+    params: { id },
+    body,
+  } = req;
+  if (checkPayload(req.user || {}) && checkId(id)) {
+    sanitizeBody(req.body);
+
+    const { mode: status } = body;
+    const isValid = checkStatus(status, next);
+    if (!isValid) return false;
+
+    const validOrder = await Order.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+    return handleResult(validOrder, res, next);
+  }
+  return next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.NO_PRIVILEGE,
+      ErrorCodes.NO_PRIVILEGE
+    )
+  );
+};
+
 module.exports = {
   post,
   update,
+  updateStatus,
 };

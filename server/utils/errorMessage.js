@@ -29,6 +29,7 @@ module.exports = {
   INVALID_SHIPPING_DATA:
     "Invalid shipping data: address,city,postalCode,country is required. Address must be at least 10 characters, city at least 2, postalCode at least 4 and country at least 3",
   INVALID_ORDER_ITEMS: "Invalid order items: items must be a non-empty array",
+  INVALID_STATUS: "Status must be either ACCEPTED or DECLINED",
   NO_TOKEN_FOUND: "Please provide a token",
   DUPLICATE_USER_REVIEW: "Duplicate user review",
   USER_HAS_NO_REVIEW: "User has no review",

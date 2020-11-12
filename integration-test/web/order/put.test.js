@@ -58,7 +58,7 @@ beforeEach(() => {
  */
 describe("Order", () => {
   db.setupDB();
-  it("should respond with single order object for admin user ", async (done) => {
+  it("should respond with single order object for user ", async (done) => {
     const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
     await validUser.save();
@@ -275,7 +275,7 @@ describe("Order", () => {
     done();
   });
 
-  it("should throw 400 error for invalid product in order", async (done) => {
+  it("should throw 404 error for missing order", async (done) => {
     const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
     await validUser.save();
