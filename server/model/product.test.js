@@ -1,4 +1,4 @@
-let apikey = process.env.API_KEY;
+const apikey = process.env.API_KEY;
 const mongoose = require("mongoose");
 const { Product, User } = require("./index");
 const config = require("../../config");
@@ -83,7 +83,7 @@ describe("Product model", () => {
     expect(err.errors.description).toBeDefined();
   });
 
-  //Add user review
+  // Add user review
   describe("Add user review", () => {
     it("should create and add review to product successfully", async (done) => {
       const validUser = new User(userData);
@@ -91,7 +91,7 @@ describe("Product model", () => {
       const savedUser = await validUser.save();
 
       const validProduct = new Product(productData);
-      let review = {
+      const review = {
         user: savedUser._id,
         rating: 3,
         comment: "Great food",
@@ -184,7 +184,7 @@ describe("Product model", () => {
     });
   });
 
-  //Edit user review
+  // Edit user review
   describe("Edit product review", () => {
     it("should edit product review successfully", async (done) => {
       const validUser = new User(userData);
@@ -254,14 +254,14 @@ describe("Product model", () => {
       const savedUser2 = await validUser2.save();
 
       const validProduct = new Product(productData);
-      let oldReview = {
+      const oldReview = {
         user: savedUser._id,
         rating: 3,
         comment: "Great food",
       };
 
       await validProduct.addReview(oldReview);
-      let newReview = {
+      const newReview = {
         user: savedUser2._id,
         rating: 4,
         comment: "Very yummy",
@@ -284,7 +284,7 @@ describe("Product model", () => {
     });
   });
 
-  //Delete user review
+  // Delete user review
   describe("Delete user review", () => {
     it("should delete product review successfully", async (done) => {
       const validUser = new User(userData);
@@ -296,14 +296,14 @@ describe("Product model", () => {
       const savedUser2 = await validUser2.save();
 
       const validProduct = new Product(productData);
-      let oldReview = {
+      const oldReview = {
         user: savedUser._id,
         rating: 3,
         comment: "Great food",
       };
 
       await validProduct.addReview(oldReview);
-      let newReview = {
+      const newReview = {
         user: savedUser2._id,
         rating: 4,
         comment: "Very yummy",
@@ -329,7 +329,7 @@ describe("Product model", () => {
 
       const validProduct = new Product(productData);
 
-      let review = {
+      const review = {
         user: savedUser._id,
         rating: 4,
         comment: "Very yummy",
@@ -357,7 +357,7 @@ describe("Product model", () => {
 
       const validProduct = new Product(productData);
 
-      let review = {
+      const review = {
         user: savedUser._id,
         rating: 4,
         comment: "Very yummy",

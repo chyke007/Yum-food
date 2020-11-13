@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { User } = require("./index");
 const config = require("../../config");
 const db = require("../../integration-test/setup/db_setup");
+
 const userData = {
   name: "TekLoon",
   email: "Male@gmail.com",

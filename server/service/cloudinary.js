@@ -1,6 +1,7 @@
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const { uid } = require("uid");
 const config = require("../../config");
 const {
   Storage: { PRODUCT },
@@ -16,7 +17,18 @@ cloudinary.config({
   api_secret: config.CLOUDINARY_API_SECRET,
 });
 
-const storage = new CloudinaryStorage({
+const tempDir = "/tmp";
+
+const testStorage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, tempDir);
+  },
+  filename(req, file, cb) {
+    cb(null, uid(15));
+  },
+});
+
+let storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: PRODUCT,
@@ -24,6 +36,7 @@ const storage = new CloudinaryStorage({
   },
 });
 
+if (config.DB_NAME === "test") storage = testStorage;
 const upload = multer({
   storage,
 

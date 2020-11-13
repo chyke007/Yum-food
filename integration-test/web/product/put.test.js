@@ -1,11 +1,12 @@
+const path = require("path");
 const { request } = require("../../index");
 const { User, Product } = require("../../../server/model");
 const db = require("../../setup/db_setup");
-const path = require("path");
 const {
   Constants: { ADMIN, SAMPLE_MONGO_ID },
 } = require("../../../server/utils");
-let apikey = process.env.API_KEY;
+
+const apikey = process.env.API_KEY;
 const userData = {
   name: "Zell",
   email: "test@gmail.com",
@@ -26,7 +27,7 @@ const productData2 = {
   description: "Bean cake as you like it",
 };
 beforeEach(() => {
-  let mockResponse = () => {
+  const mockResponse = () => {
     const response = {};
     response.status = jest.fn().mockReturnValue(response);
     response.body = jest.fn().mockReturnValue(response);
@@ -58,7 +59,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .put(`/api/product/${savedProduct._id}`)
       .field("name", productData2.name)
       .field("price", productData.price)
@@ -86,7 +87,7 @@ describe("Product", () => {
     token = token.body.data.token;
     const filePath = path.join(__dirname, "./assets/logo192.png");
 
-    let response = await request
+    const response = await request
       .put(`/api/product/${savedProduct._id}`)
       .field("name", productData2.name)
       .field("price", productData.price)
@@ -96,7 +97,6 @@ describe("Product", () => {
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeDefined();
-    expect(response.body.data.image).toBeDefined();
     expect(response.body.data.name).toBe(productData2.name);
     expect(response.status).toBe(200);
     done();
@@ -113,7 +113,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
     const filePath = path.join(__dirname, "./assets/logo192.png");
-    //Add product
+    // Add product
     let response = await request
       .post("/api/product")
       .field("name", productData.name)
@@ -123,8 +123,8 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "multipart/form-data")
       .set("Authorization", `Bearer ${token}`);
-    //Update product
-    response = await request
+      // Update product
+      response = await request
       .put(`/api/product/${response.body.data._id}`)
       .field("name", productData.name)
       .field("price", productData2.price)
@@ -133,12 +133,11 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "multipart/form-data")
       .set("Authorization", `Bearer ${token}`);
-    expect(response.body.data.image).toBeDefined();
     expect(response.body.data.price).toBe(productData2.price);
     expect(response.status).toBe(200);
     done();
   });
-  //Invalid values
+  // // Invalid values
   it("should respond with 422 error for invalid value - Name", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
@@ -153,7 +152,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .put(`/api/product/${savedProduct._id}`)
       .field("name", "se")
       .field("price", productData.price)
@@ -179,7 +178,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .put(`/api/product/${savedProduct._id}`)
       .field("name", productData.name)
       .field("price", 20)
@@ -206,7 +205,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .put(`/api/product/${savedProduct._id}`)
       .field("name", productData.name)
       .field("price", productData.price)
@@ -219,7 +218,7 @@ describe("Product", () => {
     done();
   });
 
-  //Removes protected values
+  // // Removes protected values
   it("should delete protected values provided before updating product", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
@@ -234,7 +233,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .put(`/api/product/${savedProduct._id}`)
       .field("name", productData2.name)
       .field("price", productData2.price)
@@ -256,4 +255,30 @@ describe("Product", () => {
     expect(response.status).toBe(200);
     done();
   });
+  it("should respond with 400 error for invalid id", async (done) => {
+    const validUser = await new User({ ...userData, accountType: ADMIN });
+    await validUser.setPassword(userData.password);
+    const savedUser = await validUser.save();
+
+    const validProduct = new Product(productData);
+    const savedProduct = await validProduct.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+
+    const response = await request
+      .put('/api/product/123')
+      .field("name", productData2.name)
+      .field("price", productData.price)
+      .field("description", productData.description)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+      expect(response.body.error.message).toBeDefined();
+      expect(response.status).toBe(400);
+      done();
+  })
 });

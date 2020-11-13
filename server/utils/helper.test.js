@@ -1,3 +1,4 @@
+const faker = require("faker");
 const {
   Helper: {
     checkPayload,
@@ -6,23 +7,23 @@ const {
     checkComment,
     checkOrderItems,
     checkShippingData,
+    checkStatus,
     formatUser,
     tokenPayload,
     validateBody,
   },
-  Constants: { SAMPLE_MONGO_ID },
+  Constants: { SAMPLE_MONGO_ID, ACCEPTED, DECLINED, PENDING },
 } = require("./index");
-const faker = require("faker");
 
 /**
  * Check Payload
  */
 describe("Check Payload test", () => {
-  let fakedUser = {
+  const fakedUser = {
     email: faker.internet.email(),
     id: SAMPLE_MONGO_ID,
   };
-  let next = () => {};
+  const next = () => {};
   it("should respond with desired value", () => {
     const response = checkPayload(fakedUser, next);
     expect(response).toBe(true);
@@ -109,7 +110,7 @@ describe("Check comment test", () => {
  */
 describe("Check Order Items", () => {
   let order = [{ name: "Jellof rice" }];
-  let next = () => {};
+  const next = () => {};
   it("should respond with desired value", () => {
     const response = checkOrderItems(order, next);
     expect(response).toBe(true);
@@ -140,7 +141,7 @@ describe("Check Shipping Data", () => {
     postalCode: "028293",
     country: "Pluto",
   };
-  let next = () => {};
+  const next = () => {};
   it("should respond with desired value", () => {
     const response = checkShippingData(shipping, next);
     expect(response).toBe(true);
@@ -169,32 +170,56 @@ describe("Check Shipping Data", () => {
     expect(response).toBe(false);
   });
 });
+
+/**
+ * Check Status
+ */
+describe("Check Status test", () => {
+  const next = () => {};
+  it("should respond with desired value", () => {
+    const response = checkStatus(ACCEPTED,next);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with desired value", () => {
+    const response = checkStatus(DECLINED,next);
+    expect(response).toBe(true);
+  });
+
+  it("should respond with false for invalid status", () => {
+    const response = checkStatus(PENDING,next);
+    expect(response).toBe(false);
+  });
+});
+
+
+
 /**
  * Format User
  */
 describe("Format User test", () => {
   it("should respond with desired object", () => {
-    let fakedUser = {
+    const fakedUser = {
       email: faker.internet.email(),
       name: faker.internet.userName(),
       phone: faker.phone.phoneNumber(),
       salt: faker.random.uuid(),
       hash: faker.random.alphaNumeric(),
     };
-    let user = {
+    const user = {
       toJSON: () => {
         return fakedUser;
       },
     };
-    let token = faker.random.uuid();
+    const token = faker.random.uuid();
     const response = formatUser(user, token);
     delete fakedUser.salt, delete fakedUser.hash;
     expect(response).toBe(fakedUser);
   });
 
   it("should respond with null for missing token or user", () => {
-    let fakedUser = {};
-    let user = {
+    const fakedUser = {};
+    const user = {
       toJSON: () => {
         return fakedUser;
       },
@@ -204,8 +229,8 @@ describe("Format User test", () => {
   });
 
   it("should respond with null for null token or user", () => {
-    let fakedUser = {};
-    let user = {
+    const fakedUser = {};
+    const user = {
       toJSON: () => {
         return fakedUser;
       },
@@ -220,7 +245,7 @@ describe("Format User test", () => {
  */
 describe("Token Payload test", () => {
   it("should respond with desired object", () => {
-    let user = {
+    const user = {
       id: faker.random.uuid(),
       email: faker.internet.email(),
       phone: faker.phone.phoneNumber(),
@@ -236,7 +261,7 @@ describe("Token Payload test", () => {
   });
 
   it("should respond with null for missing parameters", () => {
-    let user = {
+    const user = {
       id: faker.random.uuid(),
       email: null,
       phone: faker.phone.phoneNumber(),
@@ -252,7 +277,7 @@ describe("Token Payload test", () => {
   });
 
   it("should respond with null for null user", () => {
-    let user = {};
+    const user = {};
     const response = tokenPayload(user);
     expect(response).toStrictEqual({
       accountType: null,
@@ -267,121 +292,121 @@ describe("Token Payload test", () => {
  */
 
 describe("Validate Body Test", () => {
-  //Email
+  // Email
   describe("Validate Body Test - Email", () => {
     it("should respond with true for valid email", () => {
-      let body = { email: faker.internet.email() };
-      let scope = ["email"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { email: faker.internet.email() };
+      const scope = ["email"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid email", () => {
-      let body = { email: faker.internet.userName() };
-      let scope = ["email"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { email: faker.internet.userName() };
+      const scope = ["email"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
   });
 
-  //Password
+  // Password
   describe("Validate Body Test - Password", () => {
     it("should respond with true for valid password", () => {
-      let body = { password: "Wero12Id@$" };
-      let scope = ["password"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { password: "Wero12Id@$" };
+      const scope = ["password"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid password", () => {
-      let body = { password: faker.internet.color() };
-      let scope = ["password"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { password: faker.internet.color() };
+      const scope = ["password"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
   });
 
-  //Name
+  // Name
   describe("Validate Body Test - Name", () => {
     it("should respond with true for valid name", () => {
-      let body = { name: faker.internet.userName() + "@$" };
-      let scope = ["name"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { name: `${faker.internet.userName()}@$` };
+      const scope = ["name"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid name", () => {
-      let body = { name: faker.internet.ip() };
-      let scope = ["name"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { name: faker.internet.ip() };
+      const scope = ["name"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
   });
 
-  //Price
+  // Price
   describe("Validate Body Test - Price", () => {
     it("should respond with true for valid price", () => {
-      let body = { price: 120 };
-      let scope = ["price"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { price: 120 };
+      const scope = ["price"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid price", () => {
-      let body = { price: 98 };
-      let scope = ["price"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { price: 98 };
+      const scope = ["price"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
   });
 
-  //Description
+  // Description
   describe("Validate Body Test - Description", () => {
     it("should respond with true for valid description", () => {
-      let body = { description: "Yummy and satisfactory bean cake" };
-      let scope = ["description"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { description: "Yummy and satisfactory bean cake" };
+      const scope = ["description"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid description", () => {
-      let body = { description: "bean cake" };
-      let scope = ["description"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { description: "bean cake" };
+      const scope = ["description"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
   });
 
-  //Phone
+  // Phone
   describe("Validate Body Test - Phone", () => {
     it("should respond with true for valid phone", () => {
-      let body = { phone: "09066665555" };
-      let scope = ["phone"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { phone: "09066665555" };
+      const scope = ["phone"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid phone", () => {
-      let body = { phone: faker.internet.userName() };
-      let scope = ["phone"];
-      let done = () => {};
-      let res = { status: () => {} };
+      const body = { phone: faker.internet.userName() };
+      const scope = ["phone"];
+      const done = () => {};
+      const res = { status: () => {} };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });

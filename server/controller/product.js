@@ -236,7 +236,7 @@ const post = async function (req, res, next) {
       description,
     });
 
-    if (req.file) {
+    if (req.file !== undefined) {
       log.info(req.file);
       if (!req.file.path) {
         log.error("error saving image", {
@@ -281,7 +281,7 @@ const update = async function (req, res, next) {
     if (!isValid) return false;
     return Product.findByIdAndUpdate(id, body, { new: true })
       .then(async (product) => {
-        if (req.file) {
+        if (req.file !== undefined) {
           log.info(req.file);
           if (!req.file.path) {
             log.error("error saving image", {
@@ -291,10 +291,12 @@ const update = async function (req, res, next) {
             // delete previous file
             if (product && product.public_id) {
               FileManager.deleteCloud(product.public_id || "");
+            } else if (product) {
+              product.image = req.file.path;
+              product.public_id = req.file.filename;
+              await product.save();
             }
-            product.image = req.file.path;
-            product.public_id = req.file.filename;
-            await product.save();
+            log.info("New file uploaded");
           }
         }
         return handleResult(product, res, next);

@@ -1,11 +1,12 @@
+const path = require("path");
 const { request } = require("../../index");
 const { User } = require("../../../server/model");
 const db = require("../../setup/db_setup");
-const path = require("path");
 const {
   Constants: { ADMIN },
 } = require("../../../server/utils");
-let apikey = process.env.API_KEY;
+
+const apikey = process.env.API_KEY;
 const userData = {
   name: "Zell",
   email: "test@gmail.com",
@@ -21,7 +22,7 @@ const productData = {
 };
 
 beforeEach(() => {
-  let mockResponse = () => {
+  const mockResponse = () => {
     const response = {};
     response.status = jest.fn().mockReturnValue(response);
     response.body = jest.fn().mockReturnValue(response);
@@ -50,7 +51,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("price", productData.price)
@@ -75,7 +76,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
     const filePath = path.join(__dirname, "./assets/logo192.png");
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("price", productData.price)
@@ -101,7 +102,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
     const filePath = path.join(__dirname, "./assets/cover.jpg");
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("price", productData.price)
@@ -126,7 +127,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
     const filePath = path.join(__dirname, "./assets/favicon.ico");
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("price", productData.price)
@@ -147,14 +148,14 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("price", productData.price)
       .field("description", productData.description)
       .set("apikey", apikey)
       .set("Accept", "application/json")
-      .set("Authorization", `Bearer ${token + "3"}`);
+      .set("Authorization", `Bearer ${`${token}3`}`);
     expect(response.error.message).toBeDefined();
     expect(response.status).toBe(401);
     done();
@@ -167,7 +168,7 @@ describe("Product", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("price", productData.price)
@@ -181,7 +182,7 @@ describe("Product", () => {
     done();
   });
 
-  //Missing Values
+  // Missing Values
 
   it("should respond with error message for missing value - (name)", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
@@ -193,14 +194,13 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("price", productData.price)
       .field("description", productData.description)
       .set("apikey", apikey)
       .set("Accept", "multipart/form-data")
       .set("Authorization", `Bearer ${token}`);
-    // console.log(response.body);
     expect(response.status).toBe(422);
     done();
   });
@@ -215,7 +215,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("description", productData.description)
@@ -236,7 +236,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("price", productData.price)
@@ -247,7 +247,7 @@ describe("Product", () => {
     done();
   });
 
-  //Invalid Values
+  // Invalid Values
   it("should respond with error message for invalid value - (name)", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
@@ -258,7 +258,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", "te")
       .field("price", productData.price)
@@ -279,7 +279,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("price", 99)
@@ -300,7 +300,7 @@ describe("Product", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-    let response = await request
+    const response = await request
       .post("/api/product")
       .field("name", productData.name)
       .field("price", productData.price)
@@ -312,7 +312,7 @@ describe("Product", () => {
     done();
   });
 
-  //order controller and test
+  // order controller and test
 
-  //then api would be done
+  // then api would be done
 });

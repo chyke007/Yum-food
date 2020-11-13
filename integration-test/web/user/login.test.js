@@ -4,9 +4,10 @@ const faker = require("faker");
 const { request } = require("../../index");
 const { User } = require("../../../server/model");
 const db = require("../../setup/db_setup");
-let apikey = process.env.API_KEY;
+
+const apikey = process.env.API_KEY;
 beforeEach(() => {
-  let mockResponse = () => {
+  const mockResponse = () => {
     const response = {};
     response.status = jest.fn().mockReturnValue(response);
     response.body = jest.fn().mockReturnValue(response);
@@ -129,7 +130,7 @@ describe("Login", () => {
   });
 
   it("should respond with error message for missing password parameter", async (done) => {
-    let response = await request
+    const response = await request
       .post("/api/login")
       .send({
         email: "testing@gmail.com",
@@ -140,7 +141,7 @@ describe("Login", () => {
   });
 
   it("should respond with error message for invalid password format", async (done) => {
-    let response = await request
+    const response = await request
       .post("/api/login")
       .send({
         email: "testing@gmail.com",

@@ -1,9 +1,9 @@
 const path = require("path");
 const { request } = require("../../index");
-const { User, Product } = require("../../../server/model");
+const { User, Product, Order } = require("../../../server/model");
 const db = require("../../setup/db_setup");
 const {
-  Constants: { ADMIN },
+  Constants: { USER, SAMPLE_MONGO_ID, ACCEPTED },
 } = require("../../../server/utils");
 
 const apikey = process.env.API_KEY;
@@ -58,8 +58,8 @@ beforeEach(() => {
  */
 describe("Order", () => {
   db.setupDB();
-  it("should respond with single order object for authenticated user ", async (done) => {
-    const validUser = await new User({ ...userData, accountType: ADMIN });
+  it("should respond with single order object for user ", async (done) => {
+    const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
     await validUser.save();
 
@@ -71,93 +71,41 @@ describe("Order", () => {
       .send(userData)
       .set("apikey", apikey);
     token = token.body.data.token;
-
     const order = {
       items: [{ ...orderItemData, product: savedProduct._id }],
       ...orderData,
     };
-    const response = await request
+    let response = await request
       .post("/api/order")
       .send(order)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeDefined();
-
-    const expectedPrice = productData.price * orderItemData.qty;
-
-    expect(response.body.data.itemsPrice).toBe(expectedPrice);
-    expect(response.body.data.orderItems[0].total).toBe(expectedPrice);
-    expect(response.body.data.totalPrice).toBe(
-      expectedPrice + orderData.shippingPrice
-    );
-
-    expect(response.status).toBe(200);
+    const id = response.body.data._id;
+    const newOrder = {
+      ...order,
+      shippingData: { ...shippingData, city: "VN" },
+      items: [{ ...orderItemData, qty: 4, product: savedProduct._id }],
+    };
+    response = await request
+      .put(`/api/order/${id}`)
+      .send(newOrder)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.body.data).toBeDefined();
+    const savedOrder = response.body.data;
+    const expectedPrice = productData.price * 4;
+    expect(savedOrder.itemsPrice).toBe(expectedPrice);
+    expect(savedOrder.orderItems[0].total).toBe(expectedPrice);
+    expect(savedOrder.shipping.city).toBe("VN");
     done();
   });
 
   // Missing Values
-
   it("should respond with error message for missing value - (items)", async (done) => {
-    const validUser = await new User({ ...userData, accountType: ADMIN });
-    await validUser.setPassword(userData.password);
-    await validUser.save();
-
-    const validProduct = new Product(productData);
-    const savedProduct = await validProduct.save();
-
-    let token = await request
-      .post("/api/login")
-      .send(userData)
-      .set("apikey", apikey);
-    token = token.body.data.token;
-
-    const order = {
-      ...orderData,
-    };
-    const response = await request
-      .post("/api/order")
-      .send(order)
-      .set("apikey", apikey)
-      .set("Accept", "application/json")
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(response.body.error.message).toBeDefined();
-    expect(response.status).toBe(422);
-    done();
-  });
-  it("should respond with error message for missing value - (shippingData)", async (done) => {
-    const validUser = await new User({ ...userData, accountType: ADMIN });
-    await validUser.setPassword(userData.password);
-    await validUser.save();
-
-    const validProduct = new Product(productData);
-    const savedProduct = await validProduct.save();
-
-    let token = await request
-      .post("/api/login")
-      .send(userData)
-      .set("apikey", apikey);
-    token = token.body.data.token;
-
-    const order = {
-      items: [{ ...orderItemData, product: savedProduct._id }],
-    };
-    const response = await request
-      .post("/api/order")
-      .send(order)
-      .set("apikey", apikey)
-      .set("Accept", "application/json")
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(response.body.error.message).toBeDefined();
-    expect(response.status).toBe(422);
-    done();
-  });
-
-  // Invalid Items
-  it("should respond with error message for invalid value - (items)", async (done) => {
-    const validUser = await new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
     await validUser.save();
 
@@ -171,7 +119,7 @@ describe("Order", () => {
     token = token.body.data.token;
 
     let order = {
-      items: [],
+      items: [{ ...orderItemData, product: savedProduct._id }],
       ...orderData,
     };
     let response = await request
@@ -180,14 +128,98 @@ describe("Order", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
+
+    const id = response.body.data._id;
+    order = {
+      ...orderData,
+    };
+
+    response = await request
+      .put(`/api/order/${id}`)
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.body.error.message).toBeDefined();
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
+    done();
+  });
+  it("should respond with error message for missing value - (shippingData)", async (done) => {
+    const validUser = await new User({ ...userData, accountType: USER });
+    await validUser.setPassword(userData.password);
+    await validUser.save();
+
+    const validProduct = new Product(productData);
+    const savedProduct = await validProduct.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+
+    let order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
+    let response = await request
+      .post("/api/order")
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+
+    const id = response.body.data._id;
+    order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+    };
+
+    response = await request
+      .put(`/api/order/${id}`)
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(422);
+    done();
+  });
+
+  // Invalid Items
+  it("should respond with error message for invalid value - (items)", async (done) => {
+    const validUser = await new User({ ...userData, accountType: USER });
+    await validUser.setPassword(userData.password);
+    await validUser.save();
+
+    const validProduct = new Product(productData);
+    const savedProduct = await validProduct.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+
+    let order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
+
+    let response = await request
+      .post("/api/order")
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+
+    const id = response.body.data._id;
     order = {
       items: "{items:'kkkk'}",
       ...orderData,
     };
+
     response = await request
-      .post("/api/order")
+      .put(`/api/order/${id}`)
       .send(order)
       .set("apikey", apikey)
       .set("Accept", "application/json")
@@ -197,7 +229,7 @@ describe("Order", () => {
     done();
   });
   it("should respond with error message for invalid value - (shippingData)", async (done) => {
-    const validUser = await new User({ ...userData, accountType: ADMIN });
+    const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
     await validUser.save();
 
@@ -210,8 +242,19 @@ describe("Order", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    // invalid postalCode
     let order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
+    let response = await request
+      .post("/api/order")
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+
+    const id = response.body.data._id;
+    order = {
       items: [{ ...orderItemData, product: savedProduct._id }],
       shippingData: {
         address: "2A/12 Mopi drive, LA, Pluto",
@@ -220,35 +263,63 @@ describe("Order", () => {
         country: "Pluto",
       },
     };
+
+    response = await request
+      .put(`/api/order/${id}`)
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(400);
+    done();
+  });
+
+  it("should throw 404 error for missing order", async (done) => {
+    const validUser = await new User({ ...userData, accountType: USER });
+    await validUser.setPassword(userData.password);
+    await validUser.save();
+
+    const validProduct = new Product(productData);
+    const savedProduct = await validProduct.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+
+    let order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
     let response = await request
       .post("/api/order")
       .send(order)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
-    expect(response.body.error.message).toBeDefined();
-    expect(response.status).toBe(400);
 
-    delete shippingData.country;
+    const id = response.body.data._id;
 
-    // missing country
     order = {
       items: [{ ...orderItemData, product: savedProduct._id }],
-      shippingData,
+      ...orderData,
     };
+
     response = await request
-      .post("/api/order")
+      .put(`/api/order/${SAMPLE_MONGO_ID}`)
       .send(order)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
-    shippingData.country = "Pluto";
     expect(response.body.error.message).toBeDefined();
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(404);
     done();
   });
-  it("should remove sensitive order properties before saving", async (done) => {
-    const validUser = await new User({ ...userData, accountType: ADMIN });
+
+  it("should throw 400 error for product status changed by admin", async (done) => {
+    const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
     await validUser.save();
 
@@ -261,69 +332,38 @@ describe("Order", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    const order = {
-      items: [
-        {
-          ...orderItemData,
-
-          product: savedProduct._id,
-        },
-      ],
-      itemsPrice: 230,
-      isDelivered: true,
-      shippingData,
+    let order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
     };
-    const response = await request
-      .post("/api/order")
-      .send(order)
-      .set("apikey", apikey)
-      .set("Accept", "application/json")
-      .set("Authorization", `Bearer ${token}`);
-    expect(response.body.data).toBeDefined();
-    expect(response.body.data.itemsPrice).toBe(
-      orderItemData.qty * productData.price
-    );
-    expect(response.status).toBe(200);
 
-    done();
-  });
-  it("should throw 400 error for invalid product in order", async (done) => {
-    const validUser = await new User({ ...userData, accountType: ADMIN });
-    await validUser.setPassword(userData.password);
-    await validUser.save();
-
-    const validProduct = new Product(productData);
-
-    let token = await request
-      .post("/api/login")
-      .send(userData)
-      .set("apikey", apikey);
-    token = token.body.data.token;
-
-    const order = {
-      items: [
-        {
-          ...orderItemData,
-          product: validProduct._id,
-        },
-      ],
-
-      shippingData,
-    };
-    const response = await request
+    let response = await request
       .post("/api/order")
       .send(order)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
 
+    const id = response.body.data._id;
+    await Order.findByIdAndUpdate(id, { status: ACCEPTED });
+    order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
+
+    response = await request
+      .put(`/api/order/${id}`)
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
-
     done();
   });
-  it("should throw 400 error for duplicate product in order", async (done) => {
-    const validUser = await new User({ ...userData, accountType: ADMIN });
+
+  it("should throw 400 error for invalid product", async (done) => {
+    const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
     await validUser.save();
 
@@ -336,30 +376,77 @@ describe("Order", () => {
       .set("apikey", apikey);
     token = token.body.data.token;
 
-    const order = {
-      items: [
-        {
-          ...orderItemData,
-          product: savedProduct._id,
-        },
-        {
-          ...orderItemData,
-          product: savedProduct._id,
-        },
-      ],
-
-      shippingData,
+    let order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
     };
-    const response = await request
+
+    let response = await request
       .post("/api/order")
       .send(order)
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
 
+    const validProduct2 = new Product(productData);
+
+    const id = response.body.data._id;
+    order = {
+      items: [{ ...orderItemData, product: validProduct2._id }],
+      ...orderData,
+    };
+
+    response = await request
+      .put(`/api/order/${id}`)
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
-
     done();
   });
+  it("should respond with 400 error for invalid id", async (done) => {
+    const validUser = await new User({ ...userData, accountType: USER });
+    await validUser.setPassword(userData.password);
+    await validUser.save();
+
+    const validProduct = new Product(productData);
+    const savedProduct = await validProduct.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+
+    let order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
+
+    let response = await request
+      .post("/api/order")
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+
+    const id = response.body.data._id;
+    order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
+
+    response = await request
+      .put(`/api/order/123`)
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(400);
+    done();
+
+})
 });
