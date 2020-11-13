@@ -201,7 +201,6 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "multipart/form-data")
       .set("Authorization", `Bearer ${token}`);
-    // console.log(response.body);
     expect(response.status).toBe(422);
     done();
   });

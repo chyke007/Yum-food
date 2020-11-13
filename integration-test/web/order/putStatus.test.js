@@ -242,4 +242,41 @@ describe("Order", () => {
     expect(response.status).toBe(404);
     done();
    })
+
+   it("should respond with 400 error for invalid id", async (done) => {
+    const validUser = await new User({ ...userData, accountType: ADMIN });
+    await validUser.setPassword(userData.password);
+    await validUser.save();
+
+    const validProduct = new Product(productData);
+    const savedProduct = await validProduct.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+    const order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
+    let response = await request
+      .post("/api/order")
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.body.data).toBeDefined();
+    const id = response.body.data._id;
+    let status = { mode: ACCEPTED};
+    response = await request
+      .put(`/api/order/status/123`)
+      .send(status)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(400);
+    done();
+})
 })

@@ -362,7 +362,7 @@ describe("Order", () => {
     done();
   });
 
-  it("should throw 400 error for product status changed by admin", async (done) => {
+  it("should throw 400 error for invalid product", async (done) => {
     const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
     await validUser.save();
@@ -406,4 +406,47 @@ describe("Order", () => {
     expect(response.status).toBe(400);
     done();
   });
+  it("should respond with 400 error for invalid id", async (done) => {
+    const validUser = await new User({ ...userData, accountType: USER });
+    await validUser.setPassword(userData.password);
+    await validUser.save();
+
+    const validProduct = new Product(productData);
+    const savedProduct = await validProduct.save();
+
+    let token = await request
+      .post("/api/login")
+      .send(userData)
+      .set("apikey", apikey);
+    token = token.body.data.token;
+
+    let order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
+
+    let response = await request
+      .post("/api/order")
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+
+    const id = response.body.data._id;
+    order = {
+      items: [{ ...orderItemData, product: savedProduct._id }],
+      ...orderData,
+    };
+
+    response = await request
+      .put(`/api/order/123`)
+      .send(order)
+      .set("apikey", apikey)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(400);
+    done();
+
+})
 });
