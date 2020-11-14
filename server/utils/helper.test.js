@@ -23,7 +23,7 @@ describe("Check Payload test", () => {
     email: faker.internet.email(),
     id: SAMPLE_MONGO_ID,
   };
-  const next = () => {};
+  const next = jest.fn();
   it("should respond with desired value", () => {
     const response = checkPayload(fakedUser, next);
     expect(response).toBe(true);
@@ -110,7 +110,7 @@ describe("Check comment test", () => {
  */
 describe("Check Order Items", () => {
   let order = [{ name: "Jellof rice" }];
-  const next = () => {};
+  const next = jest.fn();
   it("should respond with desired value", () => {
     const response = checkOrderItems(order, next);
     expect(response).toBe(true);
@@ -141,7 +141,7 @@ describe("Check Shipping Data", () => {
     postalCode: "028293",
     country: "Pluto",
   };
-  const next = () => {};
+  const next = jest.fn();
   it("should respond with desired value", () => {
     const response = checkShippingData(shipping, next);
     expect(response).toBe(true);
@@ -175,7 +175,7 @@ describe("Check Shipping Data", () => {
  * Check Status
  */
 describe("Check Status test", () => {
-  const next = () => {};
+  const next = jest.fn();
   it("should respond with desired value", () => {
     const response = checkStatus(ACCEPTED,next);
     expect(response).toBe(true);
@@ -297,16 +297,16 @@ describe("Validate Body Test", () => {
     it("should respond with true for valid email", () => {
       const body = { email: faker.internet.email() };
       const scope = ["email"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid email", () => {
       const body = { email: faker.internet.userName() };
       const scope = ["email"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
@@ -317,16 +317,16 @@ describe("Validate Body Test", () => {
     it("should respond with true for valid password", () => {
       const body = { password: "Wero12Id@$" };
       const scope = ["password"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid password", () => {
       const body = { password: faker.internet.color() };
       const scope = ["password"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
@@ -337,16 +337,16 @@ describe("Validate Body Test", () => {
     it("should respond with true for valid name", () => {
       const body = { name: `${faker.internet.userName()}@$` };
       const scope = ["name"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid name", () => {
       const body = { name: faker.internet.ip() };
       const scope = ["name"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
@@ -357,16 +357,16 @@ describe("Validate Body Test", () => {
     it("should respond with true for valid price", () => {
       const body = { price: 120 };
       const scope = ["price"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid price", () => {
       const body = { price: 98 };
       const scope = ["price"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
@@ -377,16 +377,16 @@ describe("Validate Body Test", () => {
     it("should respond with true for valid description", () => {
       const body = { description: "Yummy and satisfactory bean cake" };
       const scope = ["description"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid description", () => {
       const body = { description: "bean cake" };
       const scope = ["description"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });
@@ -397,16 +397,16 @@ describe("Validate Body Test", () => {
     it("should respond with true for valid phone", () => {
       const body = { phone: "09066665555" };
       const scope = ["phone"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(true);
     });
     it("should respond with false for invalid phone", () => {
       const body = { phone: faker.internet.userName() };
       const scope = ["phone"];
-      const done = () => {};
-      const res = { status: () => {} };
+      const done = jest.fn();
+      const res = { status: jest.fn() };
       const response = validateBody(scope, body, res, done);
       expect(response).toBe(false);
     });

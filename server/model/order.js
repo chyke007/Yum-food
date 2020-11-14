@@ -38,7 +38,7 @@ const orderItemSchema = new Schema(
 
 const OrderSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: Schema.Types.ObjectId, ref: "user", required: true },
     orderItems: [orderItemSchema],
     shipping: shippingSchema,
     itemsPrice: { type: Number, default: 0 },

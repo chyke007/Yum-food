@@ -6,9 +6,14 @@ const controller = require("../../controller/order");
 // all requests must pass in a token
 router.use(ExtractToken);
 
-router.post("/", controller.post).put("/:id", controller.update);
-// all requests must be by ADMIN
+router
+  .get("/:id", controller.get)
+  .get("/", controller.getAll)
+  .post("/", controller.post)
+  .put("/:id", controller.update)
+  .delete("/:id", controller.deleteOrder);
 
+// all requests must be by ADMIN
 router.use(Admin);
 router.put("/status/:id", controller.updateStatus).use(Admin);
 

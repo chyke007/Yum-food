@@ -312,7 +312,6 @@ describe("Product", () => {
     done();
   });
 
-  // order controller and test
-
+  // add seeder for admin and users
   // then api would be done
 });
