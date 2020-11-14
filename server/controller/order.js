@@ -8,7 +8,7 @@ const {
     checkShippingData,
     checkStatus,
   },
-  Constants: { PENDING },
+  Constants: { PENDING, ADMIN },
   ErrorCodes,
   ErrorMessage,
   CustomException,
@@ -261,8 +261,44 @@ const updateStatus = async function (req, res, next) {
   );
 };
 
+/**
+ * deletes a single order
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+
+const deleteOrder = async function (req, res, next) {
+  const {
+    params: { id },
+  } = req;
+  if (checkPayload(req.user || {}) && checkId(id)) {
+    let validOrder = {};
+    if (req.user.accountType === ADMIN) {
+      validOrder = await Order.findByIdAndRemove(id);
+    } else {
+      validOrder = await Order.findOne({
+        _id: id,
+        user: req.user.id,
+      });
+      if (validOrder) {
+        await Order.findByIdAndRemove(id);
+      }
+    }
+    return handleResult(validOrder, res, next);
+  }
+  return next(
+    new CustomException(
+      // eslint-disable-next-line new-cap
+      ErrorMessage.NO_PRIVILEGE,
+      ErrorCodes.NO_PRIVILEGE
+    )
+  );
+};
+
 module.exports = {
   post,
   update,
   updateStatus,
+  deleteOrder,
 };
