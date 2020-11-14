@@ -7,6 +7,8 @@ const controller = require("../../controller/order");
 router.use(ExtractToken);
 
 router
+  .get("/:id", controller.get)
+  .get("/", controller.getAll)
   .post("/", controller.post)
   .put("/:id", controller.update)
   .delete("/:id", controller.deleteOrder);

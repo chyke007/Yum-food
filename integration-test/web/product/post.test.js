@@ -312,8 +312,6 @@ describe("Product", () => {
     done();
   });
 
-  // order controller and test
-  // user can only get, get all order that belongs to them
- // add seeder for admin and users
+  // add seeder for admin and users
   // then api would be done
 });

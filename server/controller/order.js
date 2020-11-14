@@ -8,7 +8,8 @@ const {
     checkShippingData,
     checkStatus,
   },
-  Constants: { PENDING, ADMIN },
+  Db: { paginate: Paginate },
+  Constants: { PENDING, ADMIN, USER },
   ErrorCodes,
   ErrorMessage,
   CustomException,
@@ -17,6 +18,63 @@ const {
 const { Order } = require("../model");
 
 const log = new Logger("Controller:Order");
+/**
+ * tranforms query parameters for mongo
+ * @param  {Object} body
+ * @return {Object} query
+ */
+const parseQuery = ({ search, status, shipping, totalPrice }) => {
+  let query = {};
+  const and = [];
+  if (search) {
+    const name = {
+      $or: [{ "orderItems.name": { $regex: search, $options: "i" } }],
+    };
+    and.push(name);
+  }
+  if (status) {
+    const a = String(status).split(",");
+    const stat = { $or: [] };
+    a.forEach((_) => {
+      stat.$or.push({ status: { $regex: _, $options: "i" } });
+    });
+    and.push(stat);
+  }
+  if (shipping) {
+    const ship = {
+      $or: [
+        { "shipping.address": { $regex: shipping, $options: "i" } },
+        { "shipping.city": { $regex: shipping, $options: "i" } },
+        { "shipping.postalCode": { $regex: shipping, $options: "i" } },
+        { "shipping.country": { $regex: shipping, $options: "i" } },
+      ],
+    };
+    and.push(ship);
+  }
+
+  if (totalPrice) {
+    const a = String(totalPrice).split(",");
+    const pr = { $or: [] };
+    a.forEach((_) => {
+      const [from, to] = _.split("-");
+      if (to === "*") {
+        pr.$or.push({ totalPrice: { $gte: from } });
+      } else {
+        pr.$or.push({
+          totalPrice: {
+            $gte: from,
+            $lte: to,
+          },
+        });
+      }
+    });
+    and.push(pr);
+  }
+  if (and.length > 0) {
+    query = { ...query, $and: and };
+  }
+  return query;
+};
 
 /**
  * Send result to user
@@ -78,6 +136,61 @@ function checkOrder(order, next) {
 }
 
 /* eslint func-names: ["error", "never"] */
+
+/**
+ * Get specific order record
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const get = async function (req, res, next) {
+  const { id } = req.params;
+  if (!checkId(id)) {
+    next(
+      new CustomException(
+        // eslint-disable-next-line new-cap
+        ErrorMessage.PRODUCT_NOT_FOUND,
+        ErrorCodes.PRODUCT_NOT_FOUND
+      )
+    );
+    return;
+  }
+  let validOrder = {};
+  if (req.user.accountType === ADMIN) {
+    validOrder = await Order.findById(id).populate({
+      path: "user",
+      select: "name email",
+    });
+  } else {
+    validOrder = await Order.findOne({
+      _id: id,
+      user: req.user.id,
+    }).populate({ path: "user", select: "name email" });
+  }
+  handleResult(validOrder, res, next);
+};
+
+/** returns all orders
+ * @param  {Express.Request} req
+ * @param  {Express.Response} res
+ * @param  {function} next
+ */
+const getAll = async function (req, res, next) {
+  let query = parseQuery(req.query);
+  const { page, perpage } = req.query;
+  if (req.user.accountType === USER) {
+    query = { ...query, user: req.user.id };
+  }
+
+  // eslint-disable-next-line new-cap
+  Paginate(res, next, Order, {
+    perPage: perpage,
+    query,
+    page,
+    projections: { countInStock: 0 },
+    populate: [{ path: "user", select: "name email" }],
+  });
+};
 
 /**
  * Adds an order record
@@ -297,6 +410,8 @@ const deleteOrder = async function (req, res, next) {
 };
 
 module.exports = {
+  get,
+  getAll,
   post,
   update,
   updateStatus,
