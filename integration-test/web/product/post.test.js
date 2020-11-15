@@ -311,7 +311,4 @@ describe("Product", () => {
     expect(response.status).toBe(422);
     done();
   });
-
-  // add seeder for admin and users
-  // then api would be done
 });
