@@ -1,4 +1,4 @@
-// test-setup.js
+// db-setup.js
 const mongoose = require("mongoose");
 const config = require("../../config");
 

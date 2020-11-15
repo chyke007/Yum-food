@@ -1,0 +1,16 @@
+[
+    {
+        "name": "TekLoon",
+        "email": "user@yummyfood.app",
+        "phone": "08032394493",
+        "password": "Password12#",
+        "accountType": "ADMIN"
+    },
+    {
+        "name": "TekLoon",
+        "email": "admin@yummyfood.app",
+        "phone": "08032394493",
+        "password": "Yummy2468@",
+        "accountType": "USER"
+    }
+]
