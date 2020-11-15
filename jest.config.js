@@ -3,6 +3,7 @@ module.exports = {
   setupFiles: ["dotenv/config"],
   collectCoverageFrom: [
     "server/**/*.js",
+    "!server/utils/seeder.js",
     "!server/**/*.test.js",
     "!server/controller/User.js",
     "!/node_modules/",
