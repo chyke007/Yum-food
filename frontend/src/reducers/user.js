@@ -4,6 +4,7 @@ const userReducer = (
     state = {
         name: "Max",
         age: 26,
+        token: null
     },
     action
 ) => {
