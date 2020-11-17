@@ -1,18 +1,24 @@
 import React from "react";
 import { connect } from "react-redux";
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { bindActionCreators } from "redux";
-import { User } from "../components/User";
-import { Main } from "../components/Main";
+import { Navbar } from "../components/Navbar";
+import { Landing } from "../components/Landing";
+import { NotFound } from "../components/NotFound";
 import { setName } from "../actions/user";
 import { selectUserName } from "../reducers";
 class App extends React.Component {
   render() {
     return (
-      <div className="container">
-        {this.props.at}
-        <Main changeUsername={() => this.props.setName("Anna")} />
-        <User username={this.props.username} />
-      </div>
+      <BrowserRouter>
+      <React.Fragment>
+      <Navbar/>
+      <Switch>
+          {!this.props.token && <Route exact path="/" component={Landing}/>}
+          <Route component={NotFound} />
+        </Switch>
+      </React.Fragment>
+        </BrowserRouter>
     );
   }
 }
@@ -21,9 +27,7 @@ class App extends React.Component {
 //Add unit testing(jest) for selectors, add integration and end to end testing
 const mapStateToProps = (state, ownprops) => ({
   username: selectUserName(state),
-  math: state.math,
-  at: ownprops.at,
-  //ownprops optional
+  token: state.user.token
 });
 
 // const mapDispatchToProps = (dispatch) => ({
