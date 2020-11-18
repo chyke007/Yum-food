@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { bindActionCreators } from "redux";
 import { Navbar } from "../components/Navbar";
 import { Landing } from "../components/Landing";
+import { Login } from "../components/Login";
+import { Register } from "../components/Register";
 import { NotFound } from "../components/NotFound";
 import { setName } from "../actions/user";
 import { selectUserName } from "../reducers";
@@ -14,7 +16,9 @@ class App extends React.Component {
       <React.Fragment>
       <Navbar/>
       <Switch>
-          {!this.props.token && <Route exact path="/" component={Landing}/>}
+          <Route exact path="/" component={Landing}/>
+          {!this.props.token && <Route exact path="/login" component={Login}/>}
+          {!this.props.token && <Route exact path="/signup" component={Register}/>}
           <Route component={NotFound} />
         </Switch>
       </React.Fragment>

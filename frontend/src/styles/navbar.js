@@ -23,6 +23,9 @@ export const StyledNavbar = styled.main.attrs({
     }
     div#links{
         ${tw `block sm:flex px-2 pt-2 pb-3`}
+        .active{
+          ${tw `bg-gray-800`}
+        }
         &.hidden{
             ${tw `hidden sm:flex`}
         }

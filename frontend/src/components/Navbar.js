@@ -5,7 +5,7 @@ import logo from '../assets/img/logo.svg'
 
 
 export const Navbar = (props) => {
-    const [display, setDisplay] = useState(true)
+    const [display, setDisplay] = useState(false)
     return (
         <>
         <StyledNavbar>
@@ -30,8 +30,8 @@ export const Navbar = (props) => {
         </div>
         <div id="links" className={`${display ? `block` : `hidden`}`}>
             <NavLink to="/login"> Login</NavLink>
-            <NavLink to="/register"> Register</NavLink>
-            <NavLink to="/product"> Product</NavLink>
+            <NavLink to="/signup"> Sign Up</NavLink>
+            <NavLink to="/product"> Menu</NavLink>
         </div>
 
         </StyledNavbar>
