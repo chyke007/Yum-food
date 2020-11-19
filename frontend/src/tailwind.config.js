@@ -3,7 +3,9 @@ module.exports = {
     // removeDeprecatedGapUtilities: true,
     // purgeLayersByDefault: true,
   },
-  purge: [],
+  purge: [
+    './containers/**/*.js',
+  ],
   theme: {
     extend: {
       backgroundImage: theme => ({
