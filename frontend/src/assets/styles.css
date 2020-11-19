@@ -3521,6 +3521,10 @@ video {
   background-image: linear-gradient(to top left, var(--gradient-color-stops));
 }
 
+.bg-product-pattern {
+  background-image: url('./img/product_bg.svg');
+}
+
 .from-transparent {
   --gradient-from-color: transparent;
   --gradient-color-stops: var(--gradient-from-color), var(--gradient-to-color, rgba(0, 0, 0, 0));
@@ -18800,6 +18804,10 @@ video {
   animation: bounce 1s infinite;
 }
 
+.w-72 {
+  width: 35%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -21757,6 +21765,10 @@ code {
 
   .sm\:bg-gradient-to-tl {
     background-image: linear-gradient(to top left, var(--gradient-color-stops));
+  }
+
+  .sm\:bg-product-pattern {
+    background-image: url('./img/product_bg.svg');
   }
 
   .sm\:from-transparent {
@@ -37006,6 +37018,10 @@ code {
   .sm\:animate-bounce {
     animation: bounce 1s infinite;
   }
+
+  .sm\:w-72 {
+    width: 35%;
+  }
 }
 
 @media (min-width: 768px) {
@@ -39951,6 +39967,10 @@ code {
 
   .md\:bg-gradient-to-tl {
     background-image: linear-gradient(to top left, var(--gradient-color-stops));
+  }
+
+  .md\:bg-product-pattern {
+    background-image: url('./img/product_bg.svg');
   }
 
   .md\:from-transparent {
@@ -55200,6 +55220,10 @@ code {
   .md\:animate-bounce {
     animation: bounce 1s infinite;
   }
+
+  .md\:w-72 {
+    width: 35%;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -58145,6 +58169,10 @@ code {
 
   .lg\:bg-gradient-to-tl {
     background-image: linear-gradient(to top left, var(--gradient-color-stops));
+  }
+
+  .lg\:bg-product-pattern {
+    background-image: url('./img/product_bg.svg');
   }
 
   .lg\:from-transparent {
@@ -73394,6 +73422,10 @@ code {
   .lg\:animate-bounce {
     animation: bounce 1s infinite;
   }
+
+  .lg\:w-72 {
+    width: 35%;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -76339,6 +76371,10 @@ code {
 
   .xl\:bg-gradient-to-tl {
     background-image: linear-gradient(to top left, var(--gradient-color-stops));
+  }
+
+  .xl\:bg-product-pattern {
+    background-image: url('./img/product_bg.svg');
   }
 
   .xl\:from-transparent {
@@ -91587,5 +91623,9 @@ code {
 
   .xl\:animate-bounce {
     animation: bounce 1s infinite;
+  }
+
+  .xl\:w-72 {
+    width: 35%;
   }
 }

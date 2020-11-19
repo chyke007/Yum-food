@@ -32,6 +32,7 @@ export const Navbar = (props) => {
             <NavLink to="/login"> Login</NavLink>
             <NavLink to="/signup"> Sign Up</NavLink>
             <NavLink to="/product"> Menu</NavLink>
+            <NavLink to="/cart"> Cart <span className="bg-red-500  text-white text-xs ml-4 mt-1 sm:-ml-1 sm:-mt-2  inline-block px-1  absolute rounded-full"> 3</span></NavLink>
         </div>
 
         </StyledNavbar>

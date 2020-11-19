@@ -9,7 +9,7 @@ export const StyledLanding = styled.main.attrs({
       ${tw`bg-white px-6 py-4 sm:flex sm:justify-between sm:p-16`}
       div#content{
           p:nth-child(1){
-              ${tw`font-mono text-5xl text-gray-900 uppercase`}
+              ${tw`text-5xl text-gray-900 font-bold uppercase`}
           }
        p:nth-child(2){
             ${tw` text-lg text-black`}

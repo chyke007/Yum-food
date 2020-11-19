@@ -6,6 +6,7 @@ import { Navbar } from "../components/Navbar";
 import { Landing } from "../components/Landing";
 import { Login } from "../components/Login";
 import { Register } from "../components/Register";
+import { Product } from "../components/Product";
 import { NotFound } from "../components/NotFound";
 import { setName } from "../actions/user";
 import { selectUserName } from "../reducers";
@@ -19,6 +20,7 @@ class App extends React.Component {
           <Route exact path="/" component={Landing}/>
           {!this.props.token && <Route exact path="/login" component={Login}/>}
           {!this.props.token && <Route exact path="/signup" component={Register}/>}
+          <Route exact path="/product" component={Product}/>
           <Route component={NotFound} />
         </Switch>
       </React.Fragment>
