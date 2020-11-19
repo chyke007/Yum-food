@@ -3525,6 +3525,10 @@ video {
   background-image: url('./img/product_bg.svg');
 }
 
+.bg-product-end {
+  background-image: url('./img/end.svg');
+}
+
 .from-transparent {
   --gradient-from-color: transparent;
   --gradient-color-stops: var(--gradient-from-color), var(--gradient-to-color, rgba(0, 0, 0, 0));
@@ -21771,6 +21775,10 @@ code {
     background-image: url('./img/product_bg.svg');
   }
 
+  .sm\:bg-product-end {
+    background-image: url('./img/end.svg');
+  }
+
   .sm\:from-transparent {
     --gradient-from-color: transparent;
     --gradient-color-stops: var(--gradient-from-color), var(--gradient-to-color, rgba(0, 0, 0, 0));
@@ -39971,6 +39979,10 @@ code {
 
   .md\:bg-product-pattern {
     background-image: url('./img/product_bg.svg');
+  }
+
+  .md\:bg-product-end {
+    background-image: url('./img/end.svg');
   }
 
   .md\:from-transparent {
@@ -58175,6 +58187,10 @@ code {
     background-image: url('./img/product_bg.svg');
   }
 
+  .lg\:bg-product-end {
+    background-image: url('./img/end.svg');
+  }
+
   .lg\:from-transparent {
     --gradient-from-color: transparent;
     --gradient-color-stops: var(--gradient-from-color), var(--gradient-to-color, rgba(0, 0, 0, 0));
@@ -76375,6 +76391,10 @@ code {
 
   .xl\:bg-product-pattern {
     background-image: url('./img/product_bg.svg');
+  }
+
+  .xl\:bg-product-end {
+    background-image: url('./img/end.svg');
   }
 
   .xl\:from-transparent {
