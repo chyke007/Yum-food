@@ -3,9 +3,7 @@ module.exports = {
     // removeDeprecatedGapUtilities: true,
     // purgeLayersByDefault: true,
   },
-  purge: [
-    './containers/**/*.js',
-  ],
+  purge: [],
   theme: {
     extend: {
       backgroundImage: theme => ({
@@ -14,6 +12,10 @@ module.exports = {
        })
     },
   },
-  variants: {},
+  variants: {
+    extend: {
+      backgroundColor: ['checked'],
+    }
+  },
   plugins: [],
 }

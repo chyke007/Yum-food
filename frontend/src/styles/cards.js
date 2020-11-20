@@ -16,9 +16,9 @@ export const StyledLanding = styled.main.attrs({
         }
         button{
             a{
-                ${tw`  no-underline text-white hover:text-gray-900`}
+                ${tw`  no-underline `}
             }
-            ${tw`bg-gray-900 mt-4 bg-gray-900 hover:bg-gray-200   rounded-md cursor-pointer text-white px-3 py-3 uppercase `}
+            ${tw`bg-gray-900 mt-4 text-white hover:text-black hover:bg-gray-300   rounded-md cursor-pointer px-3 py-3 uppercase `}
         }
     }
     div#image{
@@ -50,5 +50,15 @@ export const StyledLanding = styled.main.attrs({
   })`
     & {
       ${tw`bg-white  px-6 py-4 flex flex-wrap items-center sm:justify-between sm:p-16`}
+}
+  `;
+
+  export const StyledProduct = styled.main.attrs({
+    className: "",
+  })`
+    & {
+        .form-tick:checked:after {
+            content: ' ✔';
+          }
 }
   `;
