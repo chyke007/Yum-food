@@ -3,7 +3,12 @@ import { connect } from "react-redux";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { bindActionCreators } from "redux";
 import { Navbar } from "../components/Navbar";
-import { Landing } from "../components/Landing";
+import { Landing } from "./Landing";
+import { Login } from "./Login";
+import { Register } from "./Register";
+import { Product } from "./Product";
+import  SingleProduct  from "../components/Product/single";
+import { Cart } from "./Cart";
 import { NotFound } from "../components/NotFound";
 import { setName } from "../actions/user";
 import { selectUserName } from "../reducers";
@@ -14,7 +19,12 @@ class App extends React.Component {
       <React.Fragment>
       <Navbar/>
       <Switch>
-          {!this.props.token && <Route exact path="/" component={Landing}/>}
+          <Route exact path="/" component={Landing}/>
+          {!this.props.token && <Route exact path="/login" component={Login}/>}
+          {!this.props.token && <Route exact path="/signup" component={Register}/>}
+          <Route exact path="/product" component={Product}/>
+          <Route exact path="/product/:id" component={SingleProduct}/>
+          <Route exact path="/checkout" component={Cart}/>
           <Route component={NotFound} />
         </Switch>
       </React.Fragment>

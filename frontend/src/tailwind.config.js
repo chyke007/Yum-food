@@ -5,8 +5,17 @@ module.exports = {
   },
   purge: [],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: theme => ({
+        'product-pattern': "url('./img/product_bg.svg')",
+        'product-end': "url('./img/end.svg')"
+       })
+    },
   },
-  variants: {},
+  variants: {
+    extend: {
+      backgroundColor: ['checked'],
+    }
+  },
   plugins: [],
 }
