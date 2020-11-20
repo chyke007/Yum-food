@@ -62,3 +62,57 @@ export const StyledLanding = styled.main.attrs({
           }
 }
   `;
+
+  export const SingleProduct = styled.main.attrs({
+    className: "",
+})`
+  & {
+     #progressbar{
+
+        li {
+            list-style-type: none;
+            font-size: 15px;
+            width: 25%;
+            float: left;
+            position: relative;
+            font-weight: 400;
+        }
+         li.active:before,li.active:after {
+            background: rgba(17, 24, 39,1);
+        }
+         li:before {
+            content: "1";
+            text-align:center;
+            width: 50px;
+            height: 50px;
+            line-height: 45px;
+            display: block;
+            font-size: 20px;
+            color: #ffffff;
+            background: lightgray;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            padding: 2px;
+         }
+         li:nth-child(1):before {
+          content: "1";
+         }
+         li:nth-child(2):before {
+          content: "2";
+         }
+         li:nth-child(3):before {
+          content: "3";
+         }
+        li:after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background: lightgray;
+            position: absolute;
+            left: 0;
+            top: 25px;
+            z-index: -1;
+          }
+     }
+}
+`;

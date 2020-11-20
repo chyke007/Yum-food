@@ -33,7 +33,7 @@ export const Login = (props) => {
     </div>
   </div>
   <button className="w-full mt-3 bg-gray-900 hover:bg-gray-200 hover:text-gray-900 rounded-md cursor-pointer text-white px-3 py-3 uppercase ">
-    SIGN UP
+    LOG IN
   </button>
 </form>
         </div>
