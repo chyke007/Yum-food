@@ -7,6 +7,7 @@ import { Landing } from "./Landing";
 import { Login } from "./Login";
 import { Register } from "./Register";
 import { Product } from "./Product";
+import  SingleProduct  from "../components/Product/single";
 import { Cart } from "./Cart";
 import { NotFound } from "../components/NotFound";
 import { setName } from "../actions/user";
@@ -22,6 +23,7 @@ class App extends React.Component {
           {!this.props.token && <Route exact path="/login" component={Login}/>}
           {!this.props.token && <Route exact path="/signup" component={Register}/>}
           <Route exact path="/product" component={Product}/>
+          <Route exact path="/product/:id" component={SingleProduct}/>
           <Route exact path="/checkout" component={Cart}/>
           <Route component={NotFound} />
         </Switch>

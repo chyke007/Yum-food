@@ -60,7 +60,7 @@ export default () => {
               3000
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" className="text-indigo-600 hover:text-indigo-900">Remove</a>
+                <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
               </td>
             </tr>
             <tr>
@@ -93,7 +93,7 @@ export default () => {
               3000
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" className="text-indigo-600 hover:text-indigo-900">Remove</a>
+                <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
               </td>
             </tr>
             <tr>
@@ -126,7 +126,7 @@ export default () => {
               3000
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" className="text-indigo-600 hover:text-indigo-900">Remove</a>
+                <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
               </td>
             </tr>
             <tr>
@@ -159,7 +159,7 @@ export default () => {
               3000
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" className="text-indigo-600 hover:text-indigo-900">Remove</a>
+                <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
               </td>
             </tr>
           </tbody>
