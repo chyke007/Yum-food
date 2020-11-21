@@ -8,8 +8,8 @@ export const Cart = (props) => {
     <aside className="w-full xl:w-9/12 p-4">
     <CartItem/>
     </aside>
-    <section className="w-full xl:w-3/12 my-8 xl:my-4 h-56 shadow-2xl rounded-lg border-gray-500 p-4">
-   <CartCheckout/>
+    <section className="w-full xl:w-3/12 my-8 xl:my-4">
+     <CartCheckout header={'Subtotal ( 4 items)'} total={620} items={620} shipping={0} tax={0} to={'/checkout/1234'} button={'Proceed to checkout'}/>
     </section>
     </div>
   );

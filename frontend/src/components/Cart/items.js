@@ -3,7 +3,7 @@ import Item1 from '../../assets/img/chicken-rice.jpg'
 import Item2 from '../../assets/img/chicken-fried.jpg'
 import Item3 from '../../assets/img/yam-sauce.jpg'
 import Item4 from '../../assets/img/chicken-recipe.jpg'
-export default () => {
+export default (props) => {
     return (
         <div className="flex flex-col">
   <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -24,9 +24,12 @@ export default () => {
               <th scope="col" className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Total(₦)
               </th>
+              {props.place ? '' : (
+
               <th scope="col" className="px-6 py-3 bg-gray-50">
                 <span className="sr-only">Remove</span>
               </th>
+              )}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -52,16 +55,21 @@ export default () => {
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2  text-xs leading-5 font-semibold rounded-full ">
                <div className="text-sm text-gray-500">
-                <input className="appearance-none outline-none " min="0" name="quantity" defaultValue="1" type="number"/>
+               {props.place ? '1' : (
+                  <input className="appearance-none outline-none " min="0" name="quantity" defaultValue="1" type="number"/>
+               )}
                 </div>
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               3000
               </td>
+              {props.place ? '' : (
+
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
               </td>
+              )}
             </tr>
             <tr>
               <td className="px-6 py-4 whitespace-nowrap">
@@ -85,16 +93,21 @@ export default () => {
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2  text-xs leading-5 font-semibold rounded-full ">
                <div className="text-sm text-gray-500">
-                <input className="appearance-none outline-none " min="0" name="quantity" defaultValue="1" type="number"/>
-                </div>
+               {props.place ? '1' : (
+                  <input className="appearance-none outline-none " min="0" name="quantity" defaultValue="1" type="number"/>
+               )}
+               </div>
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               3000
               </td>
+              {props.place ? '' : (
+
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
               </td>
+              )}
             </tr>
             <tr>
               <td className="px-6 py-4 whitespace-nowrap">
@@ -118,16 +131,21 @@ export default () => {
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2  text-xs leading-5 font-semibold rounded-full ">
                <div className="text-sm text-gray-500">
-                <input className="appearance-none outline-none " min="0" name="quantity" defaultValue="1" type="number"/>
-                </div>
+               {props.place ? '1' : (
+                  <input className="appearance-none outline-none " min="0" name="quantity" defaultValue="1" type="number"/>
+               )}
+               </div>
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               3000
               </td>
+              {props.place ? '' : (
+
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
               </td>
+              )}
             </tr>
             <tr>
               <td className="px-6 py-4 whitespace-nowrap">
@@ -151,16 +169,21 @@ export default () => {
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2  text-xs leading-5 font-semibold rounded-full ">
                <div className="text-sm text-gray-500">
-                <input className="appearance-none outline-none " min="0" name="quantity" defaultValue="1" type="number"/>
-                </div>
+               {props.place ? '1' : (
+                  <input className="appearance-none outline-none " min="0" name="quantity" defaultValue="1" type="number"/>
+               )}
+              </div>
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               3000
               </td>
+              {props.place ? '' : (
+
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
               </td>
+              )}
             </tr>
           </tbody>
         </table>
