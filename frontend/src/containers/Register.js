@@ -1,5 +1,5 @@
 import React from "react";
-import {StyledRegister} from "../styles/cards"
+import {StyledRegister} from "../styles/layout"
 import register from '../assets/img/register.png'
 
 export const Register = (props) => {

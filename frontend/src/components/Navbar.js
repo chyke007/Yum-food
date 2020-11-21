@@ -5,7 +5,7 @@ import logo from '../assets/img/logo.svg'
 
 
 export const Navbar = (props) => {
-    const [display, setDisplay] = useState(false)
+    const [display, setDisplay] = useState(false);
     return (
         <>
         <StyledNavbar>

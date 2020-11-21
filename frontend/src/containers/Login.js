@@ -1,5 +1,5 @@
 import React from "react";
-import {StyledLogin} from "../styles/cards"
+import {StyledLogin} from "../styles/layout"
 import register from '../assets/img/register.png'
 
 export const Login = (props) => {

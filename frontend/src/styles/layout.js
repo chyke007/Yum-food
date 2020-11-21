@@ -53,6 +53,13 @@ export const StyledLanding = styled.main.attrs({
 }
   `;
 
+  export const SingleOrder = styled.main.attrs({
+    className: "",
+  })`
+    & {
+}
+  `;
+
   export const StyledProduct = styled.main.attrs({
     className: "",
   })`
