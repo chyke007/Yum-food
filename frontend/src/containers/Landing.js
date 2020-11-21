@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from 'react-router-dom';
-import {StyledLanding} from "../styles/cards"
+import {StyledLanding} from "../styles/layout"
 import landing from '../assets/img/landing.jpg'
 
 export const Landing = (props) => {

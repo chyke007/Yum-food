@@ -1,5 +1,5 @@
 import React from "react";
-export default () => {
+export default (props) => {
     return (
         <div className="flex flex-col">
   <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -26,17 +26,31 @@ export default () => {
             <tr>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-900">
-                2A/12 Mopi drive, LA, Pluto
+                {props.place ? (
+                  <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" placeholder="2A/12 Mopi drive, LA, Pluto"/>
+                ) : '2A/12 Mopi drive, LA, Pluto'}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">Lagos</div>
+                <div className="text-sm text-gray-900">
+                  {props.place ? (
+                  <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Lagos"/>
+                ) : 'Lagos'}
+                </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm text-gray-900">028293</div>
+              <div className="text-sm text-gray-900">
+              {props.place ? (
+                  <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-postal" type="text" placeholder="028293"/>
+                ) : '028293'}
+              </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap ">
-              <div className="text-sm text-gray-900">Pluto</div>
+              <div className="text-sm text-gray-900">
+                {props.place ? (
+                  <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-country" type="text" placeholder="Pluto"/>
+                ) : 'Pluto'}
+              </div>
               </td>
             </tr>
           </tbody>

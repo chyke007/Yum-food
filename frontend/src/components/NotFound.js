@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from 'react-router-dom';
-import {Styled404} from "../styles/cards"
+import {Styled404} from "../styles/layout"
 import Four0Four from '../assets/img/404_2.png'
 
 export const NotFound = (props) => {

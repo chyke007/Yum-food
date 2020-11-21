@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import Delivery from "./delivery";
 import CartItem from "./items";
 import CartCheckout from "./checkout";
-import {SingleProduct} from "../../styles/cards";
+import {SingleProduct} from "../../styles/layout";
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 export default (props) => {
     return (
@@ -38,7 +38,13 @@ export default (props) => {
                 <img className="w-1/5" src={Back_Arrow} alt="ddd"/>
             </NavLink>
         </div>
-        <CartCheckout header={'Order Summary'} total={620} items={620} shipping={0} tax={0} to={'/product'} button={'Place order'}/>
+        <CartCheckout header={'Order Summary'} total={620} items={620} shipping={0} tax={0} >
+        <NavLink to='/order/1234'>
+            <button className="w-full mt-4 bg-gray-900 border border-gray-200 text-white rounded py-4 px-4 leading-tight focus:outline-none focus:bg-white focus:text-black focus:border-gray-500 hover:bg-white hover:text-black hover:border-gray-500">
+            Place order
+            </button>
+        </NavLink>
+        </CartCheckout>
     </section>
     </div>
  </section>

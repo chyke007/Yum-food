@@ -3,7 +3,7 @@ import ProductItem from "../components/Product/items";
 import ProductSkeleton from "../components/Product/skeleton";
 import ProductFilters from "../components/Product/filters";
 import end from '../assets/img/end.svg'
-import {StyledProduct} from '../styles/cards'
+import {StyledProduct} from '../styles/layout'
 export const Product = (props) => {
     const [rating, setRatings] = useState(0)
     const [filter, setFilter] = useState(true)
@@ -57,7 +57,9 @@ export const Product = (props) => {
         <img className="mx-4" src={end} alt="end"/>
     </p>
 </div>
-
+<div className="fixed flex items-center justify-center font-bold cursor-pointer text-center bg-gray-900 rounded-full bottom-10 right-10 text-white shadow-2xl w-12 p-3 h-12">
++
+</div>
 </div>):(
 <div className="z-10 absolute h-screen mb-0 w-full bg-white top-0 bottom-0">
 <header className="bg-gray-900 text-lg font-bold text-white flex justify-between p-4">

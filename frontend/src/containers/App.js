@@ -7,6 +7,7 @@ import { Landing } from "./Landing";
 import { Login } from "./Login";
 import { Register } from "./Register";
 import { Product } from "./Product";
+import SingleOrder  from "./Order";
 import  SingleProduct  from "../components/Cart/single";
 import  PlaceOrder  from "../components/Cart/order";
 import { Cart } from "./Cart";
@@ -27,6 +28,7 @@ class App extends React.Component {
           <Route exact path="/checkout/:id" component={SingleProduct}/>
           <Route exact path="/checkout" component={Cart}/>
           <Route exact path="/placeorder" component={PlaceOrder}/>
+          <Route exact path="/order/:id" component={SingleOrder}/>
           <Route component={NotFound} />
         </Switch>
       </React.Fragment>
