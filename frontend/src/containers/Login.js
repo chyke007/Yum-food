@@ -1,6 +1,6 @@
 import React from "react";
 import {StyledLogin} from "../styles/layout"
-import register from '../assets/img/register.png'
+import register from '../assets/img/sign_in.svg'
 
 export const Login = (props) => {
   return (
@@ -8,7 +8,7 @@ export const Login = (props) => {
        <div id="image" className=" hidden sm:block sm:w-1/3 mb-12 ">
             <img src={register} className="mt-32 h-32  sm:h-32 xl:h-64 object-cover" alt="Logo"/>
             </div>
-            <div id="content" className=" sm:w-1/2">
+            <div id="content" className="w-full sm:w-1/2">
             <span class="text-gray-900  text-3xl mb-6 font-bold">
                 Welcome back!
             </span>
