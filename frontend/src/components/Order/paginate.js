@@ -2,7 +2,7 @@ import React from "react";
 
 export default (props) => {
         return (
-       <div class="-mt-12 bg-white w-full px-4 py-3 flex items-center justify-between  sm:px-6">
+       <div class="bg-white w-10/12 overflow-auto px-4 py-3 flex items-center sm:px-6">
   <div class="flex-1 flex mt-12 justify-between sm:hidden">
     <a href="/" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
       Previous
@@ -11,15 +11,15 @@ export default (props) => {
       Next
     </a>
   </div>
-  <div class="hidden sm:flex-1 ml-32 sm:flex sm:items-center sm:justify-between">
+  <div class="hidden sm:flex-1 ml-32 sm:flex sm:items-center sm:justify-between my-16">
     <div>
       <p class="text-sm px-2 text-gray-700">
         Showing
-        <span class="font-medium">1</span>
+        <span class="font-medium px-1">1</span>
         to
-        <span class="font-medium">10</span>
+        <span class="font-medium px-1">10</span>
         of
-        <span class="font-medium">97</span>
+        <span class="font-medium px-1">97</span>
         results
       </p>
     </div>

@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import OrderItem from "../components/Order/items";
 import Paginate from "../components/Order/paginate";
-import OrderFilters from "../components/Product/filters";
+import OrderFilters from "../components/Order/filters";
 import end from '../assets/img/end.svg'
 import {StyledProduct} from '../styles/layout'
 export const Order = (props) => {
@@ -23,10 +23,10 @@ export const Order = (props) => {
 </svg>
        </button>
        </section>
-       <section className="overflow-x-auto md:w-3/5 lg:w-4/5 flex flex-wrap justify-end">
+       <section className="overflow-auto md:w-3/5 lg:w-4/5 flex flex-wrap justify-end">
       <OrderItem/>
-       <Paginate/>
        </section>
+       <Paginate />
         </div>
 <div>
     <p className="flex flex-row text-center mb-4">
