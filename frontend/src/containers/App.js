@@ -9,8 +9,10 @@ import { Register } from "./Register";
 import { Product } from "./Product";
 import {Order}  from "./Order";
 import {SingleOrder}  from "../components/Order";
+import {SingleProduct}  from "../components/Product";
+import AddProduct  from "../components/Product/add";
 import {Profile}  from "./Profile";
-import  SingleProduct  from "../components/Cart/single";
+import  Shipping  from "../components/Cart/single";
 import  PlaceOrder  from "../components/Cart/order";
 import { Cart } from "./Cart";
 import { NotFound } from "../components/NotFound";
@@ -27,7 +29,9 @@ class App extends React.Component {
           {!this.props.token && <Route exact path="/login" component={Login}/>}
           {!this.props.token && <Route exact path="/signup" component={Register}/>}
           <Route exact path="/product" component={Product}/>
-          <Route exact path="/checkout/:id" component={SingleProduct}/>
+          <Route exact path="/product/add" component={AddProduct}/>
+          <Route exact path="/product/:id" component={SingleProduct}/>
+          <Route exact path="/checkout/:id" component={Shipping}/>
           <Route exact path="/checkout" component={Cart}/>
           <Route exact path="/placeorder" component={PlaceOrder}/>
           <Route exact path="/order/:id" component={SingleOrder}/>
