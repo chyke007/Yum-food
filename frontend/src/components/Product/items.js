@@ -1,12 +1,14 @@
 import React from "react";
+import { withRouter  } from 'react-router-dom';
 import Card1 from '../../assets/img/chicken-rice.jpg'
 import Card2 from '../../assets/img/chicken-fried.jpg'
 import Card3 from '../../assets/img/yam-sauce.jpg'
 import Card4 from '../../assets/img/chicken-recipe.jpg'
-export default () => {
+
+const Items = (props) => {
     return (
         <>
-        <div className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 lg:w-72 cursor-pointer">
+        <div className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 lg:w-72 cursor-pointer" onClick={() => {props.history.push('/product/1234')}}>
                 <div className="relative pb-5/6 h-64 hover:opacity-50 focus:opacity-50">
                      <img className=" h-full w-full object-cover rounded-lg shadow-md" src={Card1} alt="imageAlt"/>
                 </div>
@@ -47,7 +49,7 @@ export default () => {
         </div>
 
     </div>
-    <div className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 lg:w-72 cursor-pointer">
+    <div className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 lg:w-72 cursor-pointer" onClick={() => {props.history.push('/product/1234')}}>
                 <div className="relative pb-5/6 h-64 hover:opacity-50 focus:opacity-50">
                      <img className=" h-full w-full object-cover rounded-lg shadow-md" src={Card2} alt="imageAlt"/>
                 </div>
@@ -87,7 +89,7 @@ export default () => {
         </div>
 
     </div>
-    <div className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 lg:w-72 cursor-pointer">
+    <div className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 lg:w-72 cursor-pointer" onClick={() => {props.history.push('/product/1234')}}>
                 <div className="relative pb-5/6 h-64 hover:opacity-50 focus:opacity-50">
                      <img className=" h-full w-full object-cover rounded-lg shadow-md" src={Card3} alt="imageAlt"/>
                 </div>
@@ -128,7 +130,7 @@ export default () => {
         </div>
 
     </div>
-    <div className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 lg:w-72 cursor-pointer">
+    <div className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 lg:w-72 cursor-pointer" onClick={() => {props.history.push('/product/1234')}}>
                 <div className="relative pb-5/6 h-64 hover:opacity-50 focus:opacity-50">
                      <img className=" h-full w-full object-cover rounded-lg shadow-md" src={Card4} alt="imageAlt"/>
                 </div>
@@ -172,3 +174,5 @@ export default () => {
         </>
     )
 }
+
+export default withRouter (Items);
