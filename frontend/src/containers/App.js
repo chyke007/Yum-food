@@ -1,9 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { bindActionCreators } from "redux";
-import { Navbar } from "../components/Navbar";
+import { BrowserRouter, Route,Redirect, Switch } from 'react-router-dom';
+import Navbar  from "../components/Navbar";
 import { Landing } from "./Landing";
 import Login  from "./Login";
 import { Register } from "./Register";
@@ -15,10 +14,10 @@ import AddProduct  from "../components/Product/add";
 import {Profile}  from "./Profile";
 import  Shipping  from "../components/Cart/single";
 import  PlaceOrder  from "../components/Cart/order";
-import { Cart } from "./Cart";
+import  Cart  from "./Cart";
 import { NotFound } from "../components/NotFound";
-import { setName } from "../actions/user";
-import { selectUserName } from "../reducers";
+import { selectToken, selectRole,selectCheckout } from "../reducers";
+import { ADMIN } from "../constants"
 class App extends React.Component {
   render() {
     return (
@@ -26,18 +25,28 @@ class App extends React.Component {
       <React.Fragment>
       <Navbar/>
       <Switch>
+         {/* TokenLess route */}
+          <Route exact path="/login">
+            {this.props.token ? (this.props.checkout ? <Redirect to="/checkout/123" /> : <Redirect to="/product" /> ) : <Login/>}
+          </Route>
+          <Route exact path="/signup">
+            {this.props.token ? <Redirect to="/product" /> : <Register/>}
+          </Route>
+          {/* Open route */}
           <Route exact path="/" component={Landing}/>
-          {!this.props.token && <Route exact path="/login" component={Login}/>}
-          {!this.props.token && <Route exact path="/signup" component={Register}/>}
           <Route exact path="/product" component={Product}/>
-          <Route exact path="/product/add" component={AddProduct}/>
+          <Route exact path="/product/add" >
+          {this.props.token && this.props.role === ADMIN ? <AddProduct /> : <Redirect to="/login" />}
+          </Route>
           <Route exact path="/product/:id" component={SingleProduct}/>
-          <Route exact path="/checkout/:id" component={Shipping}/>
           <Route exact path="/checkout" component={Cart}/>
+            {/* Secured Routes           */}
+            {!this.props.token && <Redirect to="/login" />}
+          <Route exact path="/checkout/:id" component={Shipping}/>
           <Route exact path="/placeorder" component={PlaceOrder}/>
           <Route exact path="/order/:id" component={SingleOrder}/>
           <Route exact path="/orders" component={Order}/>
-          <Route exact path="/profile" component={Profile}/>
+          {this.props.token && <Route exact path="/profile" component={Profile}/>}
           <Route component={NotFound} />
         </Switch>
       </React.Fragment>
@@ -49,15 +58,10 @@ class App extends React.Component {
 //To do
 //Add unit testing(jest) for selectors, add integration and end to end testing
 const mapStateToProps = (state, ownprops) => ({
-  username: selectUserName(state),
-  token: state.user.token
-});
+  role: selectRole(state),
+  token: selectToken(state),
+  checkout:selectCheckout(state)
+})
 
-// const mapDispatchToProps = (dispatch) => ({
-//   setName: (name) => dispatch(setName(name)),
-// });
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ setName }, dispatch);
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);

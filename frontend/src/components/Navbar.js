@@ -1,11 +1,19 @@
 import React, {useState} from "react"
-import { NavLink } from 'react-router-dom';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { NavLink,withRouter } from 'react-router-dom';
+import { selectToken } from "../reducers";
+import { logout } from "../actions/auth";
 import {StyledNavbar} from "../styles/navbar"
 import logo from '../assets/img/logo.svg'
 import avatar from '../assets/img/avatar.png'
 
+const logUserOut = (props) => {
+  props.logout()
+  props.history.push('/');
+}
 
-export const Navbar = (props) => {
+const Navbar = (props) => {
     const [display, setDisplay] = useState(false);
     const [menu, setMenu] = useState(false);
     return(
@@ -29,13 +37,16 @@ export const Navbar = (props) => {
               <NavLink exact to="/signup" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Register</NavLink>
 
               <NavLink exact to="/product" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Menu</NavLink>
-
+              {props.token ?
+              (
               <NavLink exact to="/orders" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Orders</NavLink>
-
+              ):''}
               <NavLink exact to="/checkout" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Cart <span className="bg-red-500  text-white text-xs ml-4 mt-1 sm:-ml-0 sm:-mt-2  inline-block px-1  absolute rounded-full"> 3</span></NavLink>
             </div>
           </div>
         </div>
+        {props.token ?
+        (
         <div className="hidden md:block">
           <div className="ml-4 flex items-center md:ml-6">
             <button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
@@ -53,12 +64,12 @@ export const Navbar = (props) => {
               </div>
               <div className={menu?" origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 block" :"origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 hidden"} role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
                 <NavLink exact to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">My Profile</NavLink>
-
-                <NavLink exact to="/logout" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</NavLink>
+                <span onClick={() => logUserOut(props)} className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</span>
               </div>
             </div>
           </div>
         </div>
+        ):''}
         <div className="-mr-2 flex md:hidden">
           <button className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
             <span className="sr-only">Open main menu</span>
@@ -82,11 +93,12 @@ export const Navbar = (props) => {
         <NavLink exact to="/signup" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Register</NavLink>
 
         <NavLink exact to="/product" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Menu</NavLink>
-
-        <NavLink exact to="/orders" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Orders</NavLink>
-
+        {props.token ?
+        (<NavLink exact to="/orders" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Orders</NavLink>
+    ):''}
         <NavLink exact to="/checkout" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Cart <span className="bg-red-500  text-white text-xs ml-2 inline-block h-4 text-center px-1  absolute rounded-full"> 3</span></NavLink>
     </div>
+    {props.token ? (
       <div className="pt-4 pb-3 border-t border-gray-700">
         <div className="flex items-center px-5">
           <div className="flex-shrink-0">
@@ -106,11 +118,22 @@ export const Navbar = (props) => {
         <div className="mt-3 px-2 space-y-1">
           <NavLink exact to="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">My Profile</NavLink>
 
-          <NavLink exact to="/logout" className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Sign out</NavLink>
+          <span onClick={() => logUserOut(props)} className="cursor-pointer block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Sign out</span>
         </div>
-      </div>
+      </div>):''
+      }
     </div>
   </nav>
 </StyledNavbar>
     );
 };
+
+const mapStateToProps = (state) => ({
+  token: selectToken(state)
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ logout }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));

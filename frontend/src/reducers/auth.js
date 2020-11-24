@@ -4,14 +4,13 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
+    SET_CHECKOUT_IN_HISTORY,
+    CLEAR_CHECKOUT_FROM_HISTORY
   } from "../types";
 
-  const user = JSON.parse(localStorage.getItem("token"));
-  const initialState = user
-    ? { isLoggedIn: true, user }
-    : { isLoggedIn: false, user: null };
+  const initialState = { isLoggedIn: false, user: null, checkout:false };
 
-    export default function (state = initialState, action) {
+export default function (state = initialState, action) {
     const { type, payload } = action;
     switch (type) {
       case REGISTER_SUCCESS:
@@ -42,7 +41,34 @@ import {
           isLoggedIn: false,
           user: null,
         };
+        case SET_CHECKOUT_IN_HISTORY:
+        return {
+          ...state,
+          checkout:true
+        };
+        case CLEAR_CHECKOUT_FROM_HISTORY:
+        return {
+          ...state,
+          checkout:false
+        };
       default:
         return state;
     }
   }
+
+  //Selectors
+export const selectFirstName = (state) => {
+    return state.user.data.name.split(' ')[0];
+};
+export const selectLastName = (state) => {
+    return state.user.data.name.split(' ')[1];
+};
+export const selectToken = (state) => {
+    return state.user ? state.user.data.token : state.user
+}
+export const selectRole = (state) => {
+    return state.user ? state.user.data.accountType : state.user
+}
+export const selectCheckout = (state) => {
+    return state.checkout
+}

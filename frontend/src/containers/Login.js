@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { withRouter  } from 'react-router-dom';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { login } from "../actions/auth";
+import { login,clearCheckout } from "../actions/auth";
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import {StyledLogin} from "../styles/layout"
 import register from '../assets/img/sign_in.svg'
@@ -31,11 +31,9 @@ const Login = (props) => {
       return
     }
     setErrors({})
-     //it would store user in redux and local storage
     //then redirect user if success to menu page and cart shipping page if user is comming from cart
-    let state = await props.login(email,password)
-    console.log(state)
-    if(state) props.history.push('/product/')
+     await props.login(email,password)
+     props.clearCheckout()
   }
   return (
     <StyledLogin>
@@ -100,12 +98,11 @@ const Login = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  token: state.user.token,
   loading: state.loading.status
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ login }, dispatch);
+  return bindActionCreators({ login,clearCheckout }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));

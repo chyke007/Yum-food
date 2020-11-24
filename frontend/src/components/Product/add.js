@@ -14,7 +14,7 @@ export default (props) => {
       Add Product
     </h3>
     <p class="mt-1 max-w-2xl text-sm text-gray-500">
-      Fill in product deatils
+      Fill in product details
     </p>
   </div>
   <div class="w-full border-t border-gray-200">

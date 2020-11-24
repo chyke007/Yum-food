@@ -1,7 +1,3 @@
-//Math reducer constants
-const ADD = "ADD"
-const SUBTRACT = "SUBTRACT"
-
 //User reducer constants
 const SET_NAME = "SET_NAME"
 const SET_AGE = "SET_AGE"
@@ -10,11 +6,14 @@ const REGISTER_FAIL = "REGISTER_FAIL";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGIN_FAIL = "LOGIN_FAIL";
 const LOGOUT = "LOGOUT";
-
+//
+const SET_CHECKOUT_IN_HISTORY = "SET_CHECKOUT_IN_HISTORY";
+const CLEAR_CHECKOUT_FROM_HISTORY = "CLEAR_CHECKOUT_FROM_HISTORY";
+//loader constants
 const SET_LOADER = "SET_LOADER"
 export {
-     ADD,
-     SUBTRACT,
+     SET_CHECKOUT_IN_HISTORY,
+     CLEAR_CHECKOUT_FROM_HISTORY,
      SET_NAME,
      SET_AGE,
      REGISTER_SUCCESS,

@@ -15,7 +15,7 @@ const Items = (props) => {
                 <div className="relative px-4 -mt-16">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
                         <div className="flex items-baseline">
-                            <span className="inline-block bg-teal-200 text-teal-800 text-xs px-2 rounded-full uppercase font-semibold tracking-wide">New</span>
+                            <span className="inline-block bg-green-200 text-teal-800 text-xs px-2 rounded-full uppercase font-semibold tracking-wide">New</span>
                              <div className="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">
                                 Fried rice and chicken
                             </div>
@@ -96,7 +96,7 @@ const Items = (props) => {
                 <div className="relative px-4 -mt-16">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
                         <div className="flex items-baseline">
-                            <span className="inline-block bg-teal-200 text-teal-800 text-xs px-2 rounded-full uppercase font-semibold tracking-wide">New</span>
+                            <span className="inline-block bg-green-200 text-teal-800 text-xs px-2 rounded-full uppercase font-semibold tracking-wide">New</span>
                              <div className="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">
                                 Nigerian Egg stew
                             </div>
@@ -137,7 +137,7 @@ const Items = (props) => {
                 <div className="relative px-4 -mt-16">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
                         <div className="flex items-baseline">
-                            <span className="inline-block bg-teal-200 text-teal-800 text-xs px-2 rounded-full uppercase font-semibold tracking-wide">New</span>
+                            <span className="inline-block bg-green-200 text-teal-800 text-xs px-2 rounded-full uppercase font-semibold tracking-wide">New</span>
                              <div className="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">
                              Somerset chicken recipe
                             </div>
