@@ -1,12 +1,15 @@
-import { LOGIN_FAIL,LOGIN_SUCCESS, LOGOUT,SET_CHECKOUT_IN_HISTORY,CLEAR_CHECKOUT_FROM_HISTORY } from "../types";
+import { LOGIN_FAIL,LOGIN_SUCCESS,REGISTER_FAIL,REGISTER_SUCCESS, LOGOUT,SET_CHECKOUT_IN_HISTORY,CLEAR_CHECKOUT_FROM_HISTORY } from "../types";
 import { showMessage} from "./toastr"
 import {setLoader} from "./loader"
 import {auth} from "../services"
+
+//Default toastr
 let toastrInfoOption = {
     icon: 'success',
     status: 'success'
   }
 
+//Login
   function loginFailed (res){
     return async (dispatch) => {
         dispatch({
@@ -37,6 +40,34 @@ export function login(email,password) {
     };
 }
 
+//Register
+
+function registerFailed (res){
+    return async (dispatch) => {
+        dispatch({
+            type: REGISTER_FAIL,
+          });
+
+    showMessage(res.error.title,res.error.message, {icon:'error', status:'error'}) (dispatch);
+    }
+}
+export function register(name,phone, email, password) {
+    return async (dispatch) => {
+        dispatch(setLoader(true))
+        let res = await auth.register(name,phone, email, password);
+        dispatch(setLoader(false))
+        if (!res.data) return registerFailed(res)(dispatch);
+        dispatch({
+            type: REGISTER_SUCCESS,
+            payload: { user: res.data },
+        });
+        showMessage('Success',"Your account has been created", toastrInfoOption) (dispatch);
+        return true
+    };
+}
+
+
+//Logout
 export function logout(email,password) {
     return async (dispatch) => {
         dispatch({
