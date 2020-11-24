@@ -17,7 +17,7 @@ module.exports = {
   REQUIRED_SHIPPING_DATA: "shipping data is required",
   INVALID_EMAIL: "Invalid email",
   INVALID_PASSWORD:
-    "Invalid pasword: password must contain an uppercase,lowercase character and a special character",
+    "Invalid pasword: password must contain an uppercase,lowercase character,number,special character and is 8 characters long",
   INVALID_NAME: "Invalid name: name must be at least 3 characters",
   INVALID_PRICE: "Invalid price: price must be more than 99",
   INVALID_DESCRIPTION:
