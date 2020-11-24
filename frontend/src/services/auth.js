@@ -1,9 +1,10 @@
 import BaseService from "./base"
+import {LOGIN_URL,REGISTER_URL} from "../constants"
 class AuthService extends BaseService {
     constructor(){
         super()
-        this.LOGINURL = '/api/login'
-        this.REGISTERURL = '/api/register'
+        this.LOGINURL = LOGIN_URL
+        this.REGISTERURL = REGISTER_URL
     }
 
     async login(email, password) {

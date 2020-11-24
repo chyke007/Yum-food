@@ -4,7 +4,7 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
-  } from "../constants";
+  } from "../types";
 
   const user = JSON.parse(localStorage.getItem("token"));
   const initialState = user
