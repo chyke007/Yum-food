@@ -9,7 +9,7 @@ const store = createStore(
         applyMiddleware(createLogger(), thunk),
         devToolsEnhancer({
             name: "Basic setup",
-            realtime: true,
+            realtime: false,
         })
     )
 );

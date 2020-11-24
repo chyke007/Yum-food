@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { bindActionCreators } from "redux";
 import { Navbar } from "../components/Navbar";
 import { Landing } from "./Landing";
-import { Login } from "./Login";
+import Login  from "./Login";
 import { Register } from "./Register";
 import { Product } from "./Product";
 import {Order}  from "./Order";

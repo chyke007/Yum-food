@@ -4,13 +4,13 @@
         "email": "user@yummyfood.app",
         "phone": "08032394493",
         "password": "Password12#",
-        "accountType": "ADMIN"
+        "accountType": "USER"
     },
     {
         "name": "TekLoon",
         "email": "admin@yummyfood.app",
         "phone": "08032394493",
         "password": "Yummy2468@",
-        "accountType": "USER"
+        "accountType": "ADMIN"
     }
 ]
