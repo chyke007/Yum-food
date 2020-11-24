@@ -1,4 +1,4 @@
-import { LOGIN_FAIL,LOGIN_SUCCESS } from "../constants";
+import { LOGIN_FAIL,LOGIN_SUCCESS } from "../types";
 import { showMessage} from "./toastr"
 import {setLoader} from "./loader"
 import {auth} from "../services"
@@ -26,7 +26,7 @@ export function login(email,password) {
             type: LOGIN_SUCCESS,
             payload: { user: res.data },
           });
-        showMessage('Success',res.data, toastrInfoOption) (dispatch);
+        showMessage('Success',"Welcome back", toastrInfoOption) (dispatch);
         return true
     };
 }

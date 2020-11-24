@@ -1,4 +1,4 @@
-import { SET_LOADER } from "../constants";
+import { SET_LOADER } from "../types";
 
 export const setLoader = (status) => ({
   type: SET_LOADER,

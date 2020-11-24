@@ -1,4 +1,4 @@
-import { SET_NAME, SET_AGE } from "../constants";
+import { SET_NAME, SET_AGE } from "../types";
 
 const userReducer = (
     state = {

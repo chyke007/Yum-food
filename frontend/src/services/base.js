@@ -1,7 +1,7 @@
 import axios from "axios"
 class DefaultService {
     constructor(){
-        this.APIKEY = ''
+        this.APIKEY = process.env.REACT_APP_API_KEY
     }
     async loadData(url,requestBody,method){
         let error= null

@@ -1,10 +1,15 @@
 import { createStore, applyMiddleware, compose } from "redux";
+import {persistReducer, persistStore} from "redux-persist";
 import devToolsEnhancer from "remote-redux-devtools";
 import { createLogger } from "redux-logger";
 import thunk from "redux-thunk";
 import reducers from "./reducers/";
-const store = createStore(
-    reducers, {},
+import { persistConfig} from "./configureStore"
+const persisted = persistReducer(persistConfig, reducers);
+
+
+export const store = createStore(
+    persisted, {},
     compose(
         applyMiddleware(createLogger(), thunk),
         devToolsEnhancer({
@@ -13,5 +18,4 @@ const store = createStore(
         })
     )
 );
-
-export default store;
+export const persistor = persistStore(store)

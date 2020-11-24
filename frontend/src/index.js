@@ -1,13 +1,15 @@
 import { render } from "react-dom";
 import React from "react";
 import { Provider } from "react-redux";
+import { PersistGate } from 'redux-persist/integration/react'
 import App from "./containers/App";
-import store from "./store";
+import {store,persistor} from "./store";
 import ReduxToastr from 'react-redux-toastr'
 import './assets/styles.css';
 render(
   <React.StrictMode>
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <App/>
       <ReduxToastr
       timeOut={4000}
@@ -19,7 +21,8 @@ render(
       transitionOut="fadeOut"
       progressBar
       closeOnToastrClick/>
-     </Provider>
+      </PersistGate>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
