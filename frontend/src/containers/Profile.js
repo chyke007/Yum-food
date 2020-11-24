@@ -1,6 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
+import { selectFullName, selectRole,selectEmail,selectPhone } from "../reducers";
 import avatar from '../assets/img/avatar.png'
-export const Profile = (props) => {
+
+const Profile = (props) => {
   return (
     <>
 <div class="bg-white m-4 flex flex-col justify-center items-center shadow overflow-hidden sm:rounded-lg">
@@ -24,7 +27,7 @@ export const Profile = (props) => {
           Full name
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          Margot Foster
+        {props.name}
         </dd>
       </div>
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -32,7 +35,7 @@ export const Profile = (props) => {
          Role
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          User
+        {props.role}
         </dd>
       </div>
       <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -40,7 +43,7 @@ export const Profile = (props) => {
           Email address
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          johndoe@example.com
+        {props.email}
         </dd>
       </div>
       <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -48,7 +51,7 @@ export const Profile = (props) => {
           Phone number
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          +234594048394
+        {props.phone}
         </dd>
       </div>
      </dl>
@@ -57,3 +60,12 @@ export const Profile = (props) => {
 </>
   );
 };
+
+const mapStateToProps = (state) => ({
+  name: selectFullName(state),
+  role: selectRole(state),
+  email: selectEmail(state),
+  phone: selectPhone(state),
+});
+
+export default connect(mapStateToProps)(Profile);

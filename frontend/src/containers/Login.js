@@ -3,11 +3,10 @@ import { withRouter  } from 'react-router-dom';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { login,clearCheckout } from "../actions/auth";
-import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import {StyledLogin} from "../styles/layout"
-import register from '../assets/img/sign_in.svg'
-import eyeSlash from '../assets/img/eye-slash.png'
+import signin from '../assets/img/sign_in.svg'
 import loader from '../assets/img/loader-cube.svg'
+import eyeSlash from '../assets/img/eye-slash.png'
 import eye from '../assets/img/eye.png'
 import {validateLogin} from '../helper'
 
@@ -31,14 +30,13 @@ const Login = (props) => {
       return
     }
     setErrors({})
-    //then redirect user if success to menu page and cart shipping page if user is comming from cart
-     await props.login(email,password)
+    await props.login(email,password)
      props.clearCheckout()
   }
   return (
     <StyledLogin>
        <div id="image" className=" hidden sm:block sm:w-1/3 mb-12 ">
-            <img src={register} className="mt-32 h-32  sm:h-32 xl:h-64 object-cover" alt="Logo"/>
+            <img src={signin} className="mt-32 h-32  sm:h-32 xl:h-64 object-cover" alt="Logo"/>
             </div>
             <div id="content" className="w-full sm:w-1/2">
             <span className="text-gray-900  text-3xl mb-6 font-bold">

@@ -56,7 +56,10 @@ export default function (state = initialState, action) {
     }
   }
 
-  //Selectors
+//Selectors
+export const selectFullName = (state) => {
+  return state.user.data.name;
+};
 export const selectFirstName = (state) => {
     return state.user.data.name.split(' ')[0];
 };
@@ -69,6 +72,12 @@ export const selectToken = (state) => {
 export const selectRole = (state) => {
     return state.user ? state.user.data.accountType : state.user
 }
+export const selectEmail = (state) => {
+  return state.user.data.email;
+};
+export const selectPhone = (state) => {
+  return state.user.data.phone;
+};
 export const selectCheckout = (state) => {
     return state.checkout
 }
