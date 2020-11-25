@@ -2,6 +2,8 @@ import React from "react";
 import { NavLink } from 'react-router-dom';
 import {StyledLanding} from "../styles/layout"
 import landing from '../assets/img/landing.jpg'
+import ReactGA from 'react-ga';
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 export const Landing = (props) => {
   return (

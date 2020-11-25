@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { selectFullName, selectRole,selectEmail,selectPhone } from "../reducers";
 import avatar from '../assets/img/avatar.png'
+import ReactGA from 'react-ga';
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const Profile = (props) => {
   return (
