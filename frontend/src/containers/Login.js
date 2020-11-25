@@ -9,6 +9,8 @@ import loader from '../assets/img/loader-cube.svg'
 import eyeSlash from '../assets/img/eye-slash.png'
 import eye from '../assets/img/eye.png'
 import {validateLogin} from '../helper'
+import ReactGA from 'react-ga';
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const Login = (props) => {
   let email = React.createRef();

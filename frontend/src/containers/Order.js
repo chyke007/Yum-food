@@ -4,6 +4,9 @@ import Paginate from "../components/Order/paginate";
 import OrderFilters from "../components/Order/filters";
 import end from '../assets/img/end.svg'
 import {StyledProduct} from '../styles/layout'
+import ReactGA from 'react-ga';
+ReactGA.pageview(window.location.pathname + window.location.search);
+
 export const Order = (props) => {
     const [rating, setRatings] = useState(0)
     const [filter, setFilter] = useState(true)
