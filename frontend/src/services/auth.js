@@ -12,10 +12,6 @@ class AuthService extends BaseService {
         return await this.loadData(this.LOGINURL, requestBody, "POST");
     }
 
-    logout() {
-      localStorage.removeItem("user");
-    }
-
     async register(name,phone, email, password) {
         let requestBody = { name,phone, email, password };
         return await this.loadData(this.REGISTERURL, requestBody, "POST");

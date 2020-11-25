@@ -6,7 +6,7 @@ import Navbar  from "../components/Navbar";
 import { Landing } from "./Landing";
 import Login  from "./Login";
 import Register from "./Register";
-import { Product } from "./Product";
+import Product from "./Product";
 import {Order}  from "./Order";
 import {SingleOrder}  from "../components/Order";
 import {SingleProduct}  from "../components/Product";

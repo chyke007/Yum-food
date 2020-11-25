@@ -1,16 +1,21 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import ProductItem from "../components/Product/items";
 import ProductSkeleton from "../components/Product/skeleton";
 import AddButton from "../components/Product/addButton";
 import ProductFilters from "../components/Product/filters";
-import end from '../assets/img/end.svg'
+import { getProduct } from "../actions/product";
 import {StyledProduct} from '../styles/layout'
 import ReactGA from 'react-ga';
 ReactGA.pageview(window.location.pathname + window.location.search);
 
-export const Product = (props) => {
+ const Product = (props) => {
     const [rating, setRatings] = useState(0)
     const [filter, setFilter] = useState(true)
+    useEffect(()=> {
+        document.title = `YumFood - Menu List`;
+    })
   return (
       <StyledProduct>
       {filter ? (
@@ -56,10 +61,7 @@ export const Product = (props) => {
        </section>
         </div>
 <div>
-    <p className="flex flex-row text-center mb-4">
-        Yaay! You're all caught up
-        <img className="mx-4" src={end} alt="end"/>
-    </p>
+
 </div>
 <AddButton/>
 </div>):(
@@ -79,3 +81,13 @@ export const Product = (props) => {
 </StyledProduct>
   );
 };
+
+const mapStateToProps = (state) => ({
+    loading: state.loading.status,
+    product: state.auth.product
+  });
+
+  const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({ getProduct }, dispatch);
+  };
+export default connect(mapStateToProps, mapDispatchToProps)(Product);

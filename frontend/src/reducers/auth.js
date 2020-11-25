@@ -58,13 +58,13 @@ export default function (state = initialState, action) {
 
 //Selectors
 export const selectFullName = (state) => {
-  return state.user.data.name;
+  return state.user ? state.user.data.name : state.user;
 };
 export const selectFirstName = (state) => {
-    return state.user.data.name.split(' ')[0];
+    return state.user ? state.user.data.name.split(' ')[0] : state.user;
 };
 export const selectLastName = (state) => {
-    return state.user.data.name.split(' ')[1];
+    return state.user ? state.user.data.name.split(' ')[1] : state.user;
 };
 export const selectToken = (state) => {
     return state.user ? state.user.data.token : state.user
@@ -73,10 +73,10 @@ export const selectRole = (state) => {
     return state.user ? state.user.data.accountType : state.user
 }
 export const selectEmail = (state) => {
-  return state.user.data.email;
+  return state.user ? state.user.data.email : state.user;
 };
 export const selectPhone = (state) => {
-  return state.user.data.phone;
+  return state.user ? state.user.data.phone : state.user;
 };
 export const selectCheckout = (state) => {
     return state.checkout

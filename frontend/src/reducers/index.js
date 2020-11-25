@@ -1,10 +1,13 @@
 import { combineReducers } from "redux";
 import loading from "./loader";
 import auth, * as fromAuth from "./auth"
+import product, * as fromProduct from "./product"
 import toastr from "./toastr"
 
-const reducer = combineReducers({loading, auth,toastr });
+const reducer = combineReducers({loading, auth,product,toastr });
 
+
+//Auth Selectors
 export const selectFullName = (state) => fromAuth.selectFullName(state.auth)
 export const selectFirstName = (state) => fromAuth.selectFirstName(state.auth)
 export const selectLastName = (state) => fromAuth.selectLastName(state.auth)
@@ -14,4 +17,6 @@ export const selectEmail = (state) => fromAuth.selectEmail(state.auth)
 export const selectPhone = (state) => fromAuth.selectPhone(state.auth)
 export const selectCheckout = (state) => fromAuth.selectCheckout(state.auth)
 
+//Product Selectors
+export const selectProduct = (state) => fromProduct.selectProduct(state.product)
 export default reducer;

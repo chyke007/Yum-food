@@ -6,14 +6,17 @@ const REGISTER_FAIL = "REGISTER_FAIL";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGIN_FAIL = "LOGIN_FAIL";
 const LOGOUT = "LOGOUT";
-//
+
+//Product reducer constants
+const SET_PRODUCT = "SET_PRODUCT";
+
+//Checkout history tracker
 const SET_CHECKOUT_IN_HISTORY = "SET_CHECKOUT_IN_HISTORY";
 const CLEAR_CHECKOUT_FROM_HISTORY = "CLEAR_CHECKOUT_FROM_HISTORY";
+
 //loader constants
 const SET_LOADER = "SET_LOADER"
 export {
-     SET_CHECKOUT_IN_HISTORY,
-     CLEAR_CHECKOUT_FROM_HISTORY,
      SET_NAME,
      SET_AGE,
      REGISTER_SUCCESS,
@@ -21,5 +24,8 @@ export {
      LOGIN_SUCCESS,
      LOGIN_FAIL,
      LOGOUT,
+     SET_CHECKOUT_IN_HISTORY,
+     CLEAR_CHECKOUT_FROM_HISTORY,
+     SET_PRODUCT,
      SET_LOADER
      }
