@@ -18,8 +18,6 @@
   <a href="#license">License</a>
 </p>
 
-![screenshot](https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.gif)
-
 ## Key Features
 
 - Orders
@@ -96,6 +94,6 @@ MIT
 
 ---
 
-> [chibuikenwa.com](https://www.chibuikwnwa.com) &nbsp;&middot;&nbsp;
+> [chibuikenwa.com](https://www.chibuikenwa.com) &nbsp;&middot;&nbsp;
 > GitHub [@chyke007](https://github.com/chyke007) &nbsp;&middot;&nbsp;
 > LinkedIn [@chibuike-nwachukwu-29a7a0111](https://linkedin.com/in/chibuike-nwachukwu-29a7a0111)
