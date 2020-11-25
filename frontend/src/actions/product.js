@@ -16,10 +16,10 @@ let toastrInfoOption = {
     }
 }
 
-export function getProduct(filters) {
+export function getProducts(filters) {
     return async (dispatch) => {
         dispatch(setLoader(true))
-        let res = await product.getProduct(filters);
+        let res = await product.getProducts(filters);
         dispatch(setLoader(false))
         if (!res.data) return productFailed(res)(dispatch);
         dispatch({

@@ -5,17 +5,20 @@ import ProductItem from "../components/Product/items";
 import ProductSkeleton from "../components/Product/skeleton";
 import AddButton from "../components/Product/addButton";
 import ProductFilters from "../components/Product/filters";
-import { getProduct } from "../actions/product";
+import { getProducts } from "../actions/product";
 import {StyledProduct} from '../styles/layout'
 import ReactGA from 'react-ga';
 ReactGA.pageview(window.location.pathname + window.location.search);
 
+
+
  const Product = (props) => {
     const [rating, setRatings] = useState(0)
     const [filter, setFilter] = useState(true)
-    useEffect(()=> {
-        document.title = `YumFood - Menu List`;
-    })
+    // useEffect(()=> {
+    //     document.title = `YumFood - Menu List`;
+    // })
+    props.getProducts()
   return (
       <StyledProduct>
       {filter ? (
@@ -88,6 +91,6 @@ const mapStateToProps = (state) => ({
   });
 
   const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ getProduct }, dispatch);
+    return bindActionCreators({ getProducts }, dispatch);
   };
 export default connect(mapStateToProps, mapDispatchToProps)(Product);
