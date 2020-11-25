@@ -4,6 +4,7 @@ import Card1 from '../../assets/img/chicken-rice.jpg'
 import Card2 from '../../assets/img/chicken-fried.jpg'
 import Card3 from '../../assets/img/yam-sauce.jpg'
 import Card4 from '../../assets/img/chicken-recipe.jpg'
+import end from '../../assets/img/end.svg'
 
 const Items = (props) => {
     return (
@@ -171,6 +172,10 @@ const Items = (props) => {
         </div>
 
     </div>
+    <p className="flex mx-4 w-full flex-row justify-center items-center text-center mb-4">
+        Yaay! You're all caught up
+        <img className="" src={end} alt="end"/>
+    </p>
         </>
     )
 }

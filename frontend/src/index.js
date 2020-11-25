@@ -7,7 +7,7 @@ import {store,persistor} from "./store";
 import ReduxToastr from 'react-redux-toastr'
 import './assets/styles.css';
 import ReactGA from 'react-ga';
-ReactGA.initialize('254021062');
+ReactGA.initialize('G-BVF67L6YHP');
 
 render(
   <React.StrictMode>
