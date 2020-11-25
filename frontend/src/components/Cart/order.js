@@ -12,7 +12,7 @@ export default (props) => {
     <div className="py-4 px-2 flex flex-wrap flex-shrink justify-between">
     <aside className="w-full xl:w-9/12 p-4">
     <div className="mb-5 p-6  text-lg font-bold  xl:hidden">
-            <NavLink to="/checkout" className="flex flex-wrap w-full  cursor-pointer">
+            <NavLink to="/checkout/1234" className="flex flex-wrap w-full  cursor-pointer">
                 <img className="w-8" src={Back_Arrow} alt="ddd"/>
             </NavLink>
         </div>
