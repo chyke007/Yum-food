@@ -7,10 +7,9 @@ import { selectToken } from "../reducers";
 import CartItem from "../components/Cart/items";
 import CartCheckout from "../components/Cart/checkout";
 import ReactGA from 'react-ga';
-ReactGA.pageview(window.location.pathname + window.location.search);
 
 const checkToken = (props) => {
-  console.log(props)
+  ReactGA.pageview(window.location.pathname + window.location.search);
   if(!props.token) props.setCheckout()
   return true
 }

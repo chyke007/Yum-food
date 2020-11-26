@@ -3,6 +3,19 @@ class DefaultService {
     constructor(){
         this.APIKEY = process.env.REACT_APP_API_KEY
     }
+    makePagination(meta,links){
+        let pagination = {
+            current_page: meta.current_page,
+            next_page_url: links.next
+              ? `&page=${meta.current_page + 1}`
+              : null,
+            prev_page_url: links.prev
+              ? `&page=${meta.current_page - 1}`
+              : null,
+            total: meta.total,
+          };
+          return pagination;
+    }
     async loadData(url,requestBody,method){
         let error= null
         let res = await axios({

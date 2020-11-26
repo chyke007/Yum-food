@@ -10,9 +10,9 @@ import eyeSlash from '../assets/img/eye-slash.png'
 import eye from '../assets/img/eye.png'
 import {validateRegister} from '../helper'
 import ReactGA from 'react-ga';
-ReactGA.pageview(window.location.pathname + window.location.search);
 
 const Register = (props) => {
+  ReactGA.pageview(window.location.pathname + window.location.search);
   let fname = React.createRef();
   let lname = React.createRef();
   let phone = React.createRef();
