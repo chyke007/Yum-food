@@ -291,12 +291,13 @@ const update = async function (req, res, next) {
             // delete previous file
             if (product && product.public_id) {
               FileManager.deleteCloud(product.public_id || "");
-            } else if (product) {
+            }
+            if (product) {
               product.image = req.file.path;
               product.public_id = req.file.filename;
               await product.save();
+              log.info("New file uploaded");
             }
-            log.info("New file uploaded");
           }
         }
         return handleResult(product, res, next);

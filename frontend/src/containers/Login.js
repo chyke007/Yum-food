@@ -10,9 +10,9 @@ import eyeSlash from '../assets/img/eye-slash.png'
 import eye from '../assets/img/eye.png'
 import {validateLogin} from '../helper'
 import ReactGA from 'react-ga';
-ReactGA.pageview(window.location.pathname + window.location.search);
 
 const Login = (props) => {
+  ReactGA.pageview(window.location.pathname + window.location.search);
   let email = React.createRef();
   let password = React.createRef();
   const [secure, setSecure] = useState(true);

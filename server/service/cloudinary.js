@@ -32,7 +32,7 @@ let storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: PRODUCT,
-    transformation: [{ width: 100, height: 100, crop: "limit" }],
+    transformation: [{ crop: "scale" }],
   },
 });
 
