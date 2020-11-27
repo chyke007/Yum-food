@@ -16,14 +16,25 @@ class ProductService extends BaseService {
         return await this.loadData(`${this.PRODUCT_URL}/${id}`, requestBody, "GET");
     }
 
-    async addProduct(data) {
-        let requestBody = {...data  };
-        return await this.loadData(this.PRODUCT_URL, requestBody, "POST");
+    async addProduct(name,price,description,image) {
+        let formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("price", price);
+        formData.append("description", description);
+        image && formData.append("image", image) ;
+
+        return await this.loadData(this.PRODUCT_URL, formData, "POST");
     }
 
-    async editProduct(data,id) {
-        let requestBody = {...data  };
-        return await this.loadData(`${this.PRODUCT_URL}/${id}`, requestBody, "PUT");
+    async editProduct(name,price,description,id,image) {
+        let formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("price", price);
+        formData.append("description", description);
+        image && formData.append("image", image) ;
+        return await this.loadData(`${this.PRODUCT_URL}/${id}`, formData, "PUT");
     }
 
     async deleteProduct(id) {

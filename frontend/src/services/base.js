@@ -2,6 +2,10 @@ import axios from "axios"
 class DefaultService {
     constructor(){
         this.APIKEY = process.env.REACT_APP_API_KEY
+        this.token = localStorage.getItem("persist:root");
+        this.token = this.token && JSON.parse(this.token).auth
+        this.token = this.token && JSON.parse(this.token).user
+        this.token = this.token && this.token.data.token
     }
     makePagination(meta,links){
         let pagination = {
@@ -24,7 +28,7 @@ class DefaultService {
               data:requestBody,
               headers: {
                   'apikey':this.APIKEY,
-                  'Authorization':`Bearer ${this.get_user_token}`,
+                  'Authorization':`Bearer ${this.token}`,
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
               }

@@ -9,7 +9,7 @@ import Register from "./Register";
 import Product from "./Product";
 import {Order}  from "./Order";
 import {SingleOrder}  from "../components/Order";
-import {SingleProduct}  from "../components/Product";
+import SingleProduct  from "../components/Product";
 import AddProduct  from "../components/Product/add";
 import Profile  from "./Profile";
 import  Shipping  from "../components/Cart/single";
