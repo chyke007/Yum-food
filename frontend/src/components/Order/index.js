@@ -41,7 +41,7 @@ const SingleOrder = (props) => {
        <Delivery place={!order} delivery={singleOrder.shipping}/>
         </div>
         <div className=" px-8 my-2 mb-4">
-            <p className="font-bold text-lg text-gray-900 text-center w-full my-2">Item(s) Detail</p>
+          <p className="font-bold text-lg text-gray-900 text-center w-full my-2">Item(s) Detail</p>
         <CartItem place={order} items={singleOrder.orderItems}/>
         </div>
     </aside>

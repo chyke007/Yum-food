@@ -21,8 +21,7 @@ export default (props) => {
               <th scope="col" className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Total(₦)
               </th>
-              {props.place ? '' : (
-
+              {props.place && (
               <th scope="col" className="px-6 py-3 bg-gray-50">
                 <span className="sr-only">Remove</span>
               </th>
@@ -62,16 +61,14 @@ export default (props) => {
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             {order.total && order.total}
             </td>
-            {props.place ? '' : (
-
+            {props.place && (
             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
               <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
             </td>
             )}
           </tr>
-
           ))}
-          { props.items && props.items.length === 0 && (
+          {props.items && props.items.length === 0 && (
             <tr>
             <td colSpan="4" className="px-6 py-4 whitespace-nowrap cursor-pointer">
              <div className="text-sm text-gray-900 text-center">No data available</div>
@@ -84,7 +81,5 @@ export default (props) => {
     </div>
   </div>
 </div>
-
-
     )
 }

@@ -53,40 +53,40 @@ const Items = (props) => {
               </td>
               <td className="px-6 py-4 whitespace-nowrap cursor-pointer" onClick={() => {props.history.push(`/order/${order._id}`)}}>
                 <span className="px-2  text-xs leading-5 font-semibold rounded-full ">
-               <div className="text-sm text-gray-500">
-          <p><b>Address </b>:{order.shipping && order.shipping.address && order.shipping.address }</p>
-                <p><b>City </b>:{order.shipping && order.shipping.city && order.shipping.city }</p>
-                <p><b>Postal Code </b>:{order.shipping && order.shipping.postalCode && order.shipping.postalCode }</p>
-                <p><b>Country </b>:{order.shipping && order.shipping.country && order.shipping.country }</p>
-              </div>
+                  <div className="text-sm text-gray-500">
+                    <p><b>Address </b>:{order.shipping && order.shipping.address && order.shipping.address }</p>
+                    <p><b>City </b>:{order.shipping && order.shipping.city && order.shipping.city }</p>
+                    <p><b>Postal Code </b>:{order.shipping && order.shipping.postalCode && order.shipping.postalCode }</p>
+                    <p><b>Country </b>:{order.shipping && order.shipping.country && order.shipping.country }</p>
+                  </div>
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm cursor-pointer" onClick={() => {props.history.push(`/order/${order._id}`)}}>
-              { order.status && order.status === ACCEPTED && <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">{order.status && order.status}
+              {order.status && order.status === ACCEPTED && <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">{order.status && order.status}
               </span>}
-              { order.status && order.status === DECLINED && <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">{order.status && order.status}
+              {order.status && order.status === DECLINED && <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">{order.status && order.status}
               </span>}
-              { order.status && order.status === PENDING && <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">{order.status && order.status}
+              {order.status && order.status === PENDING && <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">{order.status && order.status}
               </span>}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
           {props.role === ADMIN ? (<button className="text-red-600 hover:text-red-900 mx-1">Delete</button>):
           ((order.status === PENDING || order.status === DECLINED )&&<button className="text-red-600 hover:text-red-900 mx-1">Delete</button>)}
           </td>
-            </tr>
+        </tr>
           ))}
           {!props.loading && props.order && props.order.items &&  props.order.items.length === 0 && (
             <tr>
-            <td colSpan="6" className="px-6 py-4 whitespace-nowrap cursor-pointer">
-             <div className="text-sm text-gray-900 text-center">No data available</div>
-            </td>
+              <td colSpan="6" className="px-6 py-4 whitespace-nowrap cursor-pointer">
+                <div className="text-sm text-gray-900 text-center">No data available</div>
+                </td>
             </tr>
           )}
           {props.loading && (
             <tr>
-            <td colSpan="6" className="px-6 py-4 whitespace-nowrap cursor-pointer">
-             <div className="text-sm text-gray-900 text-center">Loading data</div>
-            </td>
+              <td colSpan="6" className="px-6 py-4 whitespace-nowrap cursor-pointer">
+                <div className="text-sm text-gray-900 text-center">Loading data</div>
+              </td>
             </tr>
           )}
             </tbody>
