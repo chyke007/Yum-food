@@ -10,11 +10,14 @@ import {SingleOrder as SOrder} from "../../styles/layout";
 import AddProduct from "./add";
 import { selectRole } from "../../reducers";
 import { ADMIN } from "../../constants"
+import ReactGA from 'react-ga';
+
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 const SingleProduct = (props) => {
+    ReactGA.pageview(window.location.pathname + window.location.search)
     let { id } = useParams();
     let query = useQuery();
     let product = props.product.filter((e) => String(e._id) === String(id))[0];

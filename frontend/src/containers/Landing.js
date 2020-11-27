@@ -4,7 +4,7 @@ import {StyledLanding} from "../styles/layout"
 import landing from '../assets/img/landing.jpg'
 import ReactGA from 'react-ga';
 
-export const Landing = (props) => {
+const Landing = (props) => {
   ReactGA.pageview(window.location.pathname + window.location.search);
   return (
     <StyledLanding>
@@ -29,3 +29,4 @@ export const Landing = (props) => {
         </StyledLanding>
   );
 };
+export default Landing

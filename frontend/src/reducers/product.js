@@ -17,7 +17,6 @@ export default function (state = initialState, action) {
       case EDIT_PRODUCT:
           return {
             ...state,
-            // items: state.items.filter(e => e._id === payload.data._id),
             items: state.items.map((r) => String(r._id) === String(payload.product.data._id) ? payload.product.data : r)
           }
       default:
@@ -26,4 +25,4 @@ export default function (state = initialState, action) {
   }
 
 //Selectors
-export const selectProduct = (state) => state.product
+export const selectProduct = (state) =>  state.items ? state.items : null;

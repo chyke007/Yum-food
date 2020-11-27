@@ -9,7 +9,7 @@ export default (props) => {
                     <td>₦{props.total}</td>
                 </tr>
                 <tr className="text-black ">
-                    <td>Items(4)</td>
+                    <td>Items({props.qty ? props.qty : '1'})</td>
                     <td>₦{props.items}</td>
                 </tr>
                 <tr className="text-black">

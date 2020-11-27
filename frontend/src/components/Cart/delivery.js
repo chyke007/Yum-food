@@ -28,28 +28,28 @@ export default (props) => {
                 <div className="text-sm text-gray-900">
                 {props.place ? (
                   <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" placeholder="2A/12 Mopi drive, LA, Pluto"/>
-                ) : '2A/12 Mopi drive, LA, Pluto'}
+                ) : props.delivery && props.delivery.address && props.delivery.address}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-900">
                   {props.place ? (
                   <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Lagos"/>
-                ) : 'Lagos'}
+                ) : props.delivery && props.delivery.city && props.delivery.city}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
               <div className="text-sm text-gray-900">
               {props.place ? (
                   <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-postal" type="text" placeholder="028293"/>
-                ) : '028293'}
+                ) : props.delivery && props.delivery.postalCode && props.delivery.postalCode}
               </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap ">
               <div className="text-sm text-gray-900">
                 {props.place ? (
                   <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-country" type="text" placeholder="Pluto"/>
-                ) : 'Pluto'}
+                ) : props.delivery && props.delivery.country && props.delivery.country}
               </div>
               </td>
             </tr>
