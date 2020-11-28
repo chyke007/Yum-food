@@ -48,7 +48,6 @@ const Register = (props) => {
     }
     setErrors({})
     let name  = `${fname} ${lname}`
-    console.log(name,phone,email,password)
     let res = await props.register(name,phone,email,password)
     if (res) props.history.push('/login')
   }

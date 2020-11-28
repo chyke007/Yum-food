@@ -7,8 +7,8 @@ import end from '../../assets/img/end.svg'
 const Items = (props) => {
     return (
         <>
-        {!props.loading && props.product && props.product.items.map((product) => (
-            <div className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 rounded-lg lg:w-72 cursor-pointer" onClick={() => {props.history.push('/product/1234')}}>
+        {!props.loading && props.product && props.product.items.map((product,i) => (
+            <div key={i} className="shadow-2xl mb-32 ml-0 md:ml-8  w-full h-64 rounded-lg lg:w-72 cursor-pointer" onClick={() => {props.history.push(`/product/${product._id}`)}}>
             <div className="relative pb-5/6 h-64 hover:opacity-50 focus:opacity-50">
                  <img className=" object-cover w-full h-full rounded-lg shadow-md" src={product.image ? product.image : Card1} alt="imageAlt"/>
             </div>

@@ -9,11 +9,11 @@ import CartCheckout from "../components/Cart/checkout";
 import ReactGA from 'react-ga';
 
 const checkToken = (props) => {
-  ReactGA.pageview(window.location.pathname + window.location.search);
   if(!props.token) props.setCheckout()
   return true
 }
 const Cart = (props) => {
+  ReactGA.pageview(window.location.pathname + window.location.search);
   return (
     <div className="py-4 px-2 flex flex-wrap flex-shrink justify-between">
     <aside className="w-full xl:w-9/12 p-4">

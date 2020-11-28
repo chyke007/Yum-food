@@ -2,7 +2,7 @@ import React,{useState, useEffect} from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ProductItem from "../components/Product/items";
-import AddButton from "../components/Product/addButton";
+import AddButton from "../components/Product/floatButton";
 import ProductFilters from "../components/Product/filters";
 import { getProducts } from "../actions/product";
 import {StyledProduct} from '../styles/layout'
@@ -22,6 +22,8 @@ const Product = (props) => {
 
     const [filter, setFilter] = useState(true)
     const [submitted, setSubmitted] = useState(true)
+    const [savedFilter,setSavedFilter] = useState(null)
+
     const refreshFilters = () => {
       setName(null)
       setPrice(null)
@@ -42,9 +44,9 @@ const Product = (props) => {
       e.preventDefault();
       setSubmitted(true);
     }
-    const addProduct = (filters) => {
+    const addProduct = () => {
       if(!props.pagination.next_page_url) return
-      props.getProducts(filters,props.pagination);
+      props.getProducts(savedFilter,props.pagination);
     }
     const bottomVisible = () => {
       const scrollY = window.scrollY
@@ -104,6 +106,7 @@ const Product = (props) => {
           filters === "" ? filters=`active=true` : filters=`${filters}&active=true`
       }
       setSubmitted(false)
+      setSavedFilter(filters)
       props.getProducts(filters)  //eslint-disable-next-line
     }, [price,reviews,rating,active,submitted,filter]);
 
@@ -153,7 +156,9 @@ const Product = (props) => {
 <div>
 
 </div>
-<AddButton/>
+{props.role === ADMIN &&
+<AddButton to={"/product/add"} title={"Add menu"} val={"+"}/>
+}
 </div>):(
 <div className="z-10 absolute h-screen mb-0 w-full bg-white top-0 bottom-0">
 <header className="bg-gray-900 text-lg font-bold text-white flex justify-between p-4">

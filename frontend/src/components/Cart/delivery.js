@@ -1,4 +1,5 @@
 import React from "react";
+import { ADDRESS, CITY, POSTAL_CODE, COUNTRY } from "../../constants";
 export default (props) => {
     return (
         <div className="flex flex-col">
@@ -27,29 +28,41 @@ export default (props) => {
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-900">
                 {props.place ? (
-                  <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" placeholder="2A/12 Mopi drive, LA, Pluto"/>
-                ) : '2A/12 Mopi drive, LA, Pluto'}
+                  <input onChange={(e) => props.change(e,ADDRESS) } defaultValue={props.delivery.address}  maxLength="100" className={`appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 ${ props.errors.address ? "border-red-500": "border-gray-200"}`} id="grid-address" type="text" placeholder="2A/12 Mopi drive, LA, Pluto"/>
+                ) : props.delivery && props.delivery.address && props.delivery.address}
+                  {props.place && props.errors.address &&  (
+                    <p className="text-red-500 text-xs italic">{props.errors.address}</p>
+                    )}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-900">
                   {props.place ? (
-                  <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Lagos"/>
-                ) : 'Lagos'}
+                  <input onChange={(e) => props.change(e,CITY) } defaultValue={props.delivery.city}  maxLength="10" className={`appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 ${ props.errors.city ? "border-red-500": "border-gray-200"}`} id="grid-city" type="text" placeholder="Lagos"/>
+                ) : props.delivery && props.delivery.city && props.delivery.city}
+                {props.place && props.errors.city &&  (
+                    <p className="text-red-500 text-xs italic">{props.errors.city}</p>
+                    )}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
               <div className="text-sm text-gray-900">
               {props.place ? (
-                  <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-postal" type="text" placeholder="028293"/>
-                ) : '028293'}
+                  <input onChange={(e) => props.change(e,POSTAL_CODE) } defaultValue={props.delivery.postalCode}  maxLength="8" className={`appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 ${ props.errors.postalCode ? "border-red-500": "border-gray-200"}`} id="grid-postal" type="text" placeholder="028293"/>
+                ) : props.delivery && props.delivery.postalCode && props.delivery.postalCode}
+                {props.place && props.errors.postalCode &&  (
+                    <p className="text-red-500 text-xs italic">{props.errors.postalCode}</p>
+                    )}
               </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap ">
               <div className="text-sm text-gray-900">
                 {props.place ? (
-                  <input className="appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-country" type="text" placeholder="Pluto"/>
-                ) : 'Pluto'}
+                  <input onChange={(e) => props.change(e,COUNTRY) } defaultValue={props.delivery.country}  maxLength="10" className={`appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 ${ props.errors.country ? "border-red-500": "border-gray-200"}`} id="grid-country" type="text" placeholder="Pluto"/>
+                ) : props.delivery && props.delivery.country && props.delivery.country}
+                {props.place && props.errors.country &&  (
+                    <p className="text-red-500 text-xs italic">{props.errors.country}</p>
+                    )}
               </div>
               </td>
             </tr>
