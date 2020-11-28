@@ -41,6 +41,21 @@ class ProductService extends BaseService {
         let requestBody = {  };
         return await this.loadData(`${this.PRODUCT_URL}/${id}`, requestBody, "DELETE");
     }
+
+    async addReview(id,rating,comment){
+        let requestBody = { review:{rating,comment} };
+        return await this.loadData(`${this.PRODUCT_URL}/review/${id}`, requestBody, "POST");
+    }
+
+    async editReview(id,rating,comment){
+        let requestBody = { review:{rating,comment} };
+        return await this.loadData(`${this.PRODUCT_URL}/review/${id}`, requestBody, "PUT");
+    }
+
+    async deleteReview(id,rating,comment){
+        let requestBody = { };
+        return await this.loadData(`${this.PRODUCT_URL}/review/${id}`, requestBody, "DELETE");
+    }
   }
 
   export default new ProductService()

@@ -12,9 +12,6 @@ return (
                                 Fn
                             </div>
                         </div>
-                    <h4 className="mt-1 font-semibold text-gray-300 w-full  bg-gray-300 leading-tight truncate">
-                        s
-                    </h4>
                     <div className="mt-1">
                     <span className="text-gray-300  bg-gray-300 ">1000 naira</span>&nbsp;&nbsp;&nbsp;
                     <span className=" text-gray-300  bg-gray-300  text-sm">plate number</span>
@@ -39,9 +36,6 @@ return (
                                 Fn
                             </div>
                         </div>
-                    <h4 className="mt-1 font-semibold text-gray-300 w-full  bg-gray-300 leading-tight truncate">
-                        s
-                    </h4>
                     <div className="mt-1">
                     <span className="text-gray-300  bg-gray-300 ">1000 naira</span>&nbsp;&nbsp;&nbsp;
                     <span className=" text-gray-300  bg-gray-300  text-sm">plate number</span>

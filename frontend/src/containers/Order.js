@@ -37,9 +37,7 @@ const Order = (props) => {
         }
       }
       const addOrder = (next) => {
-          console.log(next)
         if(!next) return
-        // return
         props.getOrders(savedFilter,props.pagination);
       }
 
@@ -92,7 +90,7 @@ const Order = (props) => {
        </button>
        </section>
        <section className="overflow-auto md:w-3/5 lg:w-4/5 flex flex-wrap justify-end">
-      <OrderItem order={setRightList(props.order.items,props.pagination)} loading={props.loading} deleteOrder={props.deleteOrder}  change={handleFilterChange}/>
+      <OrderItem order={props.order && setRightList(props.order.items,props.pagination)} loading={props.loading} deleteOrder={props.deleteOrder}  change={handleFilterChange}/>
        </section>
        <Paginate pagination={props.pagination} loading={props.loading} nextPage={addOrder}/>
         </div>

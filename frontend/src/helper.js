@@ -20,8 +20,9 @@ const isPassword = (value) =>
   validator.matches(
     value,
     /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+).{8,}/ // eslint-disable-line
-  );
+    );
 
+const checkLen = (value, low) => validator.isLength(value, low);
 /**
  * @param {String} value
  * @return {boolean}
@@ -37,7 +38,20 @@ const isName = (value) =>
 
 const isDescription = (value) => validator.isLength(value, 10);
 
-const checkLen = (value, low) => validator.isLength(value, low);
+const isRating = (rating) => {
+  const allowedRatings = [1, 2, 3, 4, 5];
+  return allowedRatings.includes(rating);
+}
+
+/**
+ * check if comment is length appropriate
+ * @param  {object} user
+ * @return {boolean}
+ */
+const isComment = (comment) => {
+  return checkLen(String(comment), 10);
+}
+
 
 
 
@@ -131,6 +145,24 @@ exports.validateDelivery = (data) => {
   if(!checkLen(data.country,3)) errors.country = 'Country must be at least 3 characters'
 
   if(isEmpty(data.country)) errors.country = 'Country must not be empty';
+
+  return {
+      errors,
+      valid: Object.keys(errors).length === 0 ? true : false
+  }
+
+}
+
+exports.validateReview = (data) => {
+  let errors = {};
+
+  if(!isRating(Number(data.rating))) errors.rating = 'Rating must be 1 or 2 or 3 or 4 or 5'
+
+  if(isEmpty(data.rating)) errors.rating = 'Rating must not be empty';
+
+  if(!isComment(data.comment,3)) errors.comment = 'Comment must be at least 10 characters'
+
+  if(isEmpty(data.comment)) errors.comment = 'Comment must not be empty';
 
   return {
       errors,
