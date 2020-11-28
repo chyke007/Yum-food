@@ -85,3 +85,51 @@ export function deleteProduct(id) {
         return true
     };
 }
+
+export function addReview(id,rating,comment){
+  let failureMessage = '';
+  return async (dispatch) => {
+      dispatch(setLoader(true))
+      let res = await product.addReview(id,rating,comment);
+      dispatch(setLoader(false))
+      if (!res.data) return productFailed(res,failureMessage)(dispatch);
+        dispatch({
+          type: EDIT_PRODUCT,
+          payload: { product: res.data },
+      });
+      showMessage('Success',"Review has been added", toastrInfoOption) (dispatch);
+      return true
+  };
+}
+
+export function editReview(id,rating,comment){
+  let failureMessage = '';
+  return async (dispatch) => {
+      dispatch(setLoader(true))
+      let res = await product.editReview(id,rating,comment);
+      dispatch(setLoader(false))
+      if (!res.data) return productFailed(res,failureMessage)(dispatch);
+        dispatch({
+          type: EDIT_PRODUCT,
+          payload: { product: res.data },
+      });
+      showMessage('Success',"Review has been edited", toastrInfoOption) (dispatch);
+      return true
+  };
+}
+
+  export function deleteReview(id){
+    let failureMessage = '';
+    return async (dispatch) => {
+        dispatch(setLoader(true))
+        let res = await product.deleteReview(id);
+        dispatch(setLoader(false))
+        if (!res.data) return productFailed(res,failureMessage)(dispatch);
+          dispatch({
+            type: EDIT_PRODUCT,
+            payload: { product: res.data },
+        });
+        showMessage('Success',"Review has been deleted", toastrInfoOption) (dispatch);
+        return true
+    };
+}
