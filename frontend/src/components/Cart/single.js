@@ -12,7 +12,7 @@ export default (props) => {
     <aside className="w-full xl:w-9/12 p-4">
     <div className="mb-5 p-6  text-lg font-bold  xl:hidden">
             <NavLink to="/checkout" className="flex flex-wrap w-full  cursor-pointer">
-                <img className="w-8" src={Back_Arrow} alt="ddd"/>
+                <img className="w-8" src={Back_Arrow} alt="back"/>
             </NavLink>
         </div>
         <div>

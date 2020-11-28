@@ -73,11 +73,9 @@ export function editProduct(name,price,description,id,image) {
 export function deleteProduct(id) {
   let failureMessage = '';
     return async (dispatch) => {
-        showMessage("Progress","Deleting...",{
-          icon: 'info',
-          status: 'info'
-        }) (dispatch);
+        dispatch(setLoader(true))
         let res = await product.deleteProduct(id);
+        dispatch(setLoader(false))
         if (!res.data) return productFailed(res,failureMessage)(dispatch);
           dispatch({
             type: DELETE_PRODUCT,

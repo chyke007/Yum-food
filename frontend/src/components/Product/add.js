@@ -5,13 +5,15 @@ import { bindActionCreators } from "redux";
 import { addProduct,editProduct } from "../../actions/product";
 import loader from '../../assets/img/loader-cube.svg'
 import {validateAddProduct} from '../../helper'
+import { Editor } from '@tinymce/tinymce-react';
 import ReactGA from 'react-ga';
 
 const Add = (props) => {
   ReactGA.pageview(window.location.pathname + window.location.search);
   let name = React.createRef();
   let price = React.createRef();
-  let description = React.createRef();
+  const [description,setDescription] = useState("")
+  const [realCharacters,setRealCharacters] = useState("")
   const [errors, setErrors] = useState({});
   const [image, setImage] = useState(false);
   const [preview,setPreview] = useState(false);
@@ -24,9 +26,22 @@ const Add = (props) => {
       setPreview(e.target.result)
     }
   }
+  const decodeHtml = (html) => {
+    let txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  }
+  const handleEditorChange = (content, editor) => {
+    let tx = editor.getContent({ format: 'raw' });
+    let decoded = decodeHtml(tx);
+    // here we strip all HTML tags
+    let decodedStripped = decoded.replace(/(<([^>]+)>)/ig, "").trim();
+    setRealCharacters(decodedStripped);
+    setDescription(content);
+  }
 
-  const saveProduct = async ({current:{value: name}},{current:{value: price}},{current:{value: description}}) => {
-    let check = validateAddProduct({name,price,description})
+  const saveProduct = async ({current:{value: name}},{current:{value: price}},description) => {
+    let check = validateAddProduct({name,price,description:realCharacters})
     let dis = {}
     if (check.valid === false) {
       if (check.errors.name) {
@@ -115,7 +130,27 @@ const Add = (props) => {
           Product description
         </dt>
         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <textarea ref={description}  defaultValue={props.edit && props.data.description}  className={`appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 ${ errors.description ? "border-red-500": "border-gray-200"}`} aria-label=""></textarea>
+          <div className={`border ${ errors.description ? "border-red-500": "border-gray-200"}`}>
+        <Editor
+         initialValue={props.edit && props.data.description}
+         init={{
+           height: 500,
+           menubar: false,
+           plugins: [
+             'advlist autolink lists link image charmap print preview anchor',
+             'searchreplace visualblocks code fullscreen',
+             'insertdatetime media table paste code help wordcount'
+           ],
+           toolbar:
+             'undo redo | formatselect | bold italic backcolor | '+
+             'alignleft aligncenter alignright alignjustify | '+
+             'bullist numlist outdent indent | removeformat | help'
+         }}
+         onEditorChange={handleEditorChange}
+         className={`${ errors.description ? "border-red-500": "border-gray-200"}`}
+       />
+       </div>
+            {/* <textarea ref={description}    className={`appearance-none block w-full bg-gray-200 text-gray-700 mb-4 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 ${ errors.description ? "border-red-500": "border-gray-200"}`} aria-label=""></textarea> */}
             {errors.description ? (
           <p className="text-red-500 text-xs italic">{errors.description}</p>
 
