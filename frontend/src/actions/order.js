@@ -1,4 +1,4 @@
-import { SET_ORDER,APPEND_ORDER,UPDATE_STATUS, DELETE_ORDER} from "../types";
+import { SET_ORDER,APPEND_ORDER,UPDATE_STATUS, DELETE_ORDER,EDIT_ORDER} from "../types";
 import { showMessage} from "./toastr"
 import {setLoader,setPagination,setPageState} from "./loader"
 import {order} from "../services"
@@ -40,8 +40,6 @@ export function getOrders(filters,page={}) {
           { prev: res.data.prev, next: res.data.next }
           )
         dispatch(setPagination(paginate))
-
-        showMessage('Success',"Orders have been fetched", toastrInfoOption) (dispatch);
         return true
     };
 }
@@ -75,7 +73,28 @@ export function updateStatus(id,status) {
           });
 
           showMessage('Success',"Order has been deleted", toastrInfoOption) (dispatch);
-          //redirect admin to orders page
           return true
       };
   }
+
+  export function editOrderItems(id,_id,name,value,index) {
+      return async (dispatch) => {
+          dispatch({
+              type: EDIT_ORDER,
+              payload: { id,_id,name,value,index },
+          });
+          return true
+      };
+  }
+
+  export function editOrder(id,data) {
+    let failureMessage = '';
+      return async (dispatch) => {
+          dispatch(setLoader(true))
+          let res = await order.editOrder(id,data);
+          dispatch(setLoader(false))
+          if (!res.data) return orderFailed(res,failureMessage)(dispatch);
+          showMessage('Success',"Order has been updated", toastrInfoOption) (dispatch);
+          return true
+      };
+}

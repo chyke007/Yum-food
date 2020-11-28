@@ -1,5 +1,6 @@
 import React from "react";
 import Item1 from '../../assets/img/chicken-rice.jpg'
+import { QTY } from "../../constants";
 export default (props) => {
     return (
         <div className="flex flex-col">
@@ -21,7 +22,7 @@ export default (props) => {
               <th scope="col" className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Total(₦)
               </th>
-              {props.place && (
+              {!props.place && (
               <th scope="col" className="px-6 py-3 bg-gray-50">
                 <span className="sr-only">Remove</span>
               </th>
@@ -40,9 +41,6 @@ export default (props) => {
                   <div className="text-sm font-medium uppercase text-gray-900">
                   {order.name && order.name}
                   </div>
-                  <div className="text-sm text-gray-500">
-                    Today
-                  </div>
                 </div>
               </div>
             </td>
@@ -53,7 +51,7 @@ export default (props) => {
               <span className="px-2  text-xs leading-5 font-semibold rounded-full ">
              <div className="text-sm text-gray-500">
              {props.place ? (order.qty && order.qty) : (
-                <input className="appearance-none outline-none " min="0" name="quantity" defaultValue="1" type="number"/>
+                <input className="appearance-none outline-none" onChange={(e) => props.change(e,QTY,order._id) }  defaultValue={order.qty} min="0" name="quantity" type="number"/>
              )}
               </div>
               </span>
@@ -61,9 +59,9 @@ export default (props) => {
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             {order.total && order.total}
             </td>
-            {props.place && (
+            {!props.place && (
             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <button className="text-indigo-600 hover:text-indigo-900">Remove</button>
+              <button onClick={(e) => props.change(e,QTY,order._id) } defaultValue={0} className="text-indigo-600 hover:text-indigo-900">Remove</button>
             </td>
             )}
           </tr>

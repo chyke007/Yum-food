@@ -112,3 +112,29 @@ exports.validateAddProduct = (data) => {
   }
 
 }
+
+exports.validateDelivery = (data) => {
+  let errors = {};
+
+  if (!checkLen(data.address,3))   errors.address = 'Address must be at least 3 characters'
+
+  if(isEmpty(data.address)) errors.address = 'Address must not be empty'
+
+  if(!checkLen(data.city,2))   errors.city = 'City must be at least 2 characters'
+
+  if(isEmpty(data.city)) errors.city = 'City must not be empty'
+
+  if(!checkLen(data.postalCode,4)) errors.postalCode = 'Postal Code must be at least 4 characters'
+
+  if(isEmpty(data.postalCode)) errors.postalCode = 'Postal Code must not be empty';
+
+  if(!checkLen(data.country,3)) errors.country = 'Country must be at least 3 characters'
+
+  if(isEmpty(data.country)) errors.country = 'Country must not be empty';
+
+  return {
+      errors,
+      valid: Object.keys(errors).length === 0 ? true : false
+  }
+
+}

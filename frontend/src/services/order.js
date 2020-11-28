@@ -25,8 +25,8 @@ class OrderService extends BaseService {
         return await this.loadData(`${this.ORDER_URL}/status/${id}`, requestBody, "PUT");
     }
 
-    async editOrder(id) {
-        let requestBody = {};
+    async editOrder(id,data) {
+        let requestBody = {shippingData:data.shipping, items: data.orderItems};
         return await this.loadData(`${this.ORDER_URL}/${id}`, requestBody, "PUT");
     }
 

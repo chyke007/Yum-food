@@ -57,7 +57,7 @@ const Items = (props) => {
                     <p><b>Address </b>:{order.shipping && order.shipping.address && order.shipping.address }</p>
                     <p><b>City </b>:{order.shipping && order.shipping.city && order.shipping.city }</p>
                     <p><b>Postal Code </b>:{order.shipping && order.shipping.postalCode && order.shipping.postalCode }</p>
-                    <p><b>Country </b>:{order.shipping && order.shipping.country && order.shipping.country }</p>
+                    <p className="capitalize"><b>Country </b>:{order.shipping && order.shipping.country && order.shipping.country }</p>
                   </div>
                 </span>
               </td>

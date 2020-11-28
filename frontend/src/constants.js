@@ -11,6 +11,11 @@ const DECLINED = "DECLINED"
 const STATUS = "STATUS"
 const EDIT = "EDIT"
 const DELETE = "DELETE"
+const QTY = "qty";
+const ADDRESS = "ADDRESS";
+const CITY = "CITY";
+const POSTAL_CODE = "POSTAL_CODE";
+const COUNTRY = "COUNTRY"
 export {
 ADMIN,
 USER,
@@ -24,5 +29,10 @@ PENDING,
 DECLINED,
 STATUS,
 EDIT,
-DELETE
+DELETE,
+QTY,
+ADDRESS,
+CITY,
+POSTAL_CODE,
+COUNTRY
 }
