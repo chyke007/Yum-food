@@ -1,6 +1,6 @@
 import { SET_ORDER,APPEND_ORDER,UPDATE_STATUS, DELETE_ORDER,EDIT_ORDER} from "../types";
 import { showMessage} from "./toastr"
-import {setLoader,setPagination,setPageState} from "./loader"
+import {setLoader,setPagination} from "./loader"
 import {order} from "../services"
 
 //Default toastr
@@ -16,12 +16,12 @@ let toastrInfoOption = {
     }
 }
 
-export function getOrders(filters,page={}) {
+function getOrders(filters,page={}) {
   let failureMessage = '.Orders shown are stale data cached from previous visit,kindly refresh this page';
     return async (dispatch) => {
-      page.next_page_url ? dispatch(setPageState(true)):dispatch(setLoader(true))
+        dispatch(setLoader(true))
         let res = await order.getOrders(`${filters}${page.next_page_url ? page.next_page_url :'' }`);
-        page.next_page_url ? dispatch(setPageState(false)):dispatch(setLoader(false))
+        dispatch(setLoader(false))
         if (!res.data) return orderFailed(res,failureMessage)(dispatch);
         if(page.next_page_url) {
           dispatch({
@@ -36,14 +36,14 @@ export function getOrders(filters,page={}) {
 
         }
         let paginate = order.makePagination(
-          { current_page: res.data.page, total: res.data.total },
+          { current_page: res.data.page, total: res.data.total , pages: res.data.pages},
           { prev: res.data.prev, next: res.data.next }
           )
         dispatch(setPagination(paginate))
         return true
     };
 }
-
+export {getOrders};
 export function updateStatus(id,status) {
     let failureMessage = '';
       return async (dispatch) => {
@@ -71,7 +71,7 @@ export function updateStatus(id,status) {
               type: DELETE_ORDER,
               payload: { order: res.data },
           });
-
+          dispatch(getOrders("",{}))
           showMessage('Success',"Order has been deleted", toastrInfoOption) (dispatch);
           return true
       };

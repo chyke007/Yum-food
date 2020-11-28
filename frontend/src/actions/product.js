@@ -1,4 +1,4 @@
-import { SET_PRODUCT,APPEND_PRODUCT,EDIT_PRODUCT} from "../types";
+import { SET_PRODUCT,APPEND_PRODUCT,EDIT_PRODUCT,DELETE_PRODUCT} from "../types";
 import { showMessage} from "./toastr"
 import {setLoader,setPagination,setPageState} from "./loader"
 import {product} from "../services"
@@ -69,4 +69,21 @@ export function editProduct(name,price,description,id,image) {
     showMessage('Success',"Items has been updated", toastrInfoOption) (dispatch);
     return true
 };
+}
+export function deleteProduct(id) {
+  let failureMessage = '';
+    return async (dispatch) => {
+        showMessage("Progress","Deleting...",{
+          icon: 'info',
+          status: 'info'
+        }) (dispatch);
+        let res = await product.deleteProduct(id);
+        if (!res.data) return productFailed(res,failureMessage)(dispatch);
+          dispatch({
+            type: DELETE_PRODUCT,
+            payload: { product: res.data },
+        });
+        showMessage('Success',"Item has been deleted", toastrInfoOption) (dispatch);
+        return true
+    };
 }

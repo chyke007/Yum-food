@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import {  useLocation,useParams } from "react-router-dom";
+import {  useLocation,useParams,Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Delivery from "../Cart/delivery";
 import CartItem from "../Cart/items";
-import EditButton from "./floatButton";
+import FloatingButton from "./floatButton";
 import CartCheckout from "../Cart/checkout";
 import {SingleOrder as SOrder} from "../../styles/layout";
 import AddProduct from "./add";
 import { selectRole } from "../../reducers";
 import { ADMIN } from "../../constants"
+import { deleteProduct } from "../../actions/product"
 import ReactGA from 'react-ga';
 
 
@@ -21,8 +22,9 @@ const SingleProduct = (props) => {
     let { id } = useParams();
     let query = useQuery();
     let product = props.product.filter((e) => String(e._id) === String(id))[0];
-
     const [order,setOrder] = useState(true);
+    console.log(product);
+    if(!product) return <Redirect to="/product" />
     return (
         <div>
         {query.get("edit") && query.get("edit") && props.role === ADMIN
@@ -57,7 +59,12 @@ const SingleProduct = (props) => {
                </div>
             </section>
             {props.role === ADMIN &&
-           <EditButton to={`/product/${id}?edit=true`} title={"Edit menu"} val={"!"}/>
+            <>
+           <FloatingButton to={`/product/${id}?edit=true`} title={"Edit menu"} val={"!"}/>
+           <div title="Delete menu" onClick={() => props.deleteProduct(id)} className="fixed flex items-center justify-center font-bold cursor-pointer text-center bg-white-900 rounded-full bottom-30 right-10 text-red border border-red-700 shadow-2xl w-12 p-3 h-12">
+               x
+            </div>
+            </>
             }
                    </SOrder>
 
@@ -75,6 +82,6 @@ const mapStateToProps = (state) => ({
   });
 
   const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({  }, dispatch);
+    return bindActionCreators({ deleteProduct }, dispatch);
   };
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct);

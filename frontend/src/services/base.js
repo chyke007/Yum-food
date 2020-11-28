@@ -20,6 +20,7 @@ class DefaultService {
               ? `&page=${meta.current_page - 1}`
               : null,
             total: meta.total,
+            pages: meta.pages
           };
           return pagination;
     }

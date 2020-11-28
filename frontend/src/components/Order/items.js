@@ -70,8 +70,8 @@ const Items = (props) => {
               </span>}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-          {props.role === ADMIN ? (<button className="text-red-600 hover:text-red-900 mx-1">Delete</button>):
-          ((order.status === PENDING || order.status === DECLINED )&&<button className="text-red-600 hover:text-red-900 mx-1">Delete</button>)}
+          {props.role === ADMIN ? (<button onClick={() => props.deleteOrder(order._id)} className="text-red-600 hover:text-red-900 mx-1">{props.loading ? 'Deleting..': 'Delete'}</button>):
+          ((order.status === PENDING || order.status === DECLINED )&&<button onClick={() => props.deleteOrder(order._id)} className="text-red-600 hover:text-red-900 mx-1">{props.loading ? 'Deleting..': 'Delete'}</button>)}
           </td>
         </tr>
           ))}

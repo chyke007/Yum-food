@@ -6,7 +6,7 @@ import Paginate from "../components/Order/paginate";
 import OrderFilters from "../components/Order/filters";
 import end from '../assets/img/end.svg'
 import {StyledProduct} from '../styles/layout'
-import { getOrders } from "../actions/order";
+import { getOrders,deleteOrder } from "../actions/order";
 import { selectRole,selectOrder } from "../reducers";
 
 import ReactGA from 'react-ga';
@@ -18,18 +18,29 @@ const Order = (props) => {
     const [status, setStatus] = useState(null)
 
     const [filter, setFilter] = useState(true)
+    const [savedFilter,setSavedFilter] = useState(null)
     const refreshFilters = () => {
         setShipping(null)
         setPrice(null)
         setStatus(null)
       }
-
+    const setRightList = (order,paginate) => {
+        let page = paginate.current_page - 1;
+        let chunk = (page * 10)
+        return {items: order.slice(chunk,paginate.current_page * 10)}
+    }
       const getGeneral = (current,incoming,demo) => {
         if(current){
           current.includes(incoming) ? demo(current.filter((e) => String(e) !== String(incoming))) : demo([...current,incoming])
         }else{
           demo([incoming])
         }
+      }
+      const addOrder = (next) => {
+          console.log(next)
+        if(!next) return
+        // return
+        props.getOrders(savedFilter,props.pagination);
       }
 
     const handleFilterChange = (e,filterType) => {
@@ -60,6 +71,7 @@ const Order = (props) => {
         if(status !== null && status.length > 0){
           filters === "" ? filters=`status=${status.join(',')}` : filters=`${filters}&status=${status.join(',')}`
         }
+        setSavedFilter(filters)
         props.getOrders(filters)  //eslint-disable-next-line
       }, [shipping,price,status,filter]);
 
@@ -80,15 +92,16 @@ const Order = (props) => {
        </button>
        </section>
        <section className="overflow-auto md:w-3/5 lg:w-4/5 flex flex-wrap justify-end">
-      <OrderItem order={props.order} loading={props.loading}  change={handleFilterChange}/>
+      <OrderItem order={setRightList(props.order.items,props.pagination)} loading={props.loading} deleteOrder={props.deleteOrder}  change={handleFilterChange}/>
        </section>
-       <Paginate />
+       <Paginate pagination={props.pagination} loading={props.loading} nextPage={addOrder}/>
         </div>
 <div>
+    {!props.loading && !props.next_page_url &&
     <p className="flex flex-row text-center mb-4">
         Yaay! You're all caught up
         <img className="mx-4" src={end} alt="end"/>
-    </p>
+    </p>}
 </div>
 
 </div>):(
@@ -118,6 +131,6 @@ const mapStateToProps = (state) => ({
   });
 
   const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ getOrders }, dispatch);
+    return bindActionCreators({ getOrders,deleteOrder }, dispatch);
   };
 export default connect(mapStateToProps, mapDispatchToProps)(Order);
