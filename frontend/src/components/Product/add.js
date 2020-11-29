@@ -9,7 +9,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import ReactGA from 'react-ga';
 
 const Add = (props) => {
-  ReactGA.pageview(window.location.pathname + window.location.search);
+  process.env.NODE_ENV === 'production' &&  ReactGA.pageview(window.location.pathname + window.location.search);
   let name = React.createRef();
   let price = React.createRef();
   const [description,setDescription] = useState("")

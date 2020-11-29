@@ -12,7 +12,7 @@ import {validateLogin} from '../helper'
 import ReactGA from 'react-ga';
 
 const Login = (props) => {
-  ReactGA.pageview(window.location.pathname + window.location.search);
+  process.env.NODE_ENV === 'production' &&  ReactGA.pageview(window.location.pathname + window.location.search);
   let email = React.createRef();
   let password = React.createRef();
   const [secure, setSecure] = useState(true);

@@ -5,7 +5,7 @@ import landing from '../assets/img/landing.jpg'
 import ReactGA from 'react-ga';
 
 const Landing = (props) => {
-  ReactGA.pageview(window.location.pathname + window.location.search);
+  process.env.NODE_ENV === 'production' && ReactGA.pageview(window.location.pathname + window.location.search);
   return (
     <StyledLanding>
             <div id="content" className="sm:w-1/2">

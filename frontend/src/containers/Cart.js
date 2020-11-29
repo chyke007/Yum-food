@@ -15,7 +15,7 @@ const checkToken = (props) => {
   return true
 }
 const Cart = (props) => {
-  ReactGA.pageview(window.location.pathname + window.location.search);
+  process.env.NODE_ENV === 'production' && ReactGA.pageview(window.location.pathname + window.location.search);
 
 
   const handleFilterChange = (e,filterType,_id,id) => {

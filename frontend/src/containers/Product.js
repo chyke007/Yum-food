@@ -12,7 +12,7 @@ import { ADMIN } from "../constants"
 import ReactGA from 'react-ga';
 
 const Product = (props) => {
-    ReactGA.pageview(window.location.pathname + window.location.search);
+  process.env.NODE_ENV === 'production' &&  ReactGA.pageview(window.location.pathname + window.location.search);
     const [name, setName] = useState(null)
     const [price, setPrice] = useState(null)
     const [reviews, setReviews] = useState(null)
