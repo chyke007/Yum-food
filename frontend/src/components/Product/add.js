@@ -18,6 +18,12 @@ const Add = (props) => {
   const [image, setImage] = useState(false);
   const [preview,setPreview] = useState(false);
 
+  const refreshForm = () => {
+    document.getElementById("saveForm").reset();
+    setImage(false)
+    setPreview(false)
+    setDescription("")
+}
   const imageChangedHandler = event => {
     setImage(event.target.files[0])
     let reader = new FileReader()
@@ -62,7 +68,8 @@ const Add = (props) => {
     if(props.edit){
       return await props.editProduct(name,price,description,props.id,image)
     }
-    await props.addProduct(name,price,description,image)
+    let res = await props.addProduct(name,price,description,image)
+    if(res) return refreshForm()
 
   }
 
@@ -95,7 +102,7 @@ const Add = (props) => {
     </p>
   </div>
   <div className="w-full border-t border-gray-200">
-    <form  onSubmit={(e)=> { e.preventDefault(); saveProduct(name,price,description)}}>
+    <form id="saveForm" onSubmit={(e)=> { e.preventDefault(); saveProduct(name,price,description)}}>
     <dl>
     <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt className="text-sm font-medium text-gray-500">

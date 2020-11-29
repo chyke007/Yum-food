@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  useParams,Redirect } from "react-router-dom";
+import {  useParams,Redirect,withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Delivery from "../Cart/delivery";
@@ -42,7 +42,7 @@ const SingleOrder = (props) => {
     if(!singleOrder) return <Redirect to="/orders" />
     if(singleOrder.orderItems.length === 0){
        toastr.error(ORDER_MUST_HAVE_AT_LEAST_ONE_ITEM)
-        return <Redirect to="/orders" />
+        window.location.href = "/orders"
     }
 
     const config = {
@@ -83,6 +83,7 @@ const SingleOrder = (props) => {
 
       const PaystackHookExample = async () => {
         const initializePayment = usePaystackPayment(config);
+        if(singleOrder.orderItems.length === 0) return
         if(!payment) return
         initializePayment(function(e){
           setPayment(false)
@@ -201,4 +202,4 @@ const mapStateToProps = (state) => ({
   const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({ updateStatus,deleteOrder,editOrder,editOrderItems }, dispatch);
   };
-export default connect(mapStateToProps, mapDispatchToProps)(SingleOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SingleOrder));
