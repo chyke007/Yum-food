@@ -75,6 +75,9 @@ export const selectRole = (state) => {
 export const selectEmail = (state) => {
   return state.user ? state.user.data.email : state.user;
 };
+export const selectId = (state) => {
+  return state.user ? state.user.data._id : state.user;
+};
 export const selectPhone = (state) => {
   return state.user ? state.user.data.phone : state.user;
 };

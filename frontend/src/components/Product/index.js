@@ -4,9 +4,10 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {SingleOrder as SOrder} from "../../styles/layout";
 import AddProduct from "./add";
-import { selectRole } from "../../reducers";
-import { ADMIN,USER } from "../../constants"
+import { selectRole,selectId,selectToken,selectCart,selectCartItems,selectProductItems } from "../../reducers";
+import { ADMIN } from "../../constants"
 import { deleteProduct,addReview,editReview,deleteReview } from "../../actions/product"
+import { addItem } from "../../actions/cart"
 import Rating from "./rating"
 import Card1 from '../../assets/img/chicken-rice.jpg'
 import loader from '../../assets/img/loader-cube.svg'
@@ -24,21 +25,18 @@ const SingleProduct = (props) => {
     ReactGA.pageview(window.location.pathname + window.location.search)
     let { id } = useParams();
     let query = useQuery();
-    let product = props.product.filter((e) => String(e._id) === String(id))[0];
-    const [cart, setCart] = useState(false)
+    let product = props.product && props.product.filter((e) => String(e._id) === String(id))[0];
     const [errors, setErrors] = useState("");
     const [editComment, setEditComment] = useState("");
     const [editState,setEditState] = useState(false)
     const [editRating, setEditRating] = useState({})
+    const [clickedSub,setClickedSub] = useState(false);
     let comment = React.createRef();
     let rating = React.createRef();
 
 
     if(!product) return <Redirect to="/product" />
 
-    const addToCart = () => {
-        setCart(true)
-    }
     const refreshForm = () => {
         rating = "";
         comment =""
@@ -47,6 +45,10 @@ const SingleProduct = (props) => {
         setEditRating(rating)
         setEditComment(comment)
         setEditState(true)
+    }
+
+    const checkCartStatus = (pro,ob) => {
+        return pro.cartItems.some((e) => String(e.product) === String(ob._id))
     }
 
     const saveReview = async ({current:{value: rating}},{current:{value: comment}}) => {
@@ -64,13 +66,16 @@ const SingleProduct = (props) => {
       return
     }
     setErrors({})
+    setClickedSub(true)
     let res = null
     if(editState){
       res  =  await props.editReview(id,Number(rating),comment)
       res && setEditState(false)
+      setClickedSub(false)
       return refreshForm()
     }
     res = await props.addReview(id,Number(rating),comment)
+    setClickedSub(false)
     if(res) return refreshForm()
     }
 
@@ -102,10 +107,9 @@ const SingleProduct = (props) => {
                       <span className="text-lg">{ReactHtmlParser(product.description && product.description)}</span>
                 </div>
                 <div className="flex mt-8 flex-col">
-                    {props.role === USER ? (
-
-                <button disabled={cart} onClick={() => addToCart(product._id && product._id)} className={`w-full flex justify-center hover:bg-gray-200 hover:text-gray-900 rounded-md px-3 py-6 uppercase ${ cart ? "bg-gray-200  text-black cursor-not-allowed": "bg-gray-900  text-white cursor-pointer"}`}>
-                    {cart ? 'Added to Cart' :'Add to cart'}
+                    {props.role !== ADMIN ? (
+                <button disabled={props.cartItems.length === 0 || !checkCartStatus(props,product) ? false : true } onClick={() => props.addItem(product.name,product.price,1,product.price,product._id,product.image)} className={`w-full flex justify-center hover:bg-gray-200 hover:text-gray-900 rounded-md px-3 py-6 uppercase ${ checkCartStatus(props,product) ? "bg-gray-200  text-black cursor-not-allowed": "bg-gray-900  text-white cursor-pointer"}`}>
+                    {props.cartItems.length === 0 || !checkCartStatus(props,product) ? 'ADD TO CART' : 'ADDED TO CART'}
                 </button>
                     ): (
                         <>
@@ -125,10 +129,8 @@ const SingleProduct = (props) => {
                 </div>
                </section>
                </div>
-               {props.role === USER && (
-
                <div className="w-full mt-4">
-                   <header className="w-full bg-gray-900 text-white uppercase font-bold text-lg px-2">Reviews</header>
+                   <header className="w-full bg-gray-400 text-black uppercase font-bold text-lg px-2">Reviews</header>
                    <aside className="flex flex-col h-40 overflow-scroll bg-gray-200 w-full m-2 px-2 py-4">
                         {product.reviews && product.reviews.map((review,i) =>
                         (<div key={i} className="flex w-full m-2">
@@ -142,13 +144,17 @@ const SingleProduct = (props) => {
                                 <p className="flex flex-row items-center">
                                 <Rating rating={review && review.rating && review.rating}/>
                                 <span className="ml-2">{moment(review.updatedAt).format("DD/MM/YYYY")}</span>
+                              {props.token && (props.id === review.user._id || props.id === review.user ) &&
+                                <>
                                <button onClick={() => replaceForm(review.rating,review.comment)} className="ml-2 text-yellow-600 hover:text-yellow-900 mx-1">Edit</button>
                                <button onClick={() => props.deleteReview(product._id)} className="ml-2 text-red-600 hover:text-red-900 mx-1">{props.loading ? 'Deleting..': 'Delete'}</button>
-                                </p>
+                              </>
+                              }</p>
                             </span>
                        </div>)
                         )}
                    </aside>
+                   {props.token && props.role !== ADMIN &&
                    <footer className="w-full bg-gray-100 my-2 p-2">
                        <form onSubmit= {(e) => {e.preventDefault() ;saveReview(rating,comment)}} className="flex flex-wrap justify-center items-center p-2">
                            <span className = "block w-10/12 lg:w-2/3  mx-2 w-1/12 border">
@@ -172,7 +178,7 @@ const SingleProduct = (props) => {
                             ) : ''}
                             </span>
                             <button disabled={props.loading} className={`w-full lg:w-1/6 lg:-mt-0 border  mt-3 flex justify-center hover:bg-gray-200 hover:text-gray-900 rounded-md px-3 py-3 uppercase ${ props.loading ? "bg-gray-200  text-black cursor-not-allowed": "bg-gray-900  text-white cursor-pointer"}`}>
-                            {props.loading ?  (
+                            {props.loading && clickedSub ?  (
                                 <>
                                 <img src={loader} className="h-6 w-10 px-2 fill-current" alt="loading..."/>
                                 loading &nbsp;...
@@ -181,8 +187,9 @@ const SingleProduct = (props) => {
                             </button>
                        </form>
                    </footer>
+                   }
                </div>
-               ) }
+
             </section>
             {props.role === ADMIN &&
             <>
@@ -200,10 +207,14 @@ const SingleProduct = (props) => {
 const mapStateToProps = (state) => ({
     loading: state.loading.status,
     role: selectRole(state),
-    product: state.product.items,
+    product: selectProductItems(state),
+    token: selectToken(state),
+    id: selectId(state),
+    cartItems: selectCartItems(state),
+    cart: selectCart(state)
   });
 
   const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ deleteProduct,addReview,editReview,deleteReview }, dispatch);
+    return bindActionCreators({ deleteProduct,addReview,editReview,deleteReview,addItem }, dispatch);
   };
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct);
