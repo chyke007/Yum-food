@@ -1,6 +1,6 @@
 import React from "react";
 import Item1 from '../../assets/img/chicken-rice.jpg'
-import { QTY } from "../../constants";
+import { QTY,DEFAULT_IMAGE_FROM_SERVER } from "../../constants";
 export default (props) => {
     return (
         <div className="flex flex-col">
@@ -35,7 +35,7 @@ export default (props) => {
             <td className="px-6 py-4 whitespace-nowrap">
               <div className="flex items-center">
                 <div className="flex-shrink-0 h-10 w-10">
-              <img className="h-10 w-10 rounded-full object-cover" src={order.image ? order.image :Item1} alt="item"/>
+              <img className="h-10 w-10 rounded-full object-cover" src={order.image && order.image !== DEFAULT_IMAGE_FROM_SERVER ? order.image :Item1} alt="item"/>
                 </div>
                 <div className="ml-4">
                   <div className="text-sm font-medium uppercase text-gray-900">
@@ -51,7 +51,7 @@ export default (props) => {
               <span className="px-2  text-xs leading-5 font-semibold rounded-full ">
              <div className="text-sm text-gray-500">
              {props.place ? (order.qty && order.qty) : (
-                <input className="appearance-none outline-none" onChange={(e) => props.change(e,QTY,order._id) }  defaultValue={order.qty} min="0" name="quantity" type="number"/>
+                <input className="appearance-none outline-none" onChange={(e) => props.change(e,QTY,order._id,order.product) }  defaultValue={order.qty} min="0" name="quantity" type="number"/>
              )}
               </div>
               </span>
@@ -61,7 +61,7 @@ export default (props) => {
             </td>
             {!props.place && (
             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <button onClick={(e) => props.change(e,QTY,order._id) } defaultValue={0} className="text-indigo-600 hover:text-indigo-900">Remove</button>
+              <button onClick={(e) => props.change(e,QTY,order._id,order.product) } defaultValue={0} className="text-indigo-600 hover:text-indigo-900">Remove</button>
             </td>
             )}
           </tr>

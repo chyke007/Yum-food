@@ -15,8 +15,8 @@ class OrderService extends BaseService {
         return await this.loadData(`${this.ORDER_URL}/${id}`, requestBody, "GET");
     }
 
-    async addOrder() {
-        let requestBody = {};
+    async addOrder(data) {
+        let requestBody = data;
         return await this.loadData(this.ORDER_URL, requestBody, "POST");
     }
 

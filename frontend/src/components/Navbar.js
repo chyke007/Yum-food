@@ -2,12 +2,11 @@ import React, {useState} from "react"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { NavLink,withRouter } from 'react-router-dom';
-import { selectToken,selectRole } from "../reducers";
+import { selectToken,selectRole,selectCartItems } from "../reducers";
 import { logout } from "../actions/auth";
 import {StyledNavbar} from "../styles/navbar"
 import logo from '../assets/img/logo.svg'
 import avatar from '../assets/img/avatar.png'
-import {USER} from "../constants"
 const logUserOut = (props) => {
   props.logout()
   props.history.push('/');
@@ -41,9 +40,13 @@ const Navbar = (props) => {
               (
               <NavLink exact to="/orders" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Orders</NavLink>
               ):''}
-              {props.role === USER &&
-              <NavLink exact to="/checkout" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Cart <span className="bg-red-500  text-white text-xs ml-4 mt-1 sm:-ml-0 sm:-mt-2  inline-block px-1  absolute rounded-full"> 3</span></NavLink>
-}</div>
+
+              <NavLink exact to="/checkout" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Cart
+              {props.cartItems && props.cartItems.length > 0 &&
+              <span className="bg-red-500  text-white text-xs ml-4 mt-1 sm:-ml-0 sm:-mt-2  inline-block px-1  absolute rounded-full">{ props.cartItems.length} </span>
+              }
+              </NavLink>
+</div>
           </div>
         </div>
         {props.token ?
@@ -97,9 +100,8 @@ const Navbar = (props) => {
         {props.token ?
         (<NavLink exact to="/orders" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Orders</NavLink>
     ):''}
-    {props.role === USER &&
-        <NavLink exact to="/checkout" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Cart <span className="bg-red-500  text-white text-xs ml-2 inline-block h-4 text-center px-1  absolute rounded-full"> 3</span></NavLink>
-}
+    <NavLink exact to="/checkout" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Cart <span className="bg-red-500  text-white text-xs ml-2 inline-block h-4 text-center px-1  absolute rounded-full"> 3</span></NavLink>
+
         </div>
     {props.token ? (
       <div className="pt-4 pb-3 border-t border-gray-700">
@@ -133,7 +135,8 @@ const Navbar = (props) => {
 
 const mapStateToProps = (state) => ({
   token: selectToken(state),
-  role: selectRole(state)
+  role: selectRole(state),
+  cartItems: selectCartItems(state)
 });
 
 const mapDispatchToProps = (dispatch) => {

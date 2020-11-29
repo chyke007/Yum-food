@@ -30,4 +30,5 @@ export default function (state = initialState, action) {
   }
 
 //Selectors
-export const selectProduct = (state) =>  state.items ? state.items : null;
+export const selectProduct = (state) =>  state && state.items && state.items ;
+export const selectProductItems = (state) =>state && state.items && state.items
