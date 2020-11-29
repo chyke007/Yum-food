@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  useParams,Redirect,withRouter } from "react-router-dom";
+import {  useParams,withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Delivery from "../Cart/delivery";
@@ -25,7 +25,7 @@ if(mode === EDIT){
     return await props.editOrder(id,status)
 }
 if(mode === DELETE){
-props.deleteOrder(id)
+   props.deleteOrder(id)
 }
 }
 
@@ -39,7 +39,7 @@ const SingleOrder = (props) => {
     let singleOrder = props.order.filter((e) => String(e._id) === String(id))[0];
     let index = props.order.findIndex(e => String(e._id) === String(id));
 
-    if(!singleOrder) return <Redirect to="/orders" />
+    if(!singleOrder) window.location.href = "/orders"
     if(singleOrder.orderItems.length === 0){
        toastr.error(ORDER_MUST_HAVE_AT_LEAST_ONE_ITEM)
         window.location.href = "/orders"
