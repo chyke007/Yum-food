@@ -10,9 +10,10 @@ import {SingleProduct} from "../../styles/layout";
 import {CITY, ADDRESS, POSTAL_CODE, COUNTRY} from "../../constants"
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import {validateDelivery} from '../../helper'
+import ReactGA from 'react-ga';
 
 const Single = (props) => {
-
+  process.env.NODE_ENV === 'production' &&  ReactGA.pageview(window.location.pathname + window.location.search)
   const [errors, setErrors] = useState({});
   if(!props.cartItems || props.cartItems.length === 0) return <Redirect to="/product" />
 

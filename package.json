@@ -1,7 +1,7 @@
 {
   "name": "yum-food",
   "version": "1.0.0",
-  "description": "A project for the job opening at the pace",
+  "description": "An online food ordering application built using the Test Driven Development approach with the MERN stack",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

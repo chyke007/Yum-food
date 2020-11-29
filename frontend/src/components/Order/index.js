@@ -9,9 +9,10 @@ import {SingleOrder as SOrder} from "../../styles/layout";
 import loader from '../../assets/img/loader-cube.svg'
 import { selectRole } from "../../reducers";
 import { updateStatus,deleteOrder,editOrder,editOrderItems } from "../../actions/order";
-import {ACCEPTED,PENDING,DECLINED,ADMIN,USER,STATUS,EDIT,DELETE,QTY, CITY, ADDRESS, POSTAL_CODE, COUNTRY} from "../../constants"
+import {ACCEPTED,PENDING,DECLINED,PAYSTACK_SUCCESS,ADMIN,USER,STATUS,EDIT,DELETE,QTY, CITY, ADDRESS, POSTAL_CODE, COUNTRY} from "../../constants"
 import {ORDER_MUST_HAVE_AT_LEAST_ONE_ITEM} from "../../message"
 import {validateDelivery} from '../../helper'
+import { usePaystackPayment } from 'react-paystack';
 import ReactGA from 'react-ga';
 import { toastr } from 'react-redux-toastr'
 
@@ -29,11 +30,11 @@ props.deleteOrder(id)
 }
 
 const SingleOrder = (props) => {
-    ReactGA.pageview(window.location.pathname + window.location.search)
+    process.env.NODE_ENV === 'production' &&  ReactGA.pageview(window.location.pathname + window.location.search)
     const [order,setOrder] = useState(true);
     const [clicked,setClicked] = useState(null);
     const [errors, setErrors] = useState({});
-
+    const [payment,setPayment] = useState(false)
     let { id } = useParams();
     let singleOrder = props.order.filter((e) => String(e._id) === String(id))[0];
     let index = props.order.findIndex(e => String(e._id) === String(id));
@@ -44,6 +45,13 @@ const SingleOrder = (props) => {
         return <Redirect to="/orders" />
     }
 
+    const config = {
+      reference: (new Date()).getTime(),
+      email: "admin@example.com",
+      amount: Number(singleOrder.totalPrice) * 100,
+      publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY
+
+  };
     const toggleEdit = async () => {
         if(order) return setOrder(!order);
         //perform validation
@@ -69,12 +77,27 @@ const SingleOrder = (props) => {
         return
         }
         setErrors({})
-
-
+        setPayment(true)
         setClicked(EDIT);
-        let patience = await performAction(props,id,EDIT,singleOrder)
-        if(patience) return setOrder(!order)
-    }
+      }
+
+      const PaystackHookExample = async () => {
+        const initializePayment = usePaystackPayment(config);
+        if(!payment) return
+        initializePayment(function(e){
+          setPayment(false)
+          if(e.status === PAYSTACK_SUCCESS)
+            return performAction(props,id,EDIT,singleOrder).then((res) => {
+                if(res) return  setOrder(!order)
+                toastr.error("Error","Unknown error")
+              })
+          toastr.error("Error","Unknown error")
+
+        })
+      };
+
+      //Assign paystack hook that watches for order
+      PaystackHookExample()
 
      const handleFilterChange = (e,filterType,in_id) => {
         switch(filterType){

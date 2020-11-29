@@ -22,7 +22,7 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 const SingleProduct = (props) => {
-    ReactGA.pageview(window.location.pathname + window.location.search)
+    process.env.NODE_ENV === 'production' &&  ReactGA.pageview(window.location.pathname + window.location.search)
     let { id } = useParams();
     let query = useQuery();
     let product = props.product && props.product.filter((e) => String(e._id) === String(id))[0];

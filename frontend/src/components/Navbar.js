@@ -30,11 +30,13 @@ const Navbar = (props) => {
             <div className="ml-10 flex items-baseline space-x-4">
 
               <NavLink exact to="/" className="px-3 py-2 rounded-md text-sm font-medium  text-gray-300 hover:text-white hover:bg-gray-700">Home</NavLink>
-
+              {!props.token &&
+              <>
               <NavLink exact to="/login" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Login</NavLink>
 
               <NavLink exact to="/signup" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Register</NavLink>
-
+                </>
+              }
               <NavLink exact to="/product" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Menu</NavLink>
               {props.token ?
               (
@@ -91,11 +93,13 @@ const Navbar = (props) => {
     <div className={display ? "md:hidden" :"hidden md:hidden"}>
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         <NavLink exact to="/" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Home</NavLink>
-
+        {!props.token &&
+       <>
         <NavLink exact to="/login" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Login</NavLink>
 
         <NavLink exact to="/signup" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Register</NavLink>
-
+        </>
+        }
         <NavLink exact to="/product" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Menu</NavLink>
         {props.token ?
         (<NavLink exact to="/orders" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Orders</NavLink>

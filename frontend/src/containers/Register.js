@@ -12,7 +12,7 @@ import {validateRegister} from '../helper'
 import ReactGA from 'react-ga';
 
 const Register = (props) => {
-  ReactGA.pageview(window.location.pathname + window.location.search);
+  process.env.NODE_ENV === 'production' &&  ReactGA.pageview(window.location.pathname + window.location.search);
   let fname = React.createRef();
   let lname = React.createRef();
   let phone = React.createRef();

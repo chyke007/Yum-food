@@ -7,7 +7,7 @@ import {store,persistor} from "./store";
 import ReduxToastr from 'react-redux-toastr'
 import './assets/styles.css';
 import ReactGA from 'react-ga';
-ReactGA.initialize('UA-183929256-1');
+process.env.NODE_ENV === 'production' && ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_KEY);
 
 render(
   <React.StrictMode>

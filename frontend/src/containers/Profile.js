@@ -5,7 +5,7 @@ import avatar from '../assets/img/avatar.png'
 import ReactGA from 'react-ga';
 
 const Profile = (props) => {
-  ReactGA.pageview(window.location.pathname + window.location.search);
+  process.env.NODE_ENV === 'production' && ReactGA.pageview(window.location.pathname + window.location.search);
   return (
     <>
 <div class="bg-white m-4 flex flex-col justify-center items-center shadow overflow-hidden sm:rounded-lg">

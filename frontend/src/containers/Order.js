@@ -12,7 +12,7 @@ import { selectRole,selectOrder } from "../reducers";
 import ReactGA from 'react-ga';
 
 const Order = (props) => {
-    ReactGA.pageview(window.location.pathname + window.location.search);
+  process.env.NODE_ENV === 'production' &&  ReactGA.pageview(window.location.pathname + window.location.search);
     const [shipping, setShipping] = useState(null)
     const [price, setPrice] = useState(null)
     const [status, setStatus] = useState(null)

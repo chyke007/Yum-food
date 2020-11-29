@@ -11,9 +11,11 @@ import {SingleProduct} from "../../styles/layout";
 import loader from '../../assets/img/loader-cube.svg'
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
 import { PaystackButton } from 'react-paystack';
+import ReactGA from 'react-ga';
 import { toastr } from 'react-redux-toastr'
 
 const Order =  (props) => {
+    process.env.NODE_ENV === 'production' &&  ReactGA.pageview(window.location.pathname + window.location.search)
     const [button,setButton] = useState(false);
     if(!props.cartItems || props.cartItems.length === 0) return <Redirect to="/product" />
 
