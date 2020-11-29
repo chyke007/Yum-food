@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { NavLink,Redirect,withRouter } from 'react-router-dom';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -10,14 +10,35 @@ import { selectToken,selectCart,selectCartItems } from "../../reducers";
 import {SingleProduct} from "../../styles/layout";
 import loader from '../../assets/img/loader-cube.svg'
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
+import { PaystackButton } from 'react-paystack';
+import { toastr } from 'react-redux-toastr'
 
 const Order =  (props) => {
+    const [button,setButton] = useState(false);
     if(!props.cartItems || props.cartItems.length === 0) return <Redirect to="/product" />
+
+    const config = {
+        reference: (new Date()).getTime(),
+        email: "admin@example.com",
+        amount: Number(props.cart.totalPrice) * 100,
+        publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY
+        ,
+
+    };
+
     const sendOrder = async (data) => {
+        setButton(true)
        let val = await props.placeOrder(data)
        if(val) return props.history.push(`/order/${val}`)
        props.history.push("/orders")
     }
+    const componentProps = {
+        ...config,
+        text: 'Place order',
+        onSuccess: () => sendOrder(props.cart),
+        onClose: () => toastr.error("Error","Unknown error")
+    };
+
     return (
         <SingleProduct>
  <section>
@@ -51,6 +72,7 @@ const Order =  (props) => {
             </NavLink>
         </div>
         <CartCheckout header={'Order Summary'} qty={props.cartItems && props.cartItems.length} total={props.cart && props.cart.totalPrice} items={props.cart && props.cart.totalPrice} shipping={0} tax={0}>
+        {button ?
         <button onClick={() => sendOrder(props.cart)} className={`w-full mt-4 flex justify-center border border-gray-200 rounded py-4 px-4 leading-tight focus:outline-none focus:bg-white focus:text-black focus:border-gray-500 hover:bg-white hover:text-black hover:border-gray-500 uppercase ${ props.loading ? "bg-gray-200  text-black cursor-not-allowed": "bg-gray-900  text-white cursor-pointer"}`}>
             {props.loading ?  (
                 <>
@@ -58,7 +80,9 @@ const Order =  (props) => {
                        loading &nbsp;...
                 </>
               ): "Place order"}
-        </button>
+        </button> :
+        <PaystackButton {...componentProps} className={`w-full mt-4 flex justify-center border border-gray-200 rounded py-4 px-4 leading-tight focus:outline-none focus:bg-white focus:text-black focus:border-gray-500 hover:bg-white hover:text-black hover:border-gray-500 uppercase ${ props.loading ? "bg-gray-200  text-black cursor-not-allowed": "bg-gray-900  text-white cursor-pointer"}`}/>
+}
         </CartCheckout>
     </section>
     </div>
