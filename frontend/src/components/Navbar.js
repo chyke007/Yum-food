@@ -100,7 +100,11 @@ const Navbar = (props) => {
         {props.token ?
         (<NavLink exact to="/orders" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Orders</NavLink>
     ):''}
-    <NavLink exact to="/checkout" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Cart <span className="bg-red-500  text-white text-xs ml-2 inline-block h-4 text-center px-1  absolute rounded-full"> 3</span></NavLink>
+    <NavLink exact to="/checkout" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Cart
+    {props.cartItems && props.cartItems.length > 0 &&
+              <span className="bg-red-500  text-white text-xs ml-4 mt-1 sm:-ml-0 sm:-mt-2  inline-block px-1  absolute rounded-full">{ props.cartItems.length} </span>
+    }
+    </NavLink>
 
         </div>
     {props.token ? (
