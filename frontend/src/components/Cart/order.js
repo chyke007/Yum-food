@@ -6,7 +6,7 @@ import Delivery from "./delivery";
 import CartItem from "./items";
 import CartCheckout from "./checkout";
 import { placeOrder } from "../../actions/cart";
-import { selectToken,selectCart,selectCartItems } from "../../reducers";
+import { selectToken,selectCart,selectCartItems,selectEmail } from "../../reducers";
 import {SingleProduct} from "../../styles/layout";
 import loader from '../../assets/img/loader-cube.svg'
 import Back_Arrow from "../../assets/img/Back_Arrow.png";
@@ -21,7 +21,7 @@ const Order =  (props) => {
 
     const config = {
         reference: (new Date()).getTime(),
-        email: "admin@example.com",
+        email: props.email || "admin@example.com",
         amount: Number(props.cart.totalPrice) * 100,
         publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY
         ,
@@ -100,6 +100,7 @@ const mapStateToProps = (state) => ({
     token: selectToken(state),
     cartItems: selectCartItems(state),
     cart: selectCart(state),
+    email: selectEmail(state)
   });
 
   const mapDispatchToProps = (dispatch) => {
