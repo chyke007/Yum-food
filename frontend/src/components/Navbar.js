@@ -6,7 +6,7 @@ import { selectToken,selectRole,selectCartItems } from "../reducers";
 import { logout } from "../actions/auth";
 import {StyledNavbar} from "../styles/navbar"
 import logo from '../assets/img/logo.svg'
-import avatar from '../assets/img/avatar.png'
+// import avatar from '../assets/img/avatar.png'
 const logUserOut = (props) => {
   props.logout()
   props.history.push('/');
