@@ -96,4 +96,4 @@ MIT
 
 > [chibuikenwa.com](https://www.chibuikenwa.com) &nbsp;&middot;&nbsp;
 > GitHub [@chyke007](https://github.com/chyke007) &nbsp;&middot;&nbsp;
-> LinkedIn [@chibuike-nwachukwu-29a7a0111](https://linkedin.com/in/chibuike-nwachukwu-29a7a0111)
+> LinkedIn [@chibuikenwachukwu](https://linkedin.com/in/chibuikenwachukwu)
