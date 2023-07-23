@@ -1,8 +1,7 @@
 const apikey = process.env.API_KEY;
 const mongoose = require("mongoose");
 const { Product, User } = require("./index");
-const config = require("../../config");
-const db = require("../../integration-test/setup/db_setup");
+const db = require("../../server/middleware/mongo");
 
 const { CustomException } = require("../utils");
 
@@ -36,7 +35,17 @@ const userData3 = {
 };
 
 // Connects to test database
-db.setupDB();
+beforeAll(async () => {
+  await db.setUp();
+});
+
+afterEach(async () => {
+  await db.dropCollections();
+});
+
+afterAll(async () => {
+  await db.dropDatabase();
+});  
 
 /**
  * Product model

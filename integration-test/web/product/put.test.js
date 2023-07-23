@@ -1,7 +1,7 @@
 const path = require("path");
 const { request } = require("../../index");
 const { User, Product } = require("../../../server/model");
-const db = require("../../setup/db_setup");
+const db = require("../../../server/middleware/mongo");
 const {
   Constants: { ADMIN, SAMPLE_MONGO_ID },
 } = require("../../../server/utils");
@@ -44,7 +44,15 @@ beforeEach(() => {
  * Product test
  */
 describe("Product", () => {
-  db.setupDB();
+
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+
+  afterAll(async () => {
+    await db.dropDatabase();
+  });
+
   it("should respond with single product object for authenticated user - No image", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
@@ -123,8 +131,8 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "multipart/form-data")
       .set("Authorization", `Bearer ${token}`);
-      // Update product
-      response = await request
+    // Update product
+    response = await request
       .put(`/api/product/${response.body.data._id}`)
       .field("name", productData.name)
       .field("price", productData2.price)
@@ -277,8 +285,8 @@ describe("Product", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
-      expect(response.body.error.message).toBeDefined();
-      expect(response.status).toBe(400);
-      done();
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(400);
+    done();
   })
 });

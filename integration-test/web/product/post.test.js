@@ -1,7 +1,7 @@
 const path = require("path");
 const { request } = require("../../index");
 const { User } = require("../../../server/model");
-const db = require("../../setup/db_setup");
+const db = require("../../../server/middleware/mongo");
 const {
   Constants: { ADMIN },
 } = require("../../../server/utils");
@@ -39,7 +39,15 @@ beforeEach(() => {
  * Product test
  */
 describe("Product", () => {
-  db.setupDB();
+
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+
+  afterAll(async () => {
+    await db.dropDatabase();
+  });
+
   it("should respond with single product object for authenticated user - No image", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
@@ -94,7 +102,7 @@ describe("Product", () => {
   it("should respond with 413 error for upload image - Too large", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
-    const savedUser = await validUser.save();
+    await validUser.save();
 
     let token = await request
       .post("/api/login")
@@ -269,6 +277,7 @@ describe("Product", () => {
     expect(response.status).toBe(422);
     done();
   });
+
   it("should respond with error message for invalid value - (price)", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
@@ -290,6 +299,7 @@ describe("Product", () => {
     expect(response.status).toBe(422);
     done();
   });
+  
   it("should respond with error message for invalid value - (description)", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);

@@ -1,9 +1,9 @@
 const path = require("path");
 const { request } = require("../../index");
 const { User, Product } = require("../../../server/model");
-const db = require("../../setup/db_setup");
+const db = require("../../../server/middleware/mongo");
 const {
-  Constants: { ADMIN, SAMPLE_MONGO_ID, ACCEPTED, DECLINED, PENDING},
+  Constants: { ADMIN, SAMPLE_MONGO_ID, ACCEPTED, DECLINED, PENDING },
 } = require("../../../server/utils");
 
 const apikey = process.env.API_KEY;
@@ -57,7 +57,15 @@ beforeEach(() => {
  * Order test
  */
 describe("Order", () => {
-  db.setupDB();
+
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+
+  afterAll(async () => {
+    await db.dropDatabase();
+  });
+
   it("should respond with single order object for admin user - ACCEPTED ", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
@@ -83,7 +91,7 @@ describe("Order", () => {
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeDefined();
     const id = response.body.data._id;
-    let status = { mode: ACCEPTED};
+    let status = { mode: ACCEPTED };
     response = await request
       .put(`/api/order/status/${id}`)
       .send(status)
@@ -93,9 +101,9 @@ describe("Order", () => {
     expect(response.body.data).toBeDefined();
     expect(response.body.data.status).toBe(ACCEPTED);
     done();
-   })
+  })
 
-   it("should respond with single order object for admin user - DECLINED ", async (done) => {
+  it("should respond with single order object for admin user - DECLINED ", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     await validUser.save();
@@ -120,7 +128,7 @@ describe("Order", () => {
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeDefined();
     const id = response.body.data._id;
-    let status = { mode: DECLINED};
+    let status = { mode: DECLINED };
     response = await request
       .put(`/api/order/status/${id}`)
       .send(status)
@@ -130,9 +138,9 @@ describe("Order", () => {
     expect(response.body.data).toBeDefined();
     expect(response.body.data.status).toBe(DECLINED);
     done();
-   })
+  })
 
-   it("should respond with 400 error for invalid mode", async (done) => {
+  it("should respond with 400 error for invalid mode", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     await validUser.save();
@@ -157,7 +165,7 @@ describe("Order", () => {
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeDefined();
     const id = response.body.data._id;
-    let status = { mode: PENDING};
+    let status = { mode: PENDING };
     response = await request
       .put(`/api/order/status/${id}`)
       .send(status)
@@ -167,9 +175,9 @@ describe("Order", () => {
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
     done();
-   })
+  })
 
-   it("should respond with 400 error for missing mode ", async (done) => {
+  it("should respond with 400 error for missing mode ", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     await validUser.save();
@@ -194,7 +202,7 @@ describe("Order", () => {
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeDefined();
     const id = response.body.data._id;
-    let status = { status: ACCEPTED};
+    let status = { status: ACCEPTED };
     response = await request
       .put(`/api/order/status/${id}`)
       .send(status)
@@ -204,9 +212,9 @@ describe("Order", () => {
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
     done();
-   })
+  })
 
-   it("should respond with 404 error for missing order", async (done) => {
+  it("should respond with 404 error for missing order", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     await validUser.save();
@@ -231,7 +239,7 @@ describe("Order", () => {
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeDefined();
     const id = response.body.data._id;
-    let status = { mode: ACCEPTED};
+    let status = { mode: ACCEPTED };
     response = await request
       .put(`/api/order/status/${SAMPLE_MONGO_ID}`)
       .send(status)
@@ -241,9 +249,9 @@ describe("Order", () => {
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(404);
     done();
-   })
+  })
 
-   it("should respond with 400 error for invalid id", async (done) => {
+  it("should respond with 400 error for invalid id", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
     await validUser.save();
@@ -268,7 +276,7 @@ describe("Order", () => {
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.data).toBeDefined();
     const id = response.body.data._id;
-    let status = { mode: ACCEPTED};
+    let status = { mode: ACCEPTED };
     response = await request
       .put(`/api/order/status/123`)
       .send(status)
@@ -278,5 +286,5 @@ describe("Order", () => {
     expect(response.body.error.message).toBeDefined();
     expect(response.status).toBe(400);
     done();
-})
+  })
 })

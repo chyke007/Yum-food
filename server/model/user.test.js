@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { User } = require("./index");
-const config = require("../../config");
-const db = require("../../integration-test/setup/db_setup");
+const db = require("../../server/middleware/mongo");
 
 const userData = {
   name: "TekLoon",
@@ -11,7 +10,17 @@ const userData = {
 };
 
 // Connects to test database
-db.setupDB();
+beforeAll(async () => {
+  await db.setUp();
+});
+
+afterEach(async () => {
+  await db.dropCollections();
+});
+
+afterAll(async () => {
+  await db.dropDatabase();
+});  
 
 /**
  * User model

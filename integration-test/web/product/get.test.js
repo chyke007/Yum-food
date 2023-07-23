@@ -1,6 +1,6 @@
 const { request } = require("../../index");
 const { Product } = require("../../../server/model");
-const db = require("../../setup/db_setup");
+const db = require("../../../server/middleware/mongo");
 const {
   Constants: { SAMPLE_MONGO_ID },
 } = require("../../../server/utils");
@@ -38,7 +38,15 @@ beforeEach(() => {
  * Product test
  */
 describe("Product", () => {
-  db.setupDB();
+
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+
+  afterAll(async () => {
+    await db.dropDatabase();
+  });
+
   it("should respond with single product object for authenticated user", async (done) => {
     const validProduct = new Product(productData);
     const savedProduct = await validProduct.save();

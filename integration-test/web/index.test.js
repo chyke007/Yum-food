@@ -1,5 +1,4 @@
-const path = require("path");
-const db = require("../setup/db_setup");
+const db = require("../../server/middleware/mongo");
 const { request } = require("../index");
 
 const apikey = process.env.API_KEY;
@@ -17,13 +16,19 @@ beforeEach(() => {
   mockResponse();
 });
 
-// Connects to test database
-db.setupDB();
-
 /**
  * Index routes
  */
 describe("Index routes test", () => {
+
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+  
+  afterAll(async () => {
+    await db.dropDatabase();
+  });  
+
   it("should respond with HTTP 401 for missing api key", async (done) => {
     const response = await request.get("/api/test");
 

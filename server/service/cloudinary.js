@@ -36,7 +36,7 @@ let storage = new CloudinaryStorage({
   },
 });
 
-if (config.DB_NAME === "test") storage = testStorage;
+if (config.NODE_ENV === "test") storage = testStorage;
 const upload = multer({
   storage,
 
