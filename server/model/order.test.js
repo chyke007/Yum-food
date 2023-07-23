@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { Order, User, Product } = require("./index");
-const config = require("../../config");
-const db = require("../../integration-test/setup/db_setup");
+const db = require("../../server/middleware/mongo");
 
 const { CustomException } = require("../utils");
 
@@ -63,7 +62,17 @@ const orderData = {
 };
 
 // Connects to test database
-db.setupDB();
+beforeAll(async () => {
+  await db.setUp();
+});
+
+afterEach(async () => {
+  await db.dropCollections();
+});
+
+afterAll(async () => {
+  await db.dropDatabase();
+});  
 
 /**
  * Order model

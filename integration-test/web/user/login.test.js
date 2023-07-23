@@ -1,9 +1,8 @@
-const mongoose = require("mongoose");
 const faker = require("faker");
 
 const { request } = require("../../index");
 const { User } = require("../../../server/model");
-const db = require("../../setup/db_setup");
+const db = require("../../../server/middleware/mongo");
 
 const apikey = process.env.API_KEY;
 beforeEach(() => {
@@ -24,8 +23,14 @@ beforeEach(() => {
  * Login test
  */
 describe("Login", () => {
-  // Connects to test database
-  db.setupDB();
+  
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+  
+  afterAll(async () => {
+    await db.dropDatabase();
+  });  
 
   it("should respond with HTTP 401 for missing apikey", async (done) => {
     const response = await request.post("/api/login");

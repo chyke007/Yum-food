@@ -6,7 +6,7 @@ const apiRouter = require("./routes/api");
 const { Mongo, App } = require("./middleware");
 
 // connect to mongo
-Mongo();
+Mongo.setUp();
 
 // setup global middleware
 App(server);

@@ -1,7 +1,7 @@
 const path = require("path");
 const { request } = require("../../index");
 const { User, Product } = require("../../../server/model");
-const db = require("../../setup/db_setup");
+const db = require("../../../server/middleware/mongo");
 const {
   Constants: { ADMIN },
 } = require("../../../server/utils");
@@ -57,7 +57,15 @@ beforeEach(() => {
  * Order test
  */
 describe("Order", () => {
-  db.setupDB();
+
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+
+  afterAll(async () => {
+    await db.dropDatabase();
+  });
+
   it("should respond with single order object for authenticated user ", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);

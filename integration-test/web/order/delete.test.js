@@ -1,9 +1,8 @@
-const path = require("path");
 const { request } = require("../../index");
-const { User, Product, Order } = require("../../../server/model");
-const db = require("../../setup/db_setup");
+const { User, Product } = require("../../../server/model");
+const db = require("../../../server/middleware/mongo");
 const {
-  Constants: { USER, ADMIN,SAMPLE_MONGO_ID, ACCEPTED },
+  Constants: { USER, ADMIN, SAMPLE_MONGO_ID },
 } = require("../../../server/utils");
 
 const apikey = process.env.API_KEY;
@@ -63,7 +62,15 @@ beforeEach(() => {
  * Order test
  */
 describe("Order", () => {
-  db.setupDB();
+
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+
+  afterAll(async () => {
+    await db.dropDatabase();
+  });
+
   it("should respond with single order object for user ", async (done) => {
     const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
@@ -97,6 +104,7 @@ describe("Order", () => {
     expect(response.body.data).toBeDefined();
     done();
   })
+
   it("should respond with 404 error for order not added by user", async (done) => {
     const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
@@ -143,6 +151,7 @@ describe("Order", () => {
     expect(response.status).toBe(404);
     done();
   })
+
   it("should respond with valid product for order not added by admin", async (done) => {
     const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
@@ -189,6 +198,7 @@ describe("Order", () => {
     expect(response.status).toBe(200);
     done();
   })
+
   it("should respond with 400 error for invalid mongo id format", async (done) => {
     const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
@@ -220,10 +230,11 @@ describe("Order", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
-      expect(response.body.error.message).toBeDefined();
-      expect(response.status).toBe(400);
-      done();
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(400);
+    done();
   })
+
   it("should respond with 404 error for missing order", async (done) => {
     const validUser = await new User({ ...userData, accountType: USER });
     await validUser.setPassword(userData.password);
@@ -255,8 +266,8 @@ describe("Order", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
-      expect(response.body.error.message).toBeDefined();
-      expect(response.status).toBe(404);
-      done();
-    })
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(404);
+    done();
+  })
 })

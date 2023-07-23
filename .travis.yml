@@ -6,4 +6,5 @@ install:
 script:
   - npm run heroku-postbuild
   - npm test
+  - npm run integration-test
 after_success: npm run coveralls

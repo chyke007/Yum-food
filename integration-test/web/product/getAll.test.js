@@ -1,6 +1,6 @@
 const { request } = require("../../index");
 const { Product } = require("../../../server/model");
-const db = require("../../setup/db_setup");
+const db = require("../../../server/middleware/mongo");
 
 const userData = {
   name: "Zell",
@@ -48,8 +48,16 @@ beforeEach(() => {
  * Product test
  */
 describe("Product", () => {
+
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+
+  afterAll(async () => {
+    await db.dropDatabase();
+  });
+  
   describe("Authentication", () => {
-    db.setupDB();
 
     it("should respond with HTTP 401 for missing apikey", async (done) => {
       const response = await request.get("/api/product");
@@ -77,7 +85,6 @@ describe("Product", () => {
   });
 
   describe("Query Parameters", () => {
-    db.setupDB();
 
     it("should respond with empty data object for invalid product query paramter  - search", async (done) => {
       const validProduct = new Product(productData);

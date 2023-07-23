@@ -1,34 +1,53 @@
 const mongoose = require("mongoose");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 const { Logger } = require("../utils");
-const { DB_NAME, DB_URL, DB_OPTIONS } = require("../../config");
+const { DB_URL, DB_OPTIONS, NODE_ENV } = require("../../config");
 
 const log = new Logger("Middleware:Mongo");
 
-module.exports = () => {
-  log.info(DB_URL);
-  log.info(DB_OPTIONS);
-  log.info("connecting to mongo...");
-  const connectWithRetry = () => {
-    mongoose.connect(DB_URL, DB_OPTIONS);
+let mongo;
+
+if (NODE_ENV === "test") {
+  module.exports.setUp = async () => {
+    mongo = await MongoMemoryServer.create();
+    const url = mongo.getUri();
+
+    try {
+      await mongoose.connect(url, {
+        useNewUrlParser: true,
+      });
+    } catch (e) {
+      log.info("Server running already");
+    }
   };
-  mongoose.connection.on("error", () => {
-    connectWithRetry();
-    log.warning("Could not connect to MongoDB");
-  });
+} else {
+  module.exports.setUp = async () => {
+    try {
+      await mongoose.connect(DB_URL, DB_OPTIONS);
+    } catch (e) {
+      log.info("Server running already");
+    }
+  };
+}
 
-  mongoose.connection.on("disconnected", () => {
-    log.warning("Lost MongoDB connection...");
-    log.warning("Lost MongoDB connection...");
-    if (DB_NAME !== "test") connectWithRetry();
-  });
+module.exports.dropDatabase = async () => {
+  if (mongo) {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+    await mongo.stop();
+  }
+};
 
-  mongoose.connection.on("connected", async () => {
-    log.info("Connection established to MongoDB");
-  });
+module.exports.dropCollections = async () => {
+  if (mongo) {
+    const { collections } = mongoose.connection;
+    const results = [];
 
-  mongoose.connection.on("reconnected", () =>
-    log.info("Reconnected to MongoDB")
-  );
+    Object.keys(collections).forEach((key) => {
+      const collection = collections[key];
+      results.push(collection.deleteMany());
+    });
 
-  connectWithRetry();
+    await Promise.all(results);
+  }
 };

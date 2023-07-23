@@ -1,7 +1,7 @@
 const path = require("path");
 const { request } = require("../../index");
 const { User, Product } = require("../../../server/model");
-const db = require("../../setup/db_setup");
+const db = require("../../../server/middleware/mongo");
 const {
   Constants: { ADMIN, USER, SAMPLE_MONGO_ID },
 } = require("../../../server/utils");
@@ -14,11 +14,11 @@ const userData = {
   phone: "09036040503",
 };
 const userData2 = {
-    name: "Zell",
-    email: "test2@gmail.com",
-    password: "Password2@",
-    phone: "09036040503",
-  };
+  name: "Zell",
+  email: "test2@gmail.com",
+  password: "Password2@",
+  phone: "09036040503",
+};
 const productData = {
   name: "Jellof rice",
   price: 2000,
@@ -62,7 +62,15 @@ beforeEach(() => {
  * Order test
  */
 describe("Order", () => {
-  db.setupDB();
+
+  afterEach(async () => {
+    await db.dropCollections();
+  });
+
+  afterAll(async () => {
+    await db.dropDatabase();
+  });
+
   it("should respond with single order object for authenticated user ", async (done) => {
     const validUser = await new User({ ...userData, accountType: ADMIN });
     await validUser.setPassword(userData.password);
@@ -219,9 +227,9 @@ describe("Order", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
-      expect(response.body.error.message).toBeDefined();
-      expect(response.status).toBe(400);
-      done();
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(400);
+    done();
   })
   it("should respond with 404 error for missing order", async (done) => {
     const validUser = await new User({ ...userData, accountType: USER });
@@ -254,8 +262,8 @@ describe("Order", () => {
       .set("apikey", apikey)
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${token}`);
-      expect(response.body.error.message).toBeDefined();
-      expect(response.status).toBe(404);
-      done();
-    })
+    expect(response.body.error.message).toBeDefined();
+    expect(response.status).toBe(404);
+    done();
+  })
 })
