@@ -1,0 +1,163 @@
+---
+- name: Ansible_CF_Prod
+  hosts: tag_Name_SlaveDevelopmentHost
+  become: true
+  
+  vars:
+    # Specify the path to your .env file on your local machine
+    backend_env_file: /home/ubuntu/prod/env/backend/.env
+    frontend_env_file: /home/ubuntu/prod/env/frontend/.env
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - nodejs
+          - npm
+          - git
+        state: present
+
+    - name: Clone MERN app from GitHub repository
+      git:
+        repo: "https://github.com/chyke007/Yum-food"
+        dest:  /home/ubuntu/yum-food/
+        version: master
+        force: yes
+        clone: yes
+
+    - name: Copy server .env file to the server
+      synchronize:
+        src: "{{ backend_env_file }}"
+        dest: /home/ubuntu/yum-food/.env
+        mode: push
+
+    - name: Copy Frontend .env file to the frontend folder
+      synchronize:
+        src: "{{ frontend_env_file }}"
+        dest: /home/ubuntu/yum-food/frontend/.env
+        mode: push
+
+    - name: Install Packages
+      command: npm install 
+      args:
+        chdir: /home/ubuntu/yum-food/
+      become: yes
+      become_user: root
+
+    - name: Run seeder function
+      command: npm run seed 
+      args:
+        chdir: /home/ubuntu/yum-food/
+      become: yes
+      become_user: root
+
+    - name: Removes cache
+      command: rm -rf node_modules
+      args:
+        chdir: /home/ubuntu/yum-food/frontend/
+      become: yes
+      become_user: root
+
+    - name: Installs required modules
+      command: npm install --cache /tmp/empty-cache
+      args:
+        chdir: /home/ubuntu/yum-food/frontend/
+      become: yes
+      become_user: root
+
+    - name: Build frontend
+      command: npm run build
+      args:
+        chdir: /home/ubuntu/yum-food/frontend/
+      become: yes
+      become_user: root
+
+    - name: Start Node.js app
+      command: npm start
+      args:
+        chdir: /home/ubuntu/yum-food/
+
+- name: Ansible_CF_Dev
+  hosts: tag_Name_SlaveDevelopmentHost
+  become: true
+
+    vars:
+    # Specify the path to your .env file on your local machine
+    backend_env_file: /home/ubuntu/dev/env/backend/.env
+    frontend_env_file: /home/ubuntu/dev/env/frontend/.env
+  
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - nodejs
+          - npm
+          - git
+        state: present
+
+    - name: Clone MERN app from GitHub repository
+      git:
+        repo: "https://github.com/chyke007/Yum-food"
+        dest:  /home/ubuntu/yum-food/
+        version: master
+        force: yes
+        clone: yes
+
+    - name: Copy server .env file to the server
+      synchronize:
+        src: "{{ backend_env_file }}"
+        dest: /home/ubuntu/yum-food/.env
+        mode: push
+
+    - name: Copy Frontend .env file to the frontend folder
+      synchronize:
+        src: "{{ frontend_env_file }}"
+        dest: /home/ubuntu/yum-food/frontend/.env
+        mode: push
+
+    - name: Install Packages
+      command: npm install 
+      args:
+        chdir: /home/ubuntu/yum-food/
+      become: yes
+      become_user: root
+
+    - name: Run seeder function
+      command: npm run seed 
+      args:
+        chdir: /home/ubuntu/yum-food/
+      become: yes
+      become_user: root
+
+    - name: Removes cache
+      command: rm -rf node_modules
+      args:
+        chdir: /home/ubuntu/yum-food/frontend/
+      become: yes
+      become_user: root
+
+    - name: Installs required modules
+      command: npm install --cache /tmp/empty-cache
+      args:
+        chdir: /home/ubuntu/yum-food/frontend/
+      become: yes
+      become_user: root
+
+    - name: Build frontend
+      command: npm run build
+      args:
+        chdir: /home/ubuntu/yum-food/frontend/
+      become: yes
+      become_user: root
+
+    - name: Start Node.js app
+      command: npm start
+      args:
+        chdir: /home/ubuntu/yum-food/
