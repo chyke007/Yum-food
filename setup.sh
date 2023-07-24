@@ -8,7 +8,7 @@ KEY_PAIR_ID=$(aws ec2 describe-key-pairs  --region "$AWS_REGION" --query "KeyPai
 PARAMETER_NAME="/ec2/keypair/$KEY_PAIR_ID"
 
 # Set the output file name for the .pem file
-OUTPUT_FILE="/home/ubuntu/.ssh/ssh_key.pem"
+OUTPUT_FILE="/home/ubuntu/ssh_key.pem"
 
 # Retrieve the SSH private key from SSM Parameter Store
 SSH_PRIVATE_KEY=$(aws ssm get-parameter --region "$AWS_REGION" --name "$PARAMETER_NAME" --with-decryption --query "Parameter.Value" --output text)

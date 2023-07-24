@@ -120,7 +120,7 @@ Resources:
   MasterEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: t2.micro
+      InstanceType: t2.large
       KeyName: !Ref MyKeyPair
       Tags:
         - Key: Name
@@ -151,7 +151,24 @@ Resources:
 
           sudo apt install jenkins -y
 
+          sudo chown -R jenkins:jenkins /home/ubuntu/
+          
+          sudo usermod -aG sudo jenkins
+
+          sudo chmod -R 777 /home/ubuntu/
+
           sudo systemctl start jenkins
+
+          # Install libssl1.1 for MongoMemoryServer package
+          
+          ## To handle dependency installations
+          sudo apt-get install gdebi-core -y
+
+          ## Download libssl1.1
+          sudo wget http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl1.1_1.1.1n-0+deb11u4_amd64.deb
+
+          ## Install libssl1.1
+          sudo gdebi --non-interactive libssl1.1_1.1.1n-0+deb11u4_amd64.deb
 
           # Install boto via pip3
           sudo pip3 install boto3
@@ -171,9 +188,10 @@ Resources:
           [inventory]
           enable_plugins = aws_ec2
           [defaults]
+          host_key_checking = False
           inventory      = /opt/ansible/inventory/aws_ec2.yaml
           remote_user = ubuntu
-          private_key_file = /home/ubuntu/.ssh/ssh_key.pem
+          private_key_file = /home/ubuntu/ssh_key.pem
           EOL
 
           # Create the /opt/ansible/inventory/aws_ec2.yaml file with AWS dynamic inventory configuration
@@ -192,7 +210,7 @@ Resources:
   SlaveDevEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: t2.micro
+      InstanceType: t2.medium
       KeyName: !Ref MyKeyPair
       Tags:
         - Key: Name
@@ -212,7 +230,7 @@ Resources:
   SlaveProdEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: t2.micro
+      InstanceType: t2.medium
       KeyName: !Ref MyKeyPair
       Tags:
         - Key: Name

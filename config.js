@@ -1,4 +1,4 @@
-exports.SECRET = process.env.SECRET;
+exports.SECRET = process.env.SECRET || "secret";
 exports.URL = process.env.URL;
 
 // DB Config
@@ -23,7 +23,7 @@ exports.DB_OPTIONS = {
   family: 4, // Use IPv4, skip trying IPv6
 };
 exports.DB_NAME = process.env.DB_NAME;
-exports.API_KEY = process.env.API_KEY;
+exports.API_KEY = process.env.API_KEY || "key";
 exports.NODE_ENV = process.env.NODE_ENV;
 
 // Cloudinary

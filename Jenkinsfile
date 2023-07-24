@@ -3,26 +3,14 @@ pipeline {
     
     tools {nodejs "node"}
     stages {
-
-        stage('Cloning Git') {
-            steps {
-                git 'https://github.com/chyke007/Yum-food'
-            }
-        }
-            
+  
         stage('Install dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install' 
+                echo 'Installing dependecies found in branch: ' + env.BRANCH_NAME
             }
         }
-
-        stage('Lint Stage') {
-            
-            steps {
-            
-               sh 'npm run lint'
-            }
-        }
+        
         stage('Unit Test stage') {
             
             steps {
@@ -44,18 +32,22 @@ pipeline {
             }
 
             steps {
-                 sh 'setup.sh && sudo ansible-playbook mern.yml --tags Ansible_CF_Dev && sudo rm -rf /home/ubuntu/.ssh/ssh_key.pem'
+                echo "Running Dev Deploy"
+                sh 'chmod +x ./setup.sh'
+                sh './setup.sh && ansible-playbook playbook.yml --tags dev &&  rm -rf /home/ubuntu/ssh_key.pem'
             }
         }
 
          stage('Deploy stage:Prod') {
 
              when {
-                branch 'main'
+                branch 'master'
             }
 
             steps {
-                 sh 'setup.sh && sudo ansible-playbook mern.yml --tags Ansible_CF_Prod && sudo rm -rf /home/ubuntu/.ssh/ssh_key.pem'
+                echo "Running Prod Deploy"
+                sh 'chmod +x ./setup.sh'
+                sh './setup.sh && ansible-playbook playbook.yml --tags prod && rm -rf /home/ubuntu/ssh_key.pem'
             }
         }
     }

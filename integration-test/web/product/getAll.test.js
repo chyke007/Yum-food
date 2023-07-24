@@ -28,7 +28,9 @@ const productData3 = {
   description: "Bean cake as you like it",
 };
 
-const apikey = process.env.API_KEY;
+const { API_KEY } = require("../../../config");
+
+const apikey = API_KEY;
 
 beforeEach(() => {
   const mockResponse = () => {
