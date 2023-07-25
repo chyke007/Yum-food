@@ -1,6 +1,6 @@
 ---
 - name: Ansible Production
-  hosts: tag_Name_SlaveDevelopmentHost
+  hosts: tag_Name_SlaveProductionHost
   tags:
     - prod
   become: true
@@ -9,6 +9,7 @@
     # Specify the path to your .env file on your local machine
     backend_env_file: /home/ubuntu/prod/env/backend/.env
     frontend_env_file: /home/ubuntu/prod/env/frontend/.env
+  
   tasks:
     - name: Update apt cache
       apt:
@@ -49,6 +50,13 @@
       become: yes
       become_user: root
 
+    - name: Install Forever package
+      command: npm install forever -g
+      args:
+        chdir: /home/ubuntu/yum-food/
+      become: yes
+      become_user: root
+
     - name: Run seeder function
       command: npm run seed 
       args:
@@ -78,7 +86,7 @@
       become_user: root
 
     - name: Start Node.js app
-      command: npm start
+      command: forever start index.js
       args:
         chdir: /home/ubuntu/yum-food/
 

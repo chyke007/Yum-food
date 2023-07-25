@@ -9,11 +9,9 @@ const Landing = (props) => {
   return (
     <StyledLanding>
             <div id="content" className="sm:w-1/2">
-                <p>Safe food
-                <br/>
-                Delivery</p>
+                <p>Yummy Delicacies </p>
                 <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus vel tellus sit amet lacinia. Nulla efficitur vulputate diam vel condimentum. Sed eu sapien quis quam faucibus facilisis. Morbi sagittis libero semper, sollicitudin dolor vel, semper velit. Aenean tempus felis a placerat tempus. Duis sodales, felis vel commodo efficitur, dui lorem mollis quam, ut scelerisque turpis eros eget ligula. Quisque vitae mollis turpis. Ut in nisi sed velit ultricies rutrum. Integer consequat feugiat urna vitae placerat.
+                Welcome to Yum Food - Your ultimate destination for food ordering! Discover a vast selection of cuisines from around the world, all at your fingertips. Our user-friendly platform offers seamless ordering with quick and reliable delivery right to your doorstep. Enjoy exclusive offers and easy payment options for a hassle-free experience. Our dedicated customer support team is always ready to assist you. Join Foodie Delights today and indulge in a delightful culinary journey. Treat yourself to a world of flavors and convenience, all in one place. Bon appétit!
                 </p>
                 <button>
                 <NavLink to="/product"> Order Now</NavLink>
