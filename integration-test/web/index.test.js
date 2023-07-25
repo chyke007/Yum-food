@@ -1,7 +1,9 @@
 const db = require("../../server/middleware/mongo");
 const { request } = require("../index");
 
-const apikey = process.env.API_KEY;
+const { API_KEY } = require("../../config");
+
+const apikey = API_KEY;
 beforeEach(() => {
   const mockResponse = () => {
     const response = {};

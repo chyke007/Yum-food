@@ -3,10 +3,12 @@ const { request } = require("../../index");
 const { User, Product } = require("../../../server/model");
 const db = require("../../../server/middleware/mongo");
 const {
-  Constants: { ADMIN, USER, SAMPLE_MONGO_ID, DECLINED, PENDING },
+  Constants: { ADMIN, USER, DECLINED, PENDING },
 } = require("../../../server/utils");
 
-const apikey = process.env.API_KEY;
+const { API_KEY } = require("../../../config");
+
+const apikey = API_KEY;
 const userData = {
   name: "Zell",
   email: "test@gmail.com",

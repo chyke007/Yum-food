@@ -5,7 +5,9 @@ const {
   Constants: { SAMPLE_MONGO_ID },
 } = require("../../../server/utils");
 
-const apikey = process.env.API_KEY;
+const { API_KEY } = require("../../../config");
+
+const apikey = API_KEY;
 const userData = {
   name: "Zell",
   email: "test@gmail.com",

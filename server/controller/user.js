@@ -9,8 +9,9 @@ const {
   CustomException,
 } = require("../utils");
 let { Jwt } = require("../service");
+const { SECRET } = require("../../config");
 
-Jwt = new Jwt(process.env.SECRET);
+Jwt = new Jwt(SECRET);
 const log = new Logger("Controller:User");
 
 /* eslint func-names: ["error", "never"] */

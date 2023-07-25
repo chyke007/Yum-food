@@ -4,8 +4,9 @@ const db = require("../../../server/middleware/mongo");
 const {
   Constants: { USER, ADMIN, SAMPLE_MONGO_ID },
 } = require("../../../server/utils");
+const { API_KEY } = require("../../../config");
 
-const apikey = process.env.API_KEY;
+const apikey = API_KEY;
 const userData = {
   name: "Zell",
   email: "test@gmail.com",

@@ -1,0 +1,261 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  KeyPairName:
+    Type: String
+    Description: Name of the Key Pair to create
+    Default: MyKeyPair
+Resources:
+  MyKeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: !Ref KeyPairName
+
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: EC2-SSM-FullAccess-Role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: EC2FullAccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: ec2:*
+                Resource: '*'
+        - PolicyName: SSMFullAccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: ssm:*
+                Resource: '*'
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: EC2-SSM-FullAccess-InstanceProfile
+      Roles:
+        - !Ref EC2InstanceRole
+
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet
+
+  MasterSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access
+      VpcId: !Ref VPC 
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          ToPort: 22
+          IpProtocol: tcp
+        - CidrIp: 0.0.0.0/0
+          FromPort: 8080
+          ToPort: 8080
+          IpProtocol: tcp
+
+  SlaveSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access
+      VpcId: !Ref VPC 
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          ToPort: 22
+          IpProtocol: tcp
+        - CidrIp: 0.0.0.0/0
+          FromPort: 4000
+          ToPort: 4000
+          IpProtocol: tcp
+
+  MasterEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.large
+      KeyName: !Ref MyKeyPair
+      Tags:
+        - Key: Name
+          Value: MasterHost
+      SubnetId: !Ref PublicSubnet
+      SecurityGroupIds:
+        - !GetAtt "MasterSecurityGroup.GroupId"
+      ImageId: ami-053b0d53c279acc90
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          # Update package index and install required packages
+          sudo apt update -y
+          sudo apt install -y python3-pip
+
+          # Install Ansible via pip3
+          sudo pip3 install ansible
+
+          # Install Jenkins
+          sudo apt install openjdk-11-jdk -y
+
+          curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+          echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]  https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+          sudo apt update -y
+
+          sudo apt install jenkins -y
+
+          sudo chown -R jenkins:jenkins /home/ubuntu/
+          
+          sudo usermod -aG sudo jenkins
+
+          sudo chmod -R 777 /home/ubuntu/
+
+          sudo systemctl start jenkins
+
+          # Install libssl1.1 for MongoMemoryServer package
+          
+          ## To handle dependency installations
+          sudo apt-get install gdebi-core -y
+
+          ## Download libssl1.1
+          sudo wget http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl1.1_1.1.1n-0+deb11u4_amd64.deb
+
+          ## Install libssl1.1
+          sudo gdebi --non-interactive libssl1.1_1.1.1n-0+deb11u4_amd64.deb
+
+          # Install boto via pip3
+          sudo pip3 install boto3
+
+          # Download and install AWS CLI v2 using curl, unzip, and sudo
+          sudo apt install unzip
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
+          # Create the /etc/ansible/ directory if it doesn't exist
+          sudo mkdir -p /etc/ansible
+          sudo mkdir -p /opt/ansible/inventory
+
+          # Create the /etc/ansible/ansible.cfg file with AWS dynamic inventory configuration
+          sudo cat > /etc/ansible/ansible.cfg << EOL
+          [inventory]
+          enable_plugins = aws_ec2
+          [defaults]
+          host_key_checking = False
+          inventory      = /opt/ansible/inventory/aws_ec2.yaml
+          remote_user = ubuntu
+          private_key_file = /home/ubuntu/ssh_key.pem
+          EOL
+
+          # Create the /opt/ansible/inventory/aws_ec2.yaml file with AWS dynamic inventory configuration
+          sudo cat > /opt/ansible/inventory/aws_ec2.yaml << EOL
+          ---
+          plugin: aws_ec2
+
+          regions:
+            - us-east-1
+
+          keyed_groups: 
+            - key: tags
+              prefix: tag
+          EOL
+
+  SlaveDevEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.medium
+      KeyName: !Ref MyKeyPair
+      Tags:
+        - Key: Name
+          Value: SlaveDevelopmentHost
+      SubnetId: !Ref PublicSubnet
+      SecurityGroupIds:
+        - !GetAtt "SlaveSecurityGroup.GroupId"
+      ImageId: ami-053b0d53c279acc90
+      UserData: !Base64 |
+        #!/bin/bash
+        # Update package index and install required packages
+        sudo apt update -y
+
+        # Install git client on server
+        sudo apt-get install -y git
+
+  SlaveProdEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.medium
+      KeyName: !Ref MyKeyPair
+      Tags:
+        - Key: Name
+          Value: SlaveProductionHost
+      SubnetId: !Ref PublicSubnet
+      SecurityGroupIds:
+        - !GetAtt "SlaveSecurityGroup.GroupId"
+      ImageId: ami-053b0d53c279acc90
+      UserData: !Base64 |
+        #!/bin/bash
+        # Update package index and install required packages
+        sudo apt update -y
+
+        # Install git client on server
+        sudo apt-get install -y git
+
+Outputs:
+  MasterPublicIp:
+    Description: Master EC2 Instance Public Ip
+    Value: !GetAtt MasterEC2Instance.PublicIp
+
+  SlaveDevPublicIp:
+    Description: Slave Prodcution EC2 Instance Public Ip
+    Value: !GetAtt SlaveDevEC2Instance.PublicIp
+
+  SlaveProdPublicIp:
+    Description: Slave Development EC2 Instance Public Ip
+    Value: !GetAtt SlaveProdEC2Instance.PublicIp
