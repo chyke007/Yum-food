@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yum-food
+  namespace: yum-food
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: yum-food
+  template:
+    metadata:
+      labels:
+        app: yum-food
+    spec:
+      containers:
+      - name: yum-food
+        image: chyke007/yumfood:1.0.0
+        ports:
+          - containerPort: 4000
+        envFrom:
+            - secretRef:
+                name: yum-secret

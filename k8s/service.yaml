@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: yum-food
+  namespace: yum-food
+spec:
+  selector:
+    app: yum-food
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 4000
+    targetPort: 4000
