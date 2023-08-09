@@ -5,7 +5,7 @@ pipeline {
 
     environment {
         DOCKER_REPO = 'chyke007/yumfood' // Replace with your Docker Hub username and repository name
-        IMAGE_TAG = "1.0.0" // Replace with the desired tag for your Docker image
+        IMAGE_TAG = "1.0.1" // Replace with the desired tag for your Docker image
     }
 
     stages {

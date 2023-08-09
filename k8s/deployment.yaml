@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: yum-food
-        image: chyke007/yumfood:1.0.0
+        image: chyke007/yumfood:1.0.1
         ports:
           - containerPort: 4000
         envFrom:
