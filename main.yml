@@ -13,7 +13,7 @@ Resources:
   EC2InstanceRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: EC2-SSM-FullAccess-Role
+      RoleName: EC2-FullAccess-Role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -29,18 +29,11 @@ Resources:
               - Effect: Allow
                 Action: ec2:*
                 Resource: '*'
-        - PolicyName: SSMFullAccessPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action: ssm:*
-                Resource: '*'
 
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      InstanceProfileName: EC2-SSM-FullAccess-InstanceProfile
+      InstanceProfileName: EC2-FullAccess-InstanceProfile
       Roles:
         - !Ref EC2InstanceRole
 
@@ -87,7 +80,7 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet
 
-  MasterSecurityGroup:
+  JenkinsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable SSH access
@@ -102,33 +95,23 @@ Resources:
           ToPort: 8080
           IpProtocol: tcp
 
-  SlaveSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Enable SSH access
-      VpcId: !Ref VPC 
-      SecurityGroupIngress:
-        - CidrIp: 0.0.0.0/0
-          FromPort: 22
-          ToPort: 22
-          IpProtocol: tcp
-        - CidrIp: 0.0.0.0/0
-          FromPort: 4000
-          ToPort: 4000
-          IpProtocol: tcp
-
-  MasterEC2Instance:
+  JenkinsEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: t2.large
+      InstanceType: t2.xlarge
       KeyName: !Ref MyKeyPair
       Tags:
         - Key: Name
           Value: MasterHost
       SubnetId: !Ref PublicSubnet
       SecurityGroupIds:
-        - !GetAtt "MasterSecurityGroup.GroupId"
+        - !GetAtt "JenkinsSecurityGroup.GroupId"
       ImageId: ami-053b0d53c279acc90
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1  # Root volume device name
+          Ebs:
+            VolumeSize: 16  # Size in GB
+            VolumeType: gp2  # General Purpose SSD
       IamInstanceProfile: !Ref EC2InstanceProfile
       UserData:
         Fn::Base64: !Sub |
@@ -150,12 +133,6 @@ Resources:
           sudo apt update -y
 
           sudo apt install jenkins -y
-
-          sudo chown -R jenkins:jenkins /home/ubuntu/
-          
-          sudo usermod -aG sudo jenkins
-
-          sudo chmod -R 777 /home/ubuntu/
 
           sudo systemctl start jenkins
 
@@ -179,83 +156,25 @@ Resources:
           unzip awscliv2.zip
           sudo ./aws/install
 
-          # Create the /etc/ansible/ directory if it doesn't exist
-          sudo mkdir -p /etc/ansible
-          sudo mkdir -p /opt/ansible/inventory
+          # Install Docker
+          sudo apt-get remove docker docker-engine docker.io
+          sudo apt-get update
+          sudo apt install docker.io -y
+          sudo systemctl start docker
+          sudo systemctl enable docker
 
-          # Create the /etc/ansible/ansible.cfg file with AWS dynamic inventory configuration
-          sudo cat > /etc/ansible/ansible.cfg << EOL
-          [inventory]
-          enable_plugins = aws_ec2
-          [defaults]
-          host_key_checking = False
-          inventory      = /opt/ansible/inventory/aws_ec2.yaml
-          remote_user = ubuntu
-          private_key_file = /home/ubuntu/ssh_key.pem
-          EOL
+          # Add ubuntu and jenkins to docker group
+          sudo usermod -a -G docker ubuntu
+          sudo usermod -a -G docker jenkins
 
-          # Create the /opt/ansible/inventory/aws_ec2.yaml file with AWS dynamic inventory configuration
-          sudo cat > /opt/ansible/inventory/aws_ec2.yaml << EOL
-          ---
-          plugin: aws_ec2
+          sudo cp /lib/systemd/system/docker.service /lib/systemd/system/docker.service.bak
+          sudo sed -i 's/^ExecStart=.*/ExecStart=\/usr\/bin\/dockerd -H tcp:\/\/127.0.0.1:2375 -H unix:\/\/\/var\/run\/docker.sock/g' /lib/systemd/system/docker.service
+          sudo systemctl daemon-reload
+          sudo systemctl restart docker
+          sudo systemctl restart jenkins
 
-          regions:
-            - us-east-1
-
-          keyed_groups: 
-            - key: tags
-              prefix: tag
-          EOL
-
-  SlaveDevEC2Instance:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: t2.medium
-      KeyName: !Ref MyKeyPair
-      Tags:
-        - Key: Name
-          Value: SlaveDevelopmentHost
-      SubnetId: !Ref PublicSubnet
-      SecurityGroupIds:
-        - !GetAtt "SlaveSecurityGroup.GroupId"
-      ImageId: ami-053b0d53c279acc90
-      UserData: !Base64 |
-        #!/bin/bash
-        # Update package index and install required packages
-        sudo apt update -y
-
-        # Install git client on server
-        sudo apt-get install -y git
-
-  SlaveProdEC2Instance:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: t2.medium
-      KeyName: !Ref MyKeyPair
-      Tags:
-        - Key: Name
-          Value: SlaveProductionHost
-      SubnetId: !Ref PublicSubnet
-      SecurityGroupIds:
-        - !GetAtt "SlaveSecurityGroup.GroupId"
-      ImageId: ami-053b0d53c279acc90
-      UserData: !Base64 |
-        #!/bin/bash
-        # Update package index and install required packages
-        sudo apt update -y
-
-        # Install git client on server
-        sudo apt-get install -y git
 
 Outputs:
-  MasterPublicIp:
-    Description: Master EC2 Instance Public Ip
-    Value: !GetAtt MasterEC2Instance.PublicIp
-
-  SlaveDevPublicIp:
-    Description: Slave Prodcution EC2 Instance Public Ip
-    Value: !GetAtt SlaveDevEC2Instance.PublicIp
-
-  SlaveProdPublicIp:
-    Description: Slave Development EC2 Instance Public Ip
-    Value: !GetAtt SlaveProdEC2Instance.PublicIp
+  JenkinsPublicIp:
+    Description: Jenkins EC2 Instance Public Ip
+    Value: !GetAtt JenkinsEC2Instance.PublicIp

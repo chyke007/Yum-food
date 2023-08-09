@@ -2,6 +2,12 @@ pipeline {
     agent any
     
     tools {nodejs "node"}
+
+    environment {
+        DOCKER_REPO = 'chyke007/yumfood' // Replace with your Docker Hub username and repository name
+        IMAGE_TAG = "1.0.0" // Replace with the desired tag for your Docker image
+    }
+
     stages {
   
         stage('Install dependencies') {
@@ -25,29 +31,21 @@ pipeline {
             }
         }
 
-        stage('Deploy stage:Dev') {
-
-             when {
-                branch 'dev'
-            }
-
+        stage('Build App Docker Images') {
+            
             steps {
-                echo "Running Dev Deploy"
-                sh 'chmod +x ./setup.sh'
-                sh './setup.sh && ansible-playbook playbook.yml --tags dev &&  rm -rf /home/ubuntu/ssh_key.pem'
+                echo 'Building App Images'
+                sh 'cp frontend/.env.example frontend/.env'
+                sh 'docker build -t ${DOCKER_REPO}:${IMAGE_TAG} .'
             }
         }
 
-         stage('Deploy stage:Prod') {
-
-             when {
-                branch 'master'
-            }
-
+        stage('Push to Docker Hub') {
             steps {
-                echo "Running Prod Deploy"
-                sh 'chmod +x ./setup.sh'
-                sh './setup.sh && ansible-playbook playbook.yml --tags prod && rm -rf /home/ubuntu/ssh_key.pem'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                    sh "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
+                }
             }
         }
     }
