@@ -47,7 +47,7 @@ pipeline {
             steps {
                 echo "Running Prod Deploy"
                 sh 'chmod +x ./setup.sh'
-                sh './setup.sh && ansible-playbook playbook.yml --tags prod && rm -rf /home/ubuntu/ssh_key.pem'
+                sh './setup.sh && ansible-playbook playbook.yml --tags prod && rm -rf /home/ubuntu/.ssh/ssh_key.pem'
             }
         }
     }
