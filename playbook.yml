@@ -25,7 +25,7 @@
 
     - name: Clone MERN app from GitHub repository
       git:
-        repo: "https://github.com/chyke007/Yum-food"
+        repo: "https://github.com/ugwulo/Yum-food"
         dest:  /home/ubuntu/yum-food/
         version: master
         force: yes
@@ -44,7 +44,7 @@
         mode: push
 
     - name: Install Packages
-      command: npm install 
+      command: npm install
       args:
         chdir: /home/ubuntu/yum-food/
       become: yes
@@ -116,7 +116,7 @@
 
     - name: Clone MERN app from GitHub repository
       git:
-        repo: "https://github.com/chyke007/Yum-food"
+        repo: "https://github.com/ugwulo/Yum-food"
         dest:  /home/ubuntu/yum-food/
         version: master
         force: yes
