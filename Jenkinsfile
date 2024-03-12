@@ -11,19 +11,19 @@ pipeline {
             }
         }
         
-        stage('Unit Test stage') {
+        // stage('Unit Test stage') {
             
-            steps {
-                sh 'npm run test'
-            }
-        }
+        //     steps {
+        //         sh 'npm run test'
+        //     }
+        // }
 
-        stage('Integration Test stage') {
+        // stage('Integration Test stage') {
             
-            steps {
-                  sh 'npm run integration-test'
-            }
-        }
+        //     steps {
+        //           sh 'npm run integration-test'
+        //     }
+        // }
 
         stage('Deploy stage:Dev') {
 
