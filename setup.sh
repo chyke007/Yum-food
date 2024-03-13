@@ -1,3 +1,4 @@
+#!/bin/bash
 AWS_REGION="us-east-1"
 KEY_NAME="MyKeyPair"
 KEY_PAIR_ID=$(aws ec2 describe-key-pairs  --region "$AWS_REGION" --query "KeyPairs[?KeyName=='$KEY_NAME'].KeyPairId" --output text)
