@@ -38,17 +38,17 @@ pipeline {
             }
         }
 
-         stage('Deploy stage:Prod') {
+        //  stage('Deploy stage:Prod') {
 
-             when {
-                branch 'master'
-            }
+        //      when {
+        //         branch 'master'
+        //     }
 
-            steps {
-                echo "Running Prod Deploy"
-                sh 'chmod +x ./setup.sh'
-                sh './setup.sh && ansible-playbook playbook.yml --tags prod && rm -rf /home/ubuntu/.ssh/ssh_key.pem'
-            }
-        }
+        //     steps {
+        //         echo "Running Prod Deploy"
+        //         sh 'chmod +x ./setup.sh'
+        //         sh './setup.sh && ansible-playbook playbook.yml --tags prod && rm -rf /home/ubuntu/.ssh/ssh_key.pem'
+        //     }
+        // }
     }
 }
