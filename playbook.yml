@@ -44,7 +44,7 @@
         mode: push
 
     - name: Install Packages
-      command: npm install
+      command: npm install 
       args:
         chdir: /home/ubuntu/yum-food/
       become: yes

@@ -6,24 +6,24 @@ pipeline {
   
         stage('Install dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install' 
                 echo 'Installing dependecies found in branch: ' + env.BRANCH_NAME
             }
         }
         
-        // stage('Unit Test stage') {
+        stage('Unit Test stage') {
             
-        //     steps {
-        //         sh 'npm run test'
-        //     }
-        // }
+            steps {
+                sh 'npm run test'
+            }
+        }
 
-        // stage('Integration Test stage') {
+        stage('Integration Test stage') {
             
-        //     steps {
-        //           sh 'npm run integration-test'
-        //     }
-        // }
+            steps {
+                  sh 'npm run integration-test'
+            }
+        }
 
         stage('Deploy stage:Dev') {
 
@@ -34,21 +34,21 @@ pipeline {
             steps {
                 echo "Running Dev Deploy"
                 sh 'chmod +x ./setup.sh'
-                sh './setup.sh && ansible-playbook playbook.yml --tags dev'
+                sh './setup.sh && ansible-playbook playbook.yml --tags dev &&  rm -rf /home/ubuntu/ssh_key.pem'
             }
         }
 
-        //  stage('Deploy stage:Prod') {
+         stage('Deploy stage:Prod') {
 
-        //      when {
-        //         branch 'master'
-        //     }
+             when {
+                branch 'master'
+            }
 
-        //     steps {
-        //         echo "Running Prod Deploy"
-        //         sh 'chmod +x ./setup.sh'
-        //         sh './setup.sh && ansible-playbook playbook.yml --tags prod && rm -rf /home/ubuntu/.ssh/ssh_key.pem'
-        //     }
-        // }
+            steps {
+                echo "Running Prod Deploy"
+                sh 'chmod +x ./setup.sh'
+                sh './setup.sh && ansible-playbook playbook.yml --tags prod && rm -rf /home/ubuntu/ssh_key.pem'
+            }
+        }
     }
 }

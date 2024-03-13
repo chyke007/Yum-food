@@ -2,10 +2,10 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   KeyPairName:
     Type: String
-    Description: Keypair for 4coreTech ec2 servers
-    Default: 4coreKeyPair
+    Description: Name of the Key Pair to create
+    Default: MyKeyPair
 Resources:
-  4coreKeyPair:
+  MyKeyPair:
     Type: AWS::EC2::KeyPair
     Properties:
       KeyName: !Ref KeyPairName
@@ -120,8 +120,8 @@ Resources:
   MasterEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: t2.micro
-      KeyName: !Ref KeyPairName
+      InstanceType: t2.medium
+      KeyName: !Ref MyKeyPair
       Tags:
         - Key: Name
           Value: MasterHost
@@ -211,7 +211,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      KeyName: !Ref KeyPairName
+      KeyName: !Ref MyKeyPair
       Tags:
         - Key: Name
           Value: SlaveDevelopmentHost
@@ -231,7 +231,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      KeyName: !Ref KeyPairName
+      KeyName: !Ref MyKeyPair
       Tags:
         - Key: Name
           Value: SlaveProductionHost
